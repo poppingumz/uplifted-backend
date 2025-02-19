@@ -1,0 +1,26 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group = 'fontys.s3.gradle'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+application {
+    mainClass = 'nl.fontys.s3.ImageCrawlerMain'
+}
+
+dependencies {
+    implementation 'edu.uci.ics:crawler4j:4.4.0'
+    implementation 'com.sleepycat:je:18.3.12'
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+test {
+    useJUnitPlatform()
+}
