@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="5a352c3b-b43e-4aec-9597-3b28dd7b91d3" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradlew" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradlew.bat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/settings.gradle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/fontys/s3/starter/TickerPriceApplication.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/fontys/s3/starter/business/GetTickerPricesUseCase.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/fontys/s3/starter/business/impl/GetTickerPricesUseCaseImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/fontys/s3/starter/configuration/RestTemplateConfiguration.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/fontys/s3/starter/controller/TickerPriceController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/fontys/s3/starter/domain/GetTickerPricesRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/fontys/s3/starter/domain/GetTickerPricesResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/fontys/s3/starter/domain/TickerPrice.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/fontys/s3/starter/persistence/TickerPriceRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/fontys/s3/starter/persistence/impl/binance/BinanceTickerPrice.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/fontys/s3/starter/persistence/impl/binance/BinanceTickerPriceRepositoryImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/fontys/s3/starter/persistence/impl/coinbase/CoinBaseTickerPrice.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/fontys/s3/starter/persistence/impl/coinbase/CoinBaseTickerPriceRepositoryImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/nl/fontys/s3/starter/TickerPriceApplicationTests.java" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ProjectId" id="2tWgzneVjMrGOOM3EiYz14m6zbg" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "last_opened_file_path": "C:/Projects/uplifted-learning-platform/Java_Assignments/RESTful_Service_In_Spring_Boot/rest_starter",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-125ca727e0f0-intellij.indexing.shared.core-IU-243.23654.189" />
+        <option value="bundled-js-predefined-d6986cc7102b-822845ee3bb5-JavaScript-IU-243.23654.189" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="5a352c3b-b43e-4aec-9597-3b28dd7b91d3" name="Changes" comment="" />
+      <created>1740473510996</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1740473510996</updated>
+      <workItem from="1740473513033" duration="21000" />
+    </task>
+    <servers />
+  </component>
+</project>
