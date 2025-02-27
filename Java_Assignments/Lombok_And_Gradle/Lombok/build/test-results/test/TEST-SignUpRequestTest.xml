@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="SignUpRequestTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2025-02-14T13:04:20" hostname="LAPTOP-RHFQ3ARB" time="0.032">
-  <properties/>
-  <testcase name="equals_shouldReturnFalse_whenFieldsHaveDifferentValue()" classname="SignUpRequestTest" time="0.027"/>
-  <testcase name="equals_shouldReturnTrue_whenFieldsHaveSameValue()" classname="SignUpRequestTest" time="0.002"/>
-  <testcase name="toString_shouldReturnAllFieldsExceptPassword()" classname="SignUpRequestTest" time="0.001"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>
