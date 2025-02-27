@@ -3,11 +3,13 @@ stages:
   - test
 
 variables:
+  JAVA_HOME: "C:\\Program Files\\Microsoft\\jdk-17.0.14.7-hotspot"
   GRADLE_OPTS: "-Dorg.gradle.daemon=false"
 
 build:
   stage: build
   script:
+    - chmod +x gradlew
     - ./gradlew assemble
 
 test:
