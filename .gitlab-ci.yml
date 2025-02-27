@@ -9,7 +9,6 @@ variables:
 build:
   stage: build
   script:
-    - chmod +x gradlew
     - ./gradlew assemble
 
 test:
