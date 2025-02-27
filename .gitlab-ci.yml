@@ -7,8 +7,7 @@ variables:
   GRADLE_OPTS: "-Dorg.gradle.daemon=false"
 
 before_script:
-  - chmod +x gradlew
-  - ls -l gradle/wrapper/
+  - Set-ExecutionPolicy Unrestricted -Scope Process -Force
   - ./gradlew --version
 
 build:
