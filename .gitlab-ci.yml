@@ -7,8 +7,10 @@ variables:
   GRADLE_OPTS: "-Dorg.gradle.daemon=false"
 
 before_script:
+  - echo "Setting up environment..."
+  - echo "Java Home: $JAVA_HOME"
   - Set-ExecutionPolicy Unrestricted -Scope Process -Force
-  - ./gradlew --version
+  - ./gradlew --version || gradle wrapper
 
 build:
   stage: build
