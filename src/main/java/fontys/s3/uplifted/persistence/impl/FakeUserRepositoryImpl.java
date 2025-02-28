@@ -13,17 +13,14 @@ public class FakeUserRepositoryImpl implements UserRepository {
     private final Map<Long, UserEntity> users = new HashMap<>();
     private final AtomicLong idGenerator = new AtomicLong(1);
 
-    @Override
     public List<UserEntity> getAllUsers() {
         return new ArrayList<>(users.values());
     }
 
-    @Override
     public Optional<UserEntity> getUserById(Long id) {
         return Optional.ofNullable(users.get(id));
     }
 
-    @Override
     public UserEntity createUser(UserEntity user) {
         long newId = idGenerator.getAndIncrement();
         user.setId(newId);
@@ -31,7 +28,6 @@ public class FakeUserRepositoryImpl implements UserRepository {
         return user;
     }
 
-    @Override
     public Optional<UserEntity> updateUser(Long id, UserEntity updatedUser) {
         if (!users.containsKey(id)) {
             return Optional.empty();
@@ -41,7 +37,6 @@ public class FakeUserRepositoryImpl implements UserRepository {
         return Optional.of(updatedUser);
     }
 
-    @Override
     public boolean deleteUser(Long id) {
         return users.remove(id) != null;
     }

@@ -26,7 +26,6 @@ public class ReviewServiceImpl implements ReviewService {
         this.userRepository = userRepository;
     }
 
-    @Override
     public List<Review> getAllReviews() {
         return reviewRepository.getAllReviews()
                 .stream()
@@ -34,12 +33,10 @@ public class ReviewServiceImpl implements ReviewService {
                 .collect(Collectors.toList());
     }
 
-    @Override
     public Optional<Review> getReviewById(Long id) {
         return reviewRepository.getReviewById(id).map(ReviewMapper::toDomain);
     }
 
-    @Override
     public Review createReview(Review review) {
         CourseEntity course = courseRepository.getCourseById(review.getCourseId()).orElseThrow();
         UserEntity user = userRepository.getUserById(review.getUserId()).orElseThrow();
@@ -49,7 +46,6 @@ public class ReviewServiceImpl implements ReviewService {
         return ReviewMapper.toDomain(savedEntity);
     }
 
-    @Override
     public Optional<Review> updateReview(Long id, Review review) {
         CourseEntity course = courseRepository.getCourseById(review.getCourseId()).orElseThrow();
         UserEntity user = userRepository.getUserById(review.getUserId()).orElseThrow();
@@ -58,7 +54,6 @@ public class ReviewServiceImpl implements ReviewService {
         return reviewRepository.updateReview(id, entity).map(ReviewMapper::toDomain);
     }
 
-    @Override
     public boolean deleteReview(Long id) {
         return reviewRepository.deleteReview(id);
     }

@@ -18,7 +18,6 @@ public class CourseServiceImpl implements CourseService {
         this.courseRepository = courseRepository;
     }
 
-    @Override
     public List<Course> getAllCourses() {
         return courseRepository.getAllCourses()
                 .stream()
@@ -26,25 +25,21 @@ public class CourseServiceImpl implements CourseService {
                 .collect(Collectors.toList());
     }
 
-    @Override
     public Optional<Course> getCourseById(Long id) {
         return courseRepository.getCourseById(id).map(CourseMapper::toDomain);
     }
 
-    @Override
     public Course createCourse(Course course) {
         CourseEntity entity = CourseMapper.toEntity(course);
         CourseEntity savedEntity = courseRepository.createCourse(entity);
         return CourseMapper.toDomain(savedEntity);
     }
 
-    @Override
     public Optional<Course> updateCourse(Long id, Course course) {
         CourseEntity entity = CourseMapper.toEntity(course);
         return courseRepository.updateCourse(id, entity).map(CourseMapper::toDomain);
     }
 
-    @Override
     public boolean deleteCourse(Long id) {
         return courseRepository.deleteCourse(id);
     }
