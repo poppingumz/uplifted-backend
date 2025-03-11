@@ -10,32 +10,36 @@ import java.util.concurrent.atomic.AtomicLong;
 @Repository
 public class FakeCourseRepositoryImpl implements CourseRepository {
     private final Map<Long, CourseEntity> courses = new HashMap<>();
-    private final AtomicLong idGenerator = new AtomicLong(1);
+    private final AtomicLong idCounter = new AtomicLong(1);
 
+    @Override
     public List<CourseEntity> getAllCourses() {
         return new ArrayList<>(courses.values());
     }
 
+    @Override
     public Optional<CourseEntity> getCourseById(Long id) {
         return Optional.ofNullable(courses.get(id));
     }
 
+    @Override
     public CourseEntity createCourse(CourseEntity course) {
-        long newId = idGenerator.getAndIncrement();
-        course.setId(newId);
-        courses.put(newId, course);
+        course.setId(idCounter.getAndIncrement());
+        courses.put(course.getId(), course);
         return course;
     }
 
+    @Override
     public Optional<CourseEntity> updateCourse(Long id, CourseEntity updatedCourse) {
-        if (!courses.containsKey(id)) {
-            return Optional.empty();
+        if (courses.containsKey(id)) {
+            updatedCourse.setId(id);
+            courses.put(id, updatedCourse);
+            return Optional.of(updatedCourse);
         }
-        updatedCourse.setId(id);
-        courses.put(id, updatedCourse);
-        return Optional.of(updatedCourse);
+        return Optional.empty();
     }
 
+    @Override
     public boolean deleteCourse(Long id) {
         return courses.remove(id) != null;
     }

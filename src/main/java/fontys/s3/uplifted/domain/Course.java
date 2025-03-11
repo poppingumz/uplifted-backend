@@ -11,8 +11,8 @@ import java.util.Set;
 @Builder
 public class Course {
     private Long id;
+    private Long teacherId;
     private String title;
     private String description;
-    private String instructorName;
     private Set<Long> enrolledStudentIds;
 }

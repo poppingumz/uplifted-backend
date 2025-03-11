@@ -18,6 +18,7 @@ public class UserServiceImpl implements UserService {
         this.userRepository = userRepository;
     }
 
+    @Override
     public List<User> getAllUsers() {
         return userRepository.getAllUsers()
                 .stream()
@@ -25,21 +26,22 @@ public class UserServiceImpl implements UserService {
                 .collect(Collectors.toList());
     }
 
+    @Override
     public Optional<User> getUserById(Long id) {
         return userRepository.getUserById(id).map(UserMapper::convert);
     }
 
+    @Override
     public User createUser(User user) {
-        UserEntity entity = UserMapper.convertToEntity(user);
-        UserEntity savedEntity = userRepository.createUser(entity);
-        return UserMapper.convert(savedEntity);
+        return UserMapper.convert(userRepository.createUser(UserMapper.convertToEntity(user)));
     }
 
+    @Override
     public Optional<User> updateUser(Long id, User user) {
-        UserEntity entity = UserMapper.convertToEntity(user);
-        return userRepository.updateUser(id, entity).map(UserMapper::convert);
+        return userRepository.updateUser(id, UserMapper.convertToEntity(user)).map(UserMapper::convert);
     }
 
+    @Override
     public boolean deleteUser(Long id) {
         return userRepository.deleteUser(id);
     }

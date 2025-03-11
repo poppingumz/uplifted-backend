@@ -6,6 +6,7 @@ import fontys.s3.uplifted.persistence.EnrollmentRepository;
 import fontys.s3.uplifted.persistence.entity.EnrollmentEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -60,5 +61,19 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 
     public boolean isUserEnrolledInCourse(Long userId, Long courseId) {
         return enrollmentRepository.isUserEnrolledInCourse(userId, courseId);
+    }
+
+    public void enrollUser(Long courseId, Long userId) {
+        if (enrollmentRepository.isUserEnrolledInCourse(userId, courseId)) {
+            throw new IllegalStateException("User is already enrolled in this course.");
+        }
+
+        Enrollment enrollment = Enrollment.builder()
+                .courseId(courseId)
+                .userId(userId)
+                .enrollmentDate(LocalDate.now())
+                .build();
+
+        enrollmentRepository.createEnrollment(EnrollmentMapper.convertToEntity(enrollment));
     }
 }

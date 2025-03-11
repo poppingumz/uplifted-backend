@@ -59,4 +59,14 @@ public class EnrollmentController {
     public boolean isUserEnrolled(@PathVariable Long userId, @PathVariable Long courseId) {
         return enrollmentService.isUserEnrolledInCourse(userId, courseId);
     }
+
+    @PostMapping("/{courseId}/users/{userId}")
+    public ResponseEntity<?> enrollUser(@PathVariable Long courseId, @PathVariable Long userId) {
+        try {
+            enrollmentService.enrollUser(courseId, userId);
+            return ResponseEntity.ok("User enrolled successfully!");
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
+    }
 }

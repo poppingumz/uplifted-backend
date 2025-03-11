@@ -10,20 +10,20 @@ final class CourseMapper {
     public static Course toDomain(CourseEntity entity) {
         return Course.builder()
                 .id(entity.getId())
+                .teacherId(entity.getTeacherId())
                 .title(entity.getTitle())
                 .description(entity.getDescription())
-                .instructorName(entity.getInstructorName())
-                .enrolledStudentIds(entity.getEnrolledStudentIds()) // Fix: Match correct field name
+                .enrolledStudentIds(entity.getEnrolledStudentIds())
                 .build();
     }
 
     public static CourseEntity toEntity(Course domain) {
         return CourseEntity.builder()
                 .id(domain.getId())
+                .teacherId(domain.getTeacherId())
                 .title(domain.getTitle())
                 .description(domain.getDescription())
-                .instructorName(domain.getInstructorName())
-                .enrolledStudentIds(domain.getEnrolledStudentIds()) // Fix: Match correct field name
+                .enrolledStudentIds(domain.getEnrolledStudentIds())
                 .build();
     }
 }

@@ -16,13 +16,13 @@ public class CourseEntity {
     private Long id;
 
     @Column(nullable = false)
+    private Long teacherId;
+
+    @Column(nullable = false)
     private String title;
 
     @Column(nullable = false)
     private String description;
-
-    @Column(nullable = false)
-    private String instructorName;
 
     @ElementCollection
     private Set<Long> enrolledStudentIds;
