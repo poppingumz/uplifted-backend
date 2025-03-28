@@ -28,7 +28,6 @@ public class ProgressServiceImpl implements ProgressService {
         this.userRepository = userRepository;
     }
 
-    @Override
     public List<Progress> getAllProgress() {
         return progressRepository.getAllProgress()
                 .stream()
@@ -36,13 +35,11 @@ public class ProgressServiceImpl implements ProgressService {
                 .collect(Collectors.toList());
     }
 
-    @Override
     public Optional<Progress> getProgressById(Long id) {
         return progressRepository.getProgressById(id).map(ProgressMapper::toDomain);
     }
 
     @Transactional
-    @Override
     public Progress createProgress(Progress progress) {
         CourseEntity course = courseRepository.getCourseById(progress.getCourseId())
                 .orElseThrow(() -> new NotFoundException("Course not found with ID: " + progress.getCourseId()));
@@ -60,7 +57,6 @@ public class ProgressServiceImpl implements ProgressService {
     }
 
     @Transactional
-    @Override
     public Optional<Progress> updateProgress(Long id, Progress progress) {
         CourseEntity course = courseRepository.getCourseById(progress.getCourseId())
                 .orElseThrow(() -> new NotFoundException("Course not found"));
@@ -76,7 +72,6 @@ public class ProgressServiceImpl implements ProgressService {
     }
 
     @Transactional
-    @Override
     public boolean deleteProgress(Long id) {
         return progressRepository.deleteProgress(id);
     }

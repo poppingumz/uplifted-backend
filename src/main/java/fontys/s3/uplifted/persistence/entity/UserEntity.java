@@ -11,6 +11,7 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class UserEntity {
 
@@ -37,12 +38,4 @@ public class UserEntity {
     )
     private Set<Course> enrolledCourses;
 
-    public UserEntity(Long id, String username, String email, String password, Role role, Set<Course> enrolledCourses) {
-        this.id = id;
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        this.role = role;
-        this.enrolledCourses = enrolledCourses;
-    }
 }

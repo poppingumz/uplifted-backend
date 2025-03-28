@@ -21,7 +21,6 @@ public class CourseServiceImpl implements CourseService {
         this.userRepository = userRepository;
     }
 
-    @Override
     public List<Course> getAllCourses() {
         return courseRepository.getAllCourses()
                 .stream()
@@ -37,7 +36,6 @@ public class CourseServiceImpl implements CourseService {
                 .collect(Collectors.toList());
     }
 
-    @Override
     public Optional<Course> getCourseById(Long id) {
         return courseRepository.getCourseById(id).map(courseEntity -> {
             Course course = CourseMapper.toDomain(courseEntity);
@@ -50,7 +48,6 @@ public class CourseServiceImpl implements CourseService {
         });
     }
 
-    @Override
     public Course createCourse(Course course) {
         CourseEntity entity = CourseMapper.toEntity(course);
         entity.setTeacherId(course.getTeacherId());
@@ -58,13 +55,11 @@ public class CourseServiceImpl implements CourseService {
         return CourseMapper.toDomain(savedEntity);
     }
 
-    @Override
     public Optional<Course> updateCourse(Long id, Course course) {
         CourseEntity entity = CourseMapper.toEntity(course);
         return courseRepository.updateCourse(id, entity).map(CourseMapper::toDomain);
     }
 
-    @Override
     public boolean deleteCourse(Long id) {
         return courseRepository.deleteCourse(id);
     }

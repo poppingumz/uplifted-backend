@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="fontys.s3.uplifted.business.UserServiceImplTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2025-03-11T21:16:43" hostname="LAPTOP-RHFQ3ARB" time="1.334">
+<testsuite name="fontys.s3.uplifted.business.UserServiceImplTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2025-03-12T08:53:55" hostname="LAPTOP-RHFQ3ARB" time="2.865">
   <properties/>
-  <testcase name="testGetUserById_NotFound()" classname="fontys.s3.uplifted.business.UserServiceImplTest" time="1.278"/>
-  <testcase name="testDeleteUser_Success()" classname="fontys.s3.uplifted.business.UserServiceImplTest" time="0.006"/>
-  <testcase name="testUpdateUser_Success()" classname="fontys.s3.uplifted.business.UserServiceImplTest" time="0.019"/>
-  <testcase name="testGetAllUsers()" classname="fontys.s3.uplifted.business.UserServiceImplTest" time="0.005"/>
-  <testcase name="testDeleteUser_NotFound()" classname="fontys.s3.uplifted.business.UserServiceImplTest" time="0.003"/>
-  <testcase name="testUpdateUser_NotFound()" classname="fontys.s3.uplifted.business.UserServiceImplTest" time="0.003"/>
-  <testcase name="testGetUserById_Found()" classname="fontys.s3.uplifted.business.UserServiceImplTest" time="0.003"/>
-  <testcase name="testCreateUser()" classname="fontys.s3.uplifted.business.UserServiceImplTest" time="0.005"/>
+  <testcase name="testGetUserById_NotFound()" classname="fontys.s3.uplifted.business.UserServiceImplTest" time="2.764"/>
+  <testcase name="testDeleteUser_Success()" classname="fontys.s3.uplifted.business.UserServiceImplTest" time="0.008"/>
+  <testcase name="testUpdateUser_Success()" classname="fontys.s3.uplifted.business.UserServiceImplTest" time="0.036"/>
+  <testcase name="testGetAllUsers()" classname="fontys.s3.uplifted.business.UserServiceImplTest" time="0.009"/>
+  <testcase name="testDeleteUser_NotFound()" classname="fontys.s3.uplifted.business.UserServiceImplTest" time="0.005"/>
+  <testcase name="testUpdateUser_NotFound()" classname="fontys.s3.uplifted.business.UserServiceImplTest" time="0.006"/>
+  <testcase name="testGetUserById_Found()" classname="fontys.s3.uplifted.business.UserServiceImplTest" time="0.005"/>
+  <testcase name="testCreateUser()" classname="fontys.s3.uplifted.business.UserServiceImplTest" time="0.011"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

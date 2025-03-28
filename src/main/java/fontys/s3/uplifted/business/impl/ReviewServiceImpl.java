@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @Service
@@ -19,6 +20,7 @@ public class ReviewServiceImpl implements ReviewService {
     private final ReviewRepository reviewRepository;
     private final CourseRepository courseRepository;
     private final UserRepository userRepository;
+    private static final Logger logger = Logger.getLogger(ReviewService.class.getName());
 
     public ReviewServiceImpl(ReviewRepository reviewRepository, CourseRepository courseRepository, UserRepository userRepository) {
         this.reviewRepository = reviewRepository;
@@ -34,7 +36,11 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     public Optional<Review> getReviewById(Long id) {
-        return reviewRepository.getReviewById(id).map(ReviewMapper::toDomain);
+        Optional<Review> review = reviewRepository.getReviewById(id).map(ReviewMapper::toDomain);
+        if (review.isEmpty()) {
+            logger.warning("Review not found for ID: " + id);
+        }
+        return review;
     }
 
     public Review createReview(Review review) {
@@ -45,6 +51,7 @@ public class ReviewServiceImpl implements ReviewService {
         ReviewEntity savedEntity = reviewRepository.createReview(entity);
         return ReviewMapper.toDomain(savedEntity);
     }
+
 
     public Optional<Review> updateReview(Long id, Review review) {
         CourseEntity course = courseRepository.getCourseById(review.getCourseId()).orElseThrow();

@@ -1,55 +1,47 @@
 package fontys.s3.uplifted.controller;
 
-import fontys.s3.uplifted.business.UserService;
 import fontys.s3.uplifted.domain.User;
-import fontys.s3.uplifted.domain.enums.Role;
+import fontys.s3.uplifted.business.impl.UserServiceImpl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/users")
 public class UserController {
-    private final UserService userService;
+    private final UserServiceImpl userServiceImpl;
 
-    public UserController(UserService userService) {
-        this.userService = userService;
+    public UserController(UserServiceImpl userServiceImpl) {
+        this.userServiceImpl = userServiceImpl;
     }
 
     @GetMapping
     public List<User> getAllUsers() {
-        return userService.getAllUsers();
+        return userServiceImpl.getAllUsers();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
-        return userService.getUserById(id)
+        return userServiceImpl.getUserById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<?> createUser(@RequestBody User user, @RequestHeader("Role") String role) {
-        if (!role.equals("ADMIN")) {
-            return ResponseEntity.status(403).body("Only admins can create users.");
-        }
-        return ResponseEntity.ok(userService.createUser(user));
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable Long id, @RequestHeader("Role") String role) {
-        if (!role.equals("ADMIN")) {
-            return ResponseEntity.status(403).body("Only admins can delete users.");
-        }
-        return userService.deleteUser(id) ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+    public User createUser(@RequestBody User user) {
+        return userServiceImpl.createUser(user);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
-        return userService.updateUser(id, user)
+        return userServiceImpl.updateUser(id, user)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+        return userServiceImpl.deleteUser(id) ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
 }

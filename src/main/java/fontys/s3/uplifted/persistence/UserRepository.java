@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;
 
-public interface UserRepository {
+public interface UserRepository  {
     List<UserEntity> getAllUsers();
     Optional<UserEntity> getUserById(Long id);
     UserEntity createUser(UserEntity user);
