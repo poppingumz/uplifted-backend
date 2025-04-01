@@ -1,12 +1,12 @@
 package fontys.s3.uplifted.persistence.entity;
 
-import fontys.s3.uplifted.domain.Course;
 import fontys.s3.uplifted.domain.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Set;
 
+@Entity
 @Table(name = "users")
 @Getter
 @Setter
@@ -16,6 +16,7 @@ import java.util.Set;
 public class UserEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false, unique = true)
@@ -36,6 +37,5 @@ public class UserEntity {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "course_id")
     )
-    private Set<Course> enrolledCourses;
-
+    private Set<CourseEntity> enrolledCourses;
 }

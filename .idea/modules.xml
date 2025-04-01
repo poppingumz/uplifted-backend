@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/UpliftEd.main.iml" filepath="$PROJECT_DIR$/.idea/modules/UpliftEd.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/uplifted-learning-platform.main.iml" filepath="$PROJECT_DIR$/.idea/modules/uplifted-learning-platform.main.iml" />
     </modules>
   </component>
 </project>

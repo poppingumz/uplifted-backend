@@ -33,6 +33,7 @@ class UserServiceImplTest {
 
     @Test
     void testGetAllUsers() {
+        //Tester
         when(userRepository.getAllUsers()).thenReturn(List.of(userEntity));
 
         List<User> users = userService.getAllUsers();

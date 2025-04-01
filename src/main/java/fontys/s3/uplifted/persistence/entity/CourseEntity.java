@@ -5,11 +5,12 @@ import lombok.*;
 
 import java.util.Set;
 
+@Entity
 @Getter
 @Setter
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Table(name = "courses")
 public class CourseEntity {
 
@@ -18,13 +19,13 @@ public class CourseEntity {
     private Long id;
 
     @Column(nullable = false)
-    private Long teacherId;
-
-    @Column(nullable = false)
     private String title;
 
     @Column(nullable = false)
     private String description;
+
+    @Column(nullable = false)
+    private String instructorName;
 
     @ElementCollection
     private Set<Long> enrolledStudentIds;

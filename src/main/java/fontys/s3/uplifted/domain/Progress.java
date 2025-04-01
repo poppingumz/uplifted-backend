@@ -12,6 +12,4 @@ public class Progress {
     private Long courseId;
     private Long userId;
     private double progressPercentage;
-    private int completedLessons;
-    private int totalLessons;
 }

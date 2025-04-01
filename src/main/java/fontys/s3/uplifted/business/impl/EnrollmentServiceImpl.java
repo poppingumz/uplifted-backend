@@ -1,79 +1,49 @@
 package fontys.s3.uplifted.business.impl;
 
 import fontys.s3.uplifted.business.EnrollmentService;
-import fontys.s3.uplifted.domain.Enrollment;
-import fontys.s3.uplifted.persistence.EnrollmentRepository;
-import fontys.s3.uplifted.persistence.entity.EnrollmentEntity;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.*;
 
+@Slf4j
 @Service
 public class EnrollmentServiceImpl implements EnrollmentService {
-    private final EnrollmentRepository enrollmentRepository;
 
-    public EnrollmentServiceImpl(EnrollmentRepository enrollmentRepository) {
-        this.enrollmentRepository = enrollmentRepository;
-    }
+    private final Map<Long, Set<Long>> enrollments = new HashMap<>();
 
-    public List<Enrollment> getAllEnrollments() {
-        return enrollmentRepository.getAllEnrollments()
-                .stream()
-                .map(EnrollmentMapper::convert)
-                .collect(Collectors.toList());
-    }
-
-    public Optional<Enrollment> getEnrollmentById(Long id) {
-        return enrollmentRepository.getEnrollmentById(id).map(EnrollmentMapper::convert);
-    }
-
-    public Enrollment createEnrollment(Enrollment enrollment) {
-        EnrollmentEntity entity = EnrollmentMapper.convertToEntity(enrollment);
-        EnrollmentEntity savedEntity = enrollmentRepository.createEnrollment(entity);
-        return EnrollmentMapper.convert(savedEntity);
-    }
-
-    public Optional<Enrollment> updateEnrollment(Long id, Enrollment enrollment) {
-        EnrollmentEntity entity = EnrollmentMapper.convertToEntity(enrollment);
-        return enrollmentRepository.updateEnrollment(id, entity).map(EnrollmentMapper::convert);
-    }
-
-    public boolean deleteEnrollment(Long id) {
-        return enrollmentRepository.deleteEnrollment(id);
-    }
-
-    public List<Enrollment> getEnrollmentsByCourseId(Long courseId) {
-        return enrollmentRepository.getEnrollmentsByCourseId(courseId)
-                .stream()
-                .map(EnrollmentMapper::convert)
-                .collect(Collectors.toList());
-    }
-
-    public List<Enrollment> getEnrollmentsByUserId(Long userId) {
-        return enrollmentRepository.getEnrollmentsByUserId(userId)
-                .stream()
-                .map(EnrollmentMapper::convert)
-                .collect(Collectors.toList());
-    }
-
-    public boolean isUserEnrolledInCourse(Long userId, Long courseId) {
-        return enrollmentRepository.isUserEnrolledInCourse(userId, courseId);
-    }
-
-    public void enrollUser(Long courseId, Long userId) {
-        if (enrollmentRepository.isUserEnrolledInCourse(userId, courseId)) {
-            throw new IllegalStateException("User is already enrolled in this course.");
+    public void enrollStudent(Long courseId, Long studentId) {
+        try {
+            enrollments.computeIfAbsent(courseId, k -> new HashSet<>()).add(studentId);
+            log.info("Enrolled student {} to course {}", studentId, courseId);
+        } catch (Exception e) {
+            log.error("Failed to enroll student {} to course {}", studentId, courseId, e);
+            throw new RuntimeException("Unable to enroll student.");
         }
+    }
 
-        Enrollment enrollment = Enrollment.builder()
-                .courseId(courseId)
-                .userId(userId)
-                .enrollmentDate(LocalDate.now())
-                .build();
+    public void unenrollStudent(Long courseId, Long studentId) {
+        try {
+            Set<Long> students = enrollments.get(courseId);
+            if (students != null && students.remove(studentId)) {
+                log.info("Unenrolled student {} from course {}", studentId, courseId);
+            } else {
+                log.warn("Student {} was not enrolled in course {}", studentId, courseId);
+            }
+        } catch (Exception e) {
+            log.error("Failed to unenroll student {} from course {}", studentId, courseId, e);
+            throw new RuntimeException("Unable to unenroll student.");
+        }
+    }
 
-        enrollmentRepository.createEnrollment(EnrollmentMapper.convertToEntity(enrollment));
+    public Set<Long> getEnrolledStudents(Long courseId) {
+        try {
+            return new HashSet<>(enrollments.getOrDefault(courseId, Collections.emptySet()));
+        } catch (Exception e) {
+            log.error("Failed to retrieve enrolled students for course {}", courseId, e);
+            throw new RuntimeException("Unable to get enrolled students.");
+        }
     }
 }

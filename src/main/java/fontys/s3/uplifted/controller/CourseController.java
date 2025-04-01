@@ -2,13 +2,15 @@ package fontys.s3.uplifted.controller;
 
 import fontys.s3.uplifted.business.CourseService;
 import fontys.s3.uplifted.domain.Course;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
-@RequestMapping("/courses")
+@RequestMapping("/api/courses")
 public class CourseController {
     private final CourseService courseService;
 
@@ -17,59 +19,58 @@ public class CourseController {
     }
 
     @GetMapping
-    public List<Course> getAllCourses() {
-        return courseService.getAllCourses();
+    public ResponseEntity<List<Course>> getAllCourses() {
+        try {
+            return ResponseEntity.ok(courseService.getAllCourses());
+        } catch (Exception e) {
+            log.error("Failed to fetch courses", e);
+            return ResponseEntity.internalServerError().build();
+        }
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Course> getCourseById(@PathVariable Long id) {
-        return courseService.getCourseById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        try {
+            return courseService.getCourseById(id)
+                    .map(ResponseEntity::ok)
+                    .orElse(ResponseEntity.notFound().build());
+        } catch (Exception e) {
+            log.error("Error retrieving course with ID: {}", id, e);
+            return ResponseEntity.internalServerError().build();
+        }
     }
 
     @PostMapping
-    public ResponseEntity<?> createCourse(@RequestBody Course course, @RequestHeader("Role") String role, @RequestHeader("UserId") Long userId) {
-        if (!role.equals("TEACHER")) {
-            return ResponseEntity.status(403).body("Only teachers can create courses.");
+    public ResponseEntity<Course> createCourse(@RequestBody Course course) {
+        try {
+            Course created = courseService.createCourse(course);
+            return ResponseEntity.ok(created);
+        } catch (Exception e) {
+            log.error("Error creating course: {}", course.getTitle(), e);
+            return ResponseEntity.internalServerError().build();
         }
-        course.setTeacherId(userId); // Assign the teacher as the course creator
-        return ResponseEntity.ok(courseService.createCourse(course));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateCourse(@PathVariable Long id, @RequestBody Course course, @RequestHeader("Role") String role, @RequestHeader("UserId") Long userId) {
-        if (!role.equals("TEACHER")) {
-            return ResponseEntity.status(403).body("Only teachers can update courses.");
+    public ResponseEntity<Course> updateCourse(@PathVariable Long id, @RequestBody Course course) {
+        try {
+            return courseService.updateCourse(id, course)
+                    .map(ResponseEntity::ok)
+                    .orElse(ResponseEntity.notFound().build());
+        } catch (Exception e) {
+            log.error("Error updating course with ID: {}", id, e);
+            return ResponseEntity.internalServerError().build();
         }
-
-        Course existingCourse = courseService.getCourseById(id).orElse(null);
-        if (existingCourse == null) {
-            return ResponseEntity.notFound().build();
-        }
-
-        if (!existingCourse.getTeacherId().equals(userId)) {
-            return ResponseEntity.status(403).body("You can only modify your own courses.");
-        }
-
-        return ResponseEntity.ok(courseService.updateCourse(id, course));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteCourse(@PathVariable Long id, @RequestHeader("Role") String role, @RequestHeader("UserId") Long userId) {
-        if (!role.equals("TEACHER")) {
-            return ResponseEntity.status(403).body("Only teachers can delete courses.");
+    public ResponseEntity<Void> deleteCourse(@PathVariable Long id) {
+        try {
+            boolean deleted = courseService.deleteCourse(id);
+            return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            log.error("Error deleting course with ID: {}", id, e);
+            return ResponseEntity.internalServerError().build();
         }
-
-        Course existingCourse = courseService.getCourseById(id).orElse(null);
-        if (existingCourse == null) {
-            return ResponseEntity.notFound().build();
-        }
-
-        if (!existingCourse.getTeacherId().equals(userId)) {
-            return ResponseEntity.status(403).body("You can only delete your own courses.");
-        }
-
-        return courseService.deleteCourse(id) ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
 }

@@ -1,17 +1,33 @@
-variables:
-  JAVA_HOME: "C:\\Program Files\\Microsoft\\jdk-17.0.14.7-hotspot"
-  GRADLE_OPTS: "-Dorg.gradle.daemon=false"
-
 stages:
   - build
   - test
 
+variables:
+  JAVA_HOME: "C:\\Program Files\\Microsoft\\jdk-17.0.14.7-hotspot"
+  GRADLE_OPTS: "-Dorg.gradle.daemon=false"
+
+before_script:
+  - echo "Starting GitLab CI/CD Pipeline..."
+  - echo "Setting JAVA_HOME..."
+  - $env:JAVA_HOME="C:\Program Files\Microsoft\jdk-17.0.14.7-hotspot"
+  - echo $env:JAVA_HOME
+  - $env:Path+=";C:\Program Files\Microsoft\jdk-17.0.14.7-hotspot\bin"
+  - java -version
+
 build:
   stage: build
   script:
-    - ./gradlew assemble
+    - echo "Building project..."
+    - ./gradlew clean assemble
+  artifacts:
+    paths:
+      - build/libs/*.jar
 
 test:
   stage: test
   script:
+    - echo "Running tests..."
     - ./gradlew test
+  artifacts:
+    reports:
+      junit: build/test-results/test/TEST-*.xml

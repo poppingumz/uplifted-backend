@@ -3,9 +3,12 @@ package fontys.s3.uplifted.persistence.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+@Entity
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "progress")
 public class ProgressEntity {
 

@@ -3,13 +3,15 @@ package fontys.s3.uplifted.persistence.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+@Entity
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @Table(name = "reviews")
 public class ReviewEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
