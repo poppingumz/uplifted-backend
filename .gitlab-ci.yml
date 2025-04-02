@@ -36,17 +36,11 @@ test:
 
 dockerize:
   stage: dockerize
-  image: docker:latest
-  services:
-    - docker:dind
-  variables:
-    DOCKER_HOST: tcp://docker:2375/
-    DOCKER_TLS_CERTDIR: ""
-  before_script:
-    - echo "Using Linux Docker runner for building image"
-    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
-    - docker build -t $DOCKER_IMAGE:$CI_COMMIT_SHORT_SHA .
-    - docker push $DOCKER_IMAGE:$CI_COMMIT_SHORT_SHA
+    - echo "Building Docker image on Windows runner with Docker Desktop..."
+    - docker version
+    - docker login -u "%CI_REGISTRY_USER%" -p "%CI_REGISTRY_PASSWORD%" %CI_REGISTRY%
+    - docker build -t %DOCKER_IMAGE%:%CI_COMMIT_SHORT_SHA% .
+    - docker push %DOCKER_IMAGE%:%CI_COMMIT_SHORT_SHA%
   only:
     - main
