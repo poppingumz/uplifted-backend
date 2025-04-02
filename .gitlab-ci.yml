@@ -39,8 +39,9 @@ dockerize:
   script:
     - echo "Building Docker image on Windows runner with Docker Desktop..."
     - docker version
-    - docker login -u "%CI_REGISTRY_USER%" -p "%CI_REGISTRY_PASSWORD%" %CI_REGISTRY%
-    - docker build -t %DOCKER_IMAGE%:%CI_COMMIT_SHORT_SHA% .
-    - docker push %DOCKER_IMAGE%:%CI_COMMIT_SHORT_SHA%
+    - docker login -u $env:CI_REGISTRY_USER -p $env:CI_REGISTRY_PASSWORD $env:CI_REGISTRY
+    - docker build -t "$env:CI_REGISTRY_IMAGE/backend:$env:CI_COMMIT_SHORT_SHA" .
+    - docker push "$env:CI_REGISTRY_IMAGE/backend:$env:CI_COMMIT_SHORT_SHA"
   only:
     - main
+
