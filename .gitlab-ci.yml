@@ -37,11 +37,9 @@ test:
 dockerize:
   stage: dockerize
   script:
-    - echo "Building Docker image on Windows runner with Docker Desktop..."
-    - docker version
-    - docker login -u $env:CI_REGISTRY_USER -p $env:CI_REGISTRY_PASSWORD $env:CI_REGISTRY
-    - docker build -t "$env:CI_REGISTRY_IMAGE/backend:$env:CI_COMMIT_SHORT_SHA" .
-    - docker push "$env:CI_REGISTRY_IMAGE/backend:$env:CI_COMMIT_SHORT_SHA"
+    - echo "Logging into Docker Hub..."
+    - echo $env:DOCKER_PASSWORD | docker login -u $env:DOCKER_USERNAME --password-stdin $env:DOCKER_REGISTRY
+    - docker build -t $env:DOCKER_REGISTRY/$env:DOCKER_USERNAME/uplifted-backend:$env:CI_COMMIT_SHORT_SHA .
+    - docker push $env:DOCKER_REGISTRY/$env:DOCKER_USERNAME/uplifted-backend:$env:CI_COMMIT_SHORT_SHA
   only:
     - main
-
