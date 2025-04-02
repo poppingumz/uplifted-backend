@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="fontys.s3.uplifted.controller.CourseControllerTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2025-04-02T08:23:07" hostname="LAPTOP-RHFQ3ARB" time="2.807">
+  <properties/>
+  <testcase name="shouldReturnCourseByIdIfExists()" classname="fontys.s3.uplifted.controller.CourseControllerTest" time="2.731"/>
+  <testcase name="shouldReturnNotFoundIfCourseToDeleteDoesNotExist()" classname="fontys.s3.uplifted.controller.CourseControllerTest" time="0.007"/>
+  <testcase name="shouldReturnAllCourses()" classname="fontys.s3.uplifted.controller.CourseControllerTest" time="0.006"/>
+  <testcase name="shouldReturnNotFoundIfCourseDoesNotExist()" classname="fontys.s3.uplifted.controller.CourseControllerTest" time="0.006"/>
+  <testcase name="shouldUpdateExistingCourse()" classname="fontys.s3.uplifted.controller.CourseControllerTest" time="0.017"/>
+  <testcase name="shouldCreateNewCourse()" classname="fontys.s3.uplifted.controller.CourseControllerTest" time="0.008"/>
+  <testcase name="shouldDeleteCourseIfExists()" classname="fontys.s3.uplifted.controller.CourseControllerTest" time="0.008"/>
+  <testcase name="shouldReturnNotFoundWhenUpdatingNonExistingCourse()" classname="fontys.s3.uplifted.controller.CourseControllerTest" time="0.006"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
