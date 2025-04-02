@@ -37,8 +37,8 @@ test:
 dockerize:
   stage: dockerize
   script:
-    - echo "Logging into Docker Hub..."
-    - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD" "$DOCKER_REGISTRY"
+    - echo "Logging into Docker Hub (via stdin)..."
+    - $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin $DOCKER_REGISTRY
     - docker build -t "$DOCKER_USERNAME/uplifted-backend:$CI_COMMIT_SHORT_SHA" .
     - docker push "$DOCKER_USERNAME/uplifted-backend:$CI_COMMIT_SHORT_SHA"
   only:
