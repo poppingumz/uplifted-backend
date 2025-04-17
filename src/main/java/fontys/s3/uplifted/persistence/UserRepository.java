@@ -1,15 +1,12 @@
 package fontys.s3.uplifted.persistence;
 
-import fontys.s3.uplifted.domain.User;
 import fontys.s3.uplifted.persistence.entity.UserEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
 
-public interface UserRepository {
-    List<UserEntity> getAllUsers();
-    Optional<UserEntity> getUserById(Long id);
-    UserEntity createUser(UserEntity user);
-    Optional<UserEntity> updateUser(Long id, UserEntity updatedUser);
-    boolean deleteUser(Long id);
+@Repository
+public interface UserRepository extends JpaRepository<UserEntity, Long> {
+    Optional<UserEntity> findByEmail(String email);
 }

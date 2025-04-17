@@ -3,6 +3,8 @@ package fontys.s3.uplifted.persistence.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
+
 @Entity
 @Table(name = "files")
 @Getter
@@ -21,4 +23,9 @@ public class FileEntity {
 
     @Lob
     private byte[] data;
+
+    private Long uploaderId;
+    private Long courseId;
+    private LocalDate uploadDate;
 }
+

@@ -1,17 +1,20 @@
 package fontys.s3.uplifted.business.impl;
 
 import fontys.s3.uplifted.business.FileService;
+import fontys.s3.uplifted.business.impl.mapper.FileMapper;
 import fontys.s3.uplifted.domain.File;
 import fontys.s3.uplifted.persistence.FileRepository;
+import fontys.s3.uplifted.persistence.entity.FileEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
-@Slf4j
 @Service
+@Slf4j
 public class FileServiceImpl implements FileService {
 
     private final FileRepository fileRepository;
@@ -22,35 +25,29 @@ public class FileServiceImpl implements FileService {
 
     public void uploadFile(MultipartFile file) {
         try {
-            File uploadedFile = File.builder()
+            FileEntity entity = FileEntity.builder()
                     .name(file.getOriginalFilename())
                     .type(file.getContentType())
                     .data(file.getBytes())
                     .build();
 
-            fileRepository.saveFile(uploadedFile);
-            log.info("Successfully uploaded file: {}", uploadedFile.getName());
+            fileRepository.save(entity);
         } catch (IOException e) {
-            log.error("Failed to upload file", e);
-            throw new RuntimeException("Could not upload file. Please try again.");
+            log.error("File upload failed", e);
+            throw new RuntimeException("Failed to upload file");
         }
     }
 
     public List<File> getAllFiles() {
-        try {
-            return fileRepository.getAllFiles();
-        } catch (Exception e) {
-            log.error("Error retrieving all files", e);
-            throw new RuntimeException("Could not retrieve files.");
-        }
+        return fileRepository.findAll()
+                .stream()
+                .map(FileMapper::toDomain)
+                .collect(Collectors.toList());
     }
 
     public File getFileById(Long id) {
-        try {
-            return fileRepository.getFileById(id);
-        } catch (Exception e) {
-            log.error("Error retrieving file by ID {}", id, e);
-            throw new RuntimeException("File not found with ID: " + id);
-        }
+        return fileRepository.findById(id)
+                .map(FileMapper::toDomain)
+                .orElseThrow(() -> new RuntimeException("File not found with ID: " + id));
     }
 }

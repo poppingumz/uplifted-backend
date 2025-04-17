@@ -3,6 +3,7 @@ plugins {
     id 'org.springframework.boot' version '3.1.0'
     id 'io.spring.dependency-management' version '1.1.0'
     id "org.sonarqube" version "4.4.1.3373"
+    id "jacoco"
 }
 
 group = 'fontys.s3.uplifted'
@@ -18,8 +19,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
-    implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
-    implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+    runtimeOnly('io.jsonwebtoken:jjwt-jackson:0.11.5')
 
     runtimeOnly 'com.mysql:mysql-connector-j'
 
@@ -38,9 +39,20 @@ test {
 sonar {
     properties {
         property "sonar.projectKey", "uplifted"
-        property "sonar.projectName", "UpliftEd"
         property "sonar.host.url", "http://localhost:9000"
-        property "sonar.token", "YOUR_SONAR_TOKEN"
+        property "sonar.coverage.jacoco.xmlReportPaths", "$buildDir/reports/jacoco/test/jacocoTestReport.xml"
+
     }
 }
+jacoco {
+    toolVersion = "0.8.10"
+}
 
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.required = true
+        html.required = true
+        csv.required = false
+    }
+}

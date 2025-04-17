@@ -1,3 +1,4 @@
+
 package fontys.s3.uplifted.business;
 
 import fontys.s3.uplifted.business.impl.UserServiceImpl;
@@ -10,102 +11,105 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class UserServiceImplTest {
+public class UserServiceImplTest {
 
-    @Mock private UserRepository userRepository;
-    @InjectMocks private UserServiceImpl userService;
+    @Mock
+    private UserRepository userRepository;
 
-    private UserEntity userEntity;
-    private User user;
+    @InjectMocks
+    private UserServiceImpl userService;
+
+    private UserEntity sampleEntity;
+    private User sampleUser;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         MockitoAnnotations.openMocks(this);
-        userEntity = new UserEntity(1L, "testUser", "test@example.com", "password123", Role.STUDENT, null);
-        user = new User(1L, "testUser", "test@example.com", "password123", Role.STUDENT);
+        sampleEntity = UserEntity.builder()
+                .id(1L)
+                .username("johndoe")
+                .email("john@example.com")
+                .password("securepassword")
+                .role(Role.STUDENT)
+                .build();
+
+        sampleUser = User.builder()
+                .id(1L)
+                .username("johndoe")
+                .email("john@example.com")
+                .password("securepassword")
+                .role(Role.STUDENT)
+                .build();
     }
 
     @Test
-    void testGetAllUsers() {
-        //Tester
-        when(userRepository.getAllUsers()).thenReturn(List.of(userEntity));
+    public void testGetAllUsers() {
+        when(userRepository.findAll()).thenReturn(Arrays.asList(sampleEntity));
 
         List<User> users = userService.getAllUsers();
-
-        assertNotNull(users);
         assertEquals(1, users.size());
-        assertEquals("testUser", users.get(0).getUsername());
+        assertEquals("johndoe", users.get(0).getUsername());
     }
 
     @Test
-    void testGetUserById_Found() {
-        when(userRepository.getUserById(1L)).thenReturn(Optional.of(userEntity));
+    public void testGetUserById() {
+        when(userRepository.findById(1L)).thenReturn(Optional.of(sampleEntity));
 
-        Optional<User> foundUser = userService.getUserById(1L);
-
-        assertTrue(foundUser.isPresent());
-        assertEquals("testUser", foundUser.get().getUsername());
+        Optional<User> result = userService.getUserById(1L);
+        assertTrue(result.isPresent());
+        assertEquals("johndoe", result.get().getUsername());
     }
 
     @Test
-    void testGetUserById_NotFound() {
-        when(userRepository.getUserById(999L)).thenReturn(Optional.empty());
+    public void testCreateUser() {
+        when(userRepository.save(any(UserEntity.class))).thenReturn(sampleEntity);
 
-        Optional<User> foundUser = userService.getUserById(999L);
-
-        assertFalse(foundUser.isPresent());
+        User created = userService.createUser(sampleUser);
+        assertNotNull(created);
+        assertEquals("johndoe", created.getUsername());
     }
 
     @Test
-    void testCreateUser() {
-        when(userRepository.createUser(any(UserEntity.class))).thenReturn(userEntity);
+    public void testUpdateUser() {
+        when(userRepository.findById(1L)).thenReturn(Optional.of(sampleEntity));
+        when(userRepository.save(any(UserEntity.class))).thenReturn(sampleEntity);
 
-        User createdUser = userService.createUser(user);
-
-        assertNotNull(createdUser);
-        assertEquals("testUser", createdUser.getUsername());
+        Optional<User> updated = userService.updateUser(1L, sampleUser);
+        assertTrue(updated.isPresent());
+        assertEquals("johndoe", updated.get().getUsername());
     }
 
     @Test
-    void testUpdateUser_Success() {
-        when(userRepository.updateUser(eq(1L), any(UserEntity.class))).thenReturn(Optional.of(userEntity));
-
-        Optional<User> updatedUser = userService.updateUser(1L, user);
-
-        assertTrue(updatedUser.isPresent());
-        assertEquals("testUser", updatedUser.get().getUsername());
-    }
-
-    @Test
-    void testUpdateUser_NotFound() {
-        when(userRepository.updateUser(eq(999L), any(UserEntity.class))).thenReturn(Optional.empty());
-
-        Optional<User> updatedUser = userService.updateUser(999L, user);
-
-        assertFalse(updatedUser.isPresent());
-    }
-
-    @Test
-    void testDeleteUser_Success() {
-        when(userRepository.deleteUser(1L)).thenReturn(true);
+    public void testDeleteUserSuccess() {
+        when(userRepository.existsById(1L)).thenReturn(true);
+        doNothing().when(userRepository).deleteById(1L);
 
         boolean result = userService.deleteUser(1L);
-
         assertTrue(result);
     }
 
     @Test
-    void testDeleteUser_NotFound() {
-        when(userRepository.deleteUser(999L)).thenReturn(false);
+    public void testDeleteUserNotFound() {
+        when(userRepository.existsById(2L)).thenReturn(false);
 
-        boolean result = userService.deleteUser(999L);
-
+        boolean result = userService.deleteUser(2L);
         assertFalse(result);
+    }
+
+    @Test
+    public void testGetUserByEmail() {
+        when(userRepository.findByEmail("john@example.com")).thenReturn(Optional.of(sampleEntity));
+
+        Optional<User> user = userService.getUserByEmail("john@example.com");
+        assertTrue(user.isPresent());
+        assertEquals("johndoe", user.get().getUsername());
     }
 }

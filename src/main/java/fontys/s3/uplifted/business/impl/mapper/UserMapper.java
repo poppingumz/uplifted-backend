@@ -14,6 +14,9 @@ public final class UserMapper {
                 .email(user.getEmail())
                 .password(user.getPassword())
                 .role(user.getRole())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .dateOfBirth(user.getDateOfBirth())
                 .build();
     }
 
@@ -24,6 +27,10 @@ public final class UserMapper {
                 .email(user.getEmail())
                 .password(user.getPassword())
                 .role(user.getRole())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .dateOfBirth(user.getDateOfBirth())
                 .build();
     }
+
 }

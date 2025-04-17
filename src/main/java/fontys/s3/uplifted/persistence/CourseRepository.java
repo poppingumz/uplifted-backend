@@ -1,13 +1,15 @@
 package fontys.s3.uplifted.persistence;
 
 import fontys.s3.uplifted.persistence.entity.CourseEntity;
-import java.util.List;
-import java.util.Optional;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface CourseRepository {
-    List<CourseEntity> getAllCourses();
-    Optional<CourseEntity> getCourseById(Long id);
-    CourseEntity createCourse(CourseEntity course);
-    Optional<CourseEntity> updateCourse(Long id, CourseEntity updatedCourse);
-    boolean deleteCourse(Long id);
+import java.util.List;
+
+@Repository
+public interface CourseRepository extends JpaRepository<CourseEntity, Long> {
+
+    List<CourseEntity> findByTitleContainingIgnoreCase(String title);
+    List<CourseEntity> findByInstructor_Id(Long instructorId);
+    boolean existsByTitle(String title);
 }

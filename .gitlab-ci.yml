@@ -1,6 +1,7 @@
 stages:
   - build
   - test
+  - sonarqube
   - dockerize
 
 variables:
@@ -29,10 +30,19 @@ test:
   stage: test
   script:
     - echo "Running tests..."
-    - ./gradlew test
+    - ./gradlew test jacocoTestReport
   artifacts:
     reports:
       junit: build/test-results/test/TEST-*.xml
+
+sonarqube:
+  stage: sonarqube
+  image: gradle:7.6-jdk17
+  script:
+    - ./gradlew sonar -Dsonar.login=$SONAR_TOKEN -Dsonar.host.url=$SONAR_HOST_URL
+  allow_failure: true
+  only:
+    - main
 
 dockerize:
   stage: dockerize
@@ -43,7 +53,7 @@ dockerize:
     DOCKER_HOST: tcp://docker:2375/
     DOCKER_TLS_CERTDIR: ""
   before_script:
-    - echo "Using Linux Docker runner for building image"
+    - echo "Using Docker runner for building image"
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
     - docker build -t $DOCKER_IMAGE:$CI_COMMIT_SHORT_SHA .

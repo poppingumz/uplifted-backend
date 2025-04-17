@@ -19,19 +19,23 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class ReviewServiceImpl implements ReviewService {
+
     private final ReviewRepository reviewRepository;
     private final CourseRepository courseRepository;
     private final UserRepository userRepository;
 
-    public ReviewServiceImpl(ReviewRepository reviewRepository, CourseRepository courseRepository, UserRepository userRepository) {
+    public ReviewServiceImpl(ReviewRepository reviewRepository,
+                             CourseRepository courseRepository,
+                             UserRepository userRepository) {
         this.reviewRepository = reviewRepository;
         this.courseRepository = courseRepository;
         this.userRepository = userRepository;
     }
 
+    @Override
     public List<Review> getAllReviews() {
         try {
-            return reviewRepository.getAllReviews()
+            return reviewRepository.findAll()
                     .stream()
                     .map(ReviewMapper::toDomain)
                     .collect(Collectors.toList());
@@ -41,56 +45,67 @@ public class ReviewServiceImpl implements ReviewService {
         }
     }
 
+    @Override
     public Optional<Review> getReviewById(Long id) {
         try {
-            return reviewRepository.getReviewById(id).map(ReviewMapper::toDomain);
+            return reviewRepository.findById(id).map(ReviewMapper::toDomain);
         } catch (Exception e) {
             log.error("Failed to retrieve review with ID: {}", id, e);
             throw new RuntimeException("Could not find review with ID: " + id);
         }
     }
 
+    @Override
     public Review createReview(Review review) {
         try {
-            CourseEntity course = courseRepository.getCourseById(review.getCourseId())
+            CourseEntity course = courseRepository.findById(review.getCourseId())
                     .orElseThrow(() -> new RuntimeException("Course not found with ID: " + review.getCourseId()));
-            UserEntity user = userRepository.getUserById(review.getUserId())
+
+            UserEntity user = userRepository.findById(review.getUserId())
                     .orElseThrow(() -> new RuntimeException("User not found with ID: " + review.getUserId()));
 
             ReviewEntity entity = ReviewMapper.toEntity(review, course, user);
-            ReviewEntity savedEntity = reviewRepository.createReview(entity);
+            ReviewEntity saved = reviewRepository.save(entity);
             log.info("Review created for course ID: {}, user ID: {}", review.getCourseId(), review.getUserId());
-            return ReviewMapper.toDomain(savedEntity);
+            return ReviewMapper.toDomain(saved);
         } catch (Exception e) {
             log.error("Failed to create review", e);
             throw new RuntimeException("Could not create review. Please try again.");
         }
     }
 
+    @Override
     public Optional<Review> updateReview(Long id, Review review) {
         try {
-            CourseEntity course = courseRepository.getCourseById(review.getCourseId())
-                    .orElseThrow(() -> new RuntimeException("Course not found with ID: " + review.getCourseId()));
-            UserEntity user = userRepository.getUserById(review.getUserId())
-                    .orElseThrow(() -> new RuntimeException("User not found with ID: " + review.getUserId()));
+            return reviewRepository.findById(id).map(existing -> {
+                CourseEntity course = courseRepository.findById(review.getCourseId())
+                        .orElseThrow(() -> new RuntimeException("Course not found with ID: " + review.getCourseId()));
 
-            ReviewEntity entity = ReviewMapper.toEntity(review, course, user);
-            return reviewRepository.updateReview(id, entity).map(ReviewMapper::toDomain);
+                UserEntity user = userRepository.findById(review.getUserId())
+                        .orElseThrow(() -> new RuntimeException("User not found with ID: " + review.getUserId()));
+
+                ReviewEntity updated = ReviewMapper.toEntity(review, course, user);
+                updated.setId(id);
+
+                return ReviewMapper.toDomain(reviewRepository.save(updated));
+            });
         } catch (Exception e) {
             log.error("Failed to update review with ID: {}", id, e);
             throw new RuntimeException("Could not update review. Please try again.");
         }
     }
 
+    @Override
     public boolean deleteReview(Long id) {
         try {
-            boolean deleted = reviewRepository.deleteReview(id);
-            if (deleted) {
-                log.info("Review with ID {} deleted successfully", id);
-            } else {
+            if (!reviewRepository.existsById(id)) {
                 log.warn("No review found with ID {} to delete", id);
+                return false;
             }
-            return deleted;
+
+            reviewRepository.deleteById(id);
+            log.info("Review with ID {} deleted successfully", id);
+            return true;
         } catch (Exception e) {
             log.error("Failed to delete review with ID: {}", id, e);
             throw new RuntimeException("Could not delete review.");

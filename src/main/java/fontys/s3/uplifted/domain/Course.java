@@ -13,6 +13,9 @@ public class Course {
     private Long id;
     private String title;
     private String description;
-    private String instructorName;
+    private Long instructorId;
     private Set<Long> enrolledStudentIds;
+    private int enrollmentLimit;
+    private boolean published;
+    private String category;
 }

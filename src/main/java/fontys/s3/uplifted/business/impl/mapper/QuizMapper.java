@@ -1,30 +1,40 @@
 package fontys.s3.uplifted.business.impl.mapper;
 
 import fontys.s3.uplifted.domain.Quiz;
+import fontys.s3.uplifted.persistence.entity.CourseEntity;
 import fontys.s3.uplifted.persistence.entity.QuizEntity;
+import fontys.s3.uplifted.persistence.entity.UserEntity;
+
+import java.util.stream.Collectors;
 
 public final class QuizMapper {
+
     public static Quiz toDomain(QuizEntity entity) {
         return Quiz.builder()
                 .id(entity.getId())
-                .courseId(entity.getCourseId())
+                .courseId(entity.getCourse().getId())
                 .title(entity.getTitle())
                 .description(entity.getDescription())
                 .totalMarks(entity.getTotalMarks())
                 .passingMarks(entity.getPassingMarks())
-                .questionsAndAnswers(entity.getQuestionsAndAnswers())
+                .createdById(entity.getCreatedBy().getId())
+                .questions(entity.getQuestions().stream()
+                        .map(QuestionMapper::toDomain)
+                        .collect(Collectors.toList()))
                 .build();
     }
 
-    public static QuizEntity toEntity(Quiz quiz) {
+    public static QuizEntity toEntity(Quiz quiz, CourseEntity course, UserEntity creator) {
         return QuizEntity.builder()
                 .id(quiz.getId())
-                .courseId(quiz.getCourseId())
+                .course(course)
                 .title(quiz.getTitle())
                 .description(quiz.getDescription())
                 .totalMarks(quiz.getTotalMarks())
                 .passingMarks(quiz.getPassingMarks())
-                .questionsAndAnswers(quiz.getQuestionsAndAnswers())
+                .createdBy(creator)
                 .build();
     }
+
 }
+

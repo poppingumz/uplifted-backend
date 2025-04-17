@@ -30,8 +30,18 @@ class CourseControllerTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
 
-        sampleCourse = new Course(1L, "Java Basics", "Intro to Java", "John Doe", Set.of(101L, 102L));
+        sampleCourse = Course.builder()
+                .id(1L)
+                .title("Java Basics")
+                .description("Intro to Java")
+                .instructorId(10L)
+                .enrolledStudentIds(Set.of(101L, 102L))
+                .enrollmentLimit(50)
+                .published(true)
+                .category("Programming")
+                .build();
     }
+
 
     @Test
     void shouldReturnAllCourses() {

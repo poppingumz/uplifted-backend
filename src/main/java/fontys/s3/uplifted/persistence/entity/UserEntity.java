@@ -4,6 +4,7 @@ import fontys.s3.uplifted.domain.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.Set;
 
 @Entity
@@ -30,6 +31,16 @@ public class UserEntity {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @Column(nullable = false)
+    private String firstName;
+
+    @Column(nullable = false)
+    private String lastName;
+
+    @Column(nullable = false)
+    private LocalDate dateOfBirth;
+
 
     @ManyToMany
     @JoinTable(

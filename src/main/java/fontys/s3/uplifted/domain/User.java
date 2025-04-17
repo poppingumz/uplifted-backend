@@ -3,6 +3,8 @@ package fontys.s3.uplifted.domain;
 import fontys.s3.uplifted.domain.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -13,19 +15,13 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder
 public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(unique = true, nullable = false)
     private String username;
-
-    @Column(unique = true, nullable = false)
     private String email;
-
-    @Column(nullable = false)
     private String password;
-
-    @Enumerated(EnumType.STRING)
     private Role role;
+    private String firstName;
+    private String lastName;
+    private LocalDate dateOfBirth;
 }
+

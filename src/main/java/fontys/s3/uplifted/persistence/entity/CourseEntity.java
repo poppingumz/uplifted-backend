@@ -21,12 +21,26 @@ public class CourseEntity {
     @Column(nullable = false)
     private String title;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String description;
 
-    @Column(nullable = false)
-    private String instructorName;
+    @ManyToOne
+    @JoinColumn(name = "instructor_id", nullable = false)
+    private UserEntity instructor;
 
-    @ElementCollection
-    private Set<Long> enrolledStudentIds;
+    @ManyToMany
+    @JoinTable(
+            name = "course_enrollments",
+            joinColumns = @JoinColumn(name = "course_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private Set<UserEntity> enrolledStudents;
+
+    @Column(nullable = false)
+    private int enrollmentLimit;
+
+    @Column(nullable = false)
+    private boolean published;
+
+    private String category;
 }

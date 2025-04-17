@@ -16,8 +16,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Slf4j
 @Service
+@Slf4j
 public class ProgressServiceImpl implements ProgressService {
 
     private final ProgressRepository progressRepository;
@@ -33,72 +33,48 @@ public class ProgressServiceImpl implements ProgressService {
     }
 
     public List<Progress> getAllProgress() {
-        try {
-            return progressRepository.getAllProgress()
-                    .stream()
-                    .map(ProgressMapper::toDomain)
-                    .collect(Collectors.toList());
-        } catch (Exception e) {
-            log.error("Failed to fetch all progress records", e);
-            throw new RuntimeException("Could not retrieve progress data.");
-        }
+        return progressRepository.findAll()
+                .stream()
+                .map(ProgressMapper::toDomain)
+                .collect(Collectors.toList());
     }
 
     public Optional<Progress> getProgressById(Long id) {
-        try {
-            return progressRepository.getProgressById(id).map(ProgressMapper::toDomain);
-        } catch (Exception e) {
-            log.error("Failed to get progress by ID: {}", id, e);
-            throw new RuntimeException("Could not retrieve progress with ID: " + id);
-        }
+        return progressRepository.findById(id)
+                .map(ProgressMapper::toDomain);
     }
 
     public Progress createProgress(Progress progress) {
-        try {
-            CourseEntity course = courseRepository.getCourseById(progress.getCourseId())
-                    .orElseThrow(() -> new RuntimeException("Course not found with ID: " + progress.getCourseId()));
+        CourseEntity course = courseRepository.findById(progress.getCourseId())
+                .orElseThrow(() -> new RuntimeException("Course not found"));
 
-            UserEntity user = userRepository.getUserById(progress.getUserId())
-                    .orElseThrow(() -> new RuntimeException("User not found with ID: " + progress.getUserId()));
+        UserEntity user = userRepository.findById(progress.getUserId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
-            ProgressEntity entity = ProgressMapper.toEntity(progress, course, user);
-            ProgressEntity saved = progressRepository.createProgress(entity);
-            log.info("Progress created for user {} in course {}", user.getId(), course.getId());
-            return ProgressMapper.toDomain(saved);
-        } catch (Exception e) {
-            log.error("Failed to create progress", e);
-            throw new RuntimeException("Could not create progress.");
-        }
+        ProgressEntity entity = ProgressMapper.toEntity(progress, course, user);
+        return ProgressMapper.toDomain(progressRepository.save(entity));
     }
 
     public Optional<Progress> updateProgress(Long id, Progress progress) {
-        try {
-            CourseEntity course = courseRepository.getCourseById(progress.getCourseId())
-                    .orElseThrow(() -> new RuntimeException("Course not found with ID: " + progress.getCourseId()));
+        CourseEntity course = courseRepository.findById(progress.getCourseId())
+                .orElseThrow(() -> new RuntimeException("Course not found"));
 
-            UserEntity user = userRepository.getUserById(progress.getUserId())
-                    .orElseThrow(() -> new RuntimeException("User not found with ID: " + progress.getUserId()));
+        UserEntity user = userRepository.findById(progress.getUserId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
+        return progressRepository.findById(id).map(existing -> {
             ProgressEntity entity = ProgressMapper.toEntity(progress, course, user);
-            return progressRepository.updateProgress(id, entity).map(ProgressMapper::toDomain);
-        } catch (Exception e) {
-            log.error("Failed to update progress for ID: {}", id, e);
-            throw new RuntimeException("Could not update progress.");
-        }
+            entity.setId(id);
+            return ProgressMapper.toDomain(progressRepository.save(entity));
+        });
     }
 
     public boolean deleteProgress(Long id) {
-        try {
-            boolean deleted = progressRepository.deleteProgress(id);
-            if (deleted) {
-                log.info("Progress with ID {} deleted", id);
-            } else {
-                log.warn("No progress found with ID {} to delete", id);
-            }
-            return deleted;
-        } catch (Exception e) {
-            log.error("Failed to delete progress with ID: {}", id, e);
-            throw new RuntimeException("Could not delete progress.");
+        if (!progressRepository.existsById(id)) {
+            return false;
         }
+        progressRepository.deleteById(id);
+        return true;
     }
 }
+

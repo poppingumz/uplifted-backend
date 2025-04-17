@@ -1,14 +1,17 @@
 package fontys.s3.uplifted.persistence;
 
 import fontys.s3.uplifted.persistence.entity.QuizEntity;
+import fontys.s3.uplifted.persistence.entity.UserEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
-public interface QuizRepository {
-    QuizEntity save(QuizEntity quiz);
-    Optional<QuizEntity> findById(Long id);
+@Repository
+public interface QuizRepository extends JpaRepository<QuizEntity, Long> {
+
     List<QuizEntity> findByCourseId(Long courseId);
-    Optional<QuizEntity> update(Long id, QuizEntity quiz);
-    void delete(Long id);
+    List<QuizEntity> findByTitleContainingIgnoreCase(String keyword);
+    List<QuizEntity> findByCreatedBy(UserEntity createdBy);
+
 }

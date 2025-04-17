@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class UserServiceImpl implements UserService {
+
     private final UserRepository userRepository;
 
     public UserServiceImpl(UserRepository userRepository) {
@@ -23,7 +24,7 @@ public class UserServiceImpl implements UserService {
 
     public List<User> getAllUsers() {
         try {
-            return userRepository.getAllUsers()
+            return userRepository.findAll()
                     .stream()
                     .map(UserMapper::convert)
                     .collect(Collectors.toList());
@@ -35,7 +36,7 @@ public class UserServiceImpl implements UserService {
 
     public Optional<User> getUserById(Long id) {
         try {
-            return userRepository.getUserById(id).map(UserMapper::convert);
+            return userRepository.findById(id).map(UserMapper::convert);
         } catch (Exception e) {
             log.error("Error fetching user with ID: {}", id, e);
             throw new RuntimeException("Unable to retrieve user.");
@@ -45,7 +46,7 @@ public class UserServiceImpl implements UserService {
     public User createUser(User user) {
         try {
             UserEntity entity = UserMapper.convertToEntity(user);
-            UserEntity savedEntity = userRepository.createUser(entity);
+            UserEntity savedEntity = userRepository.save(entity);
             log.info("User created with ID: {}", savedEntity.getId());
             return UserMapper.convert(savedEntity);
         } catch (Exception e) {
@@ -56,8 +57,12 @@ public class UserServiceImpl implements UserService {
 
     public Optional<User> updateUser(Long id, User user) {
         try {
-            UserEntity entity = UserMapper.convertToEntity(user);
-            return userRepository.updateUser(id, entity).map(UserMapper::convert);
+            return userRepository.findById(id).map(existing -> {
+                UserEntity entity = UserMapper.convertToEntity(user);
+                entity.setId(id);
+                UserEntity updated = userRepository.save(entity);
+                return UserMapper.convert(updated);
+            });
         } catch (Exception e) {
             log.error("Error updating user with ID: {}", id, e);
             throw new RuntimeException("Unable to update user.");
@@ -66,14 +71,21 @@ public class UserServiceImpl implements UserService {
 
     public boolean deleteUser(Long id) {
         try {
-            boolean deleted = userRepository.deleteUser(id);
-            if (!deleted) {
+            if (!userRepository.existsById(id)) {
                 log.warn("No user found with ID {} to delete", id);
+                return false;
             }
-            return deleted;
+            userRepository.deleteById(id);
+            return true;
         } catch (Exception e) {
             log.error("Error deleting user with ID: {}", id, e);
             throw new RuntimeException("Unable to delete user.");
         }
     }
+
+    public Optional<User> getUserByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .map(UserMapper::convert);
+    }
 }
+

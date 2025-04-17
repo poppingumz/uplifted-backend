@@ -13,8 +13,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Slf4j
 @Service
+@Slf4j
 public class CourseServiceImpl implements CourseService {
 
     private final CourseRepository courseRepository;
@@ -24,65 +24,38 @@ public class CourseServiceImpl implements CourseService {
     }
 
     public List<Course> getAllCourses() {
-        try {
-            return courseRepository.getAllCourses()
-                    .stream()
-                    .map(CourseMapper::toDomain)
-                    .collect(Collectors.toList());
-        } catch (Exception e) {
-            log.error("Failed to fetch courses", e);
-            throw new RuntimeException("Unable to retrieve courses at this time.");
-        }
+        return courseRepository.findAll()
+                .stream()
+                .map(CourseMapper::toDomain)
+                .collect(Collectors.toList());
     }
 
     public Optional<Course> getCourseById(Long id) {
-        try {
-            return courseRepository.getCourseById(id)
-                    .map(CourseMapper::toDomain);
-        } catch (Exception e) {
-            log.error("Error retrieving course with ID {}", id, e);
-            throw new RuntimeException("Unable to retrieve the course.");
-        }
+        return courseRepository.findById(id)
+                .map(CourseMapper::toDomain);
     }
 
     public Course createCourse(Course course) {
-        try {
-            CourseEntity entity = CourseMapper.toEntity(course);
-            CourseEntity savedEntity = courseRepository.createCourse(entity);
-            return CourseMapper.toDomain(savedEntity);
-        } catch (Exception e) {
-            log.error("Failed to create course: {}", course.getTitle(), e);
-            throw new RuntimeException("Unable to create course.");
-        }
+        CourseEntity entity = CourseMapper.toEntity(course);
+        CourseEntity saved = courseRepository.save(entity);
+        return CourseMapper.toDomain(saved);
     }
 
     public Optional<Course> updateCourse(Long id, Course course) {
-        try {
-            if (!courseRepository.getCourseById(id).isPresent()) {
-                log.warn("Attempted to update non-existent course with ID {}", id);
-                throw new CourseNotFoundException("Course with ID " + id + " not found.");
-            }
-
+        return courseRepository.findById(id).map(existing -> {
             CourseEntity entity = CourseMapper.toEntity(course);
-            return courseRepository.updateCourse(id, entity)
-                    .map(CourseMapper::toDomain);
-        } catch (Exception e) {
-            log.error("Failed to update course with ID {}", id, e);
-            throw new RuntimeException("Unable to update course.");
-        }
+            entity.setId(id); 
+            CourseEntity updated = courseRepository.save(entity);
+            return CourseMapper.toDomain(updated);
+        });
     }
 
     public boolean deleteCourse(Long id) {
-        try {
-            boolean deleted = courseRepository.deleteCourse(id);
-            if (!deleted) {
-                log.warn("Course with ID {} not found for deletion", id);
-                throw new CourseNotFoundException("Course with ID " + id + " not found.");
-            }
-            return true;
-        } catch (Exception e) {
-            log.error("Failed to delete course with ID {}", id, e);
-            throw new RuntimeException("Unable to delete course.");
+        if (!courseRepository.existsById(id)) {
+            throw new CourseNotFoundException("Course with ID " + id + " not found.");
         }
+        courseRepository.deleteById(id);
+        return true;
     }
 }
+

@@ -12,4 +12,7 @@ public class File {
     private String name;
     private String type;
     private byte[] data;
+
+    private Long uploaderId;
+    private Long courseId;
 }

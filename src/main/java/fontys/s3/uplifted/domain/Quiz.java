@@ -1,7 +1,8 @@
 package fontys.s3.uplifted.domain;
 
 import lombok.*;
-import java.util.Map;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -15,5 +16,7 @@ public class Quiz {
     private String description;
     private Integer totalMarks;
     private Integer passingMarks;
-    private Map<String, String> questionsAndAnswers;
+
+    private Long createdById;
+    private List<Question> questions;
 }
