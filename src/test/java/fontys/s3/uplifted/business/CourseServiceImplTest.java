@@ -1,13 +1,15 @@
 package fontys.s3.uplifted.business;
 
 import fontys.s3.uplifted.business.impl.CourseServiceImpl;
-import fontys.s3.uplifted.business.impl.mapper.CourseMapper;
 import fontys.s3.uplifted.domain.Course;
+import fontys.s3.uplifted.domain.enums.Role;
 import fontys.s3.uplifted.persistence.CourseRepository;
 import fontys.s3.uplifted.persistence.entity.CourseEntity;
+import fontys.s3.uplifted.persistence.entity.UserEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -26,12 +28,33 @@ class CourseServiceImplTest {
 
     @Test
     void getCourseById_success() {
-        CourseEntity courseEntity = CourseEntity.builder().id(1L).title("Math").build();
+        // Create a mock instructor entity with required fields
+        UserEntity instructor = UserEntity.builder()
+                .id(100L)
+                .username("instructor1")
+                .email("instructor1@example.com")
+                .password("securePass")
+                .role(Role.TEACHER)
+                .dateOfBirth(LocalDate.of(1990, 1, 1))
+                .build();
+
+        CourseEntity courseEntity = CourseEntity.builder()
+                .id(1L)
+                .title("Math")
+                .description("Algebra basics")
+                .published(true)
+                .enrollmentLimit(50)
+                .instructor(instructor)
+                .build();
+
         when(courseRepository.findById(1L)).thenReturn(Optional.of(courseEntity));
 
         Optional<Course> result = courseService.getCourseById(1L);
+
         assertTrue(result.isPresent());
         assertEquals("Math", result.get().getTitle());
+        assertEquals(100L, result.get().getInstructorId());
+
     }
 
     @Test

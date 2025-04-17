@@ -54,13 +54,8 @@ public class QuizServiceImpl implements QuizService {
 
     @Override
     public Optional<Quiz> getQuizById(Long id) {
-        try {
-            return quizRepository.findById(id)
-                    .map(QuizMapper::toDomain);
-        } catch (Exception e) {
-            log.error("Error retrieving quiz with ID: {}", id, e);
-            throw new RuntimeException("Quiz not found with ID: " + id);
-        }
+        return quizRepository.findById(id)
+                .map(QuizMapper::toDomain);
     }
 
     @Override

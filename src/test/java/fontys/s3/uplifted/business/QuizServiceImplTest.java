@@ -36,9 +36,16 @@ class QuizServiceImplTest {
     @Test
     void createQuiz_success() {
         Quiz quiz = Quiz.builder().courseId(1L).createdById(2L).title("Sample").build();
+
         CourseEntity courseEntity = CourseEntity.builder().id(1L).build();
         UserEntity userEntity = UserEntity.builder().id(2L).build();
-        QuizEntity quizEntity = QuizEntity.builder().id(10L).title("Sample").build();
+
+        QuizEntity quizEntity = QuizEntity.builder()
+                .id(10L)
+                .title("Sample")
+                .course(courseEntity)
+                .createdBy(userEntity)
+                .build();
 
         when(courseRepository.findById(1L)).thenReturn(Optional.of(courseEntity));
         when(userRepository.findById(2L)).thenReturn(Optional.of(userEntity));
@@ -52,6 +59,6 @@ class QuizServiceImplTest {
     @Test
     void getQuizById_notFound() {
         when(quizRepository.findById(99L)).thenReturn(Optional.empty());
-        assertThrows(RuntimeException.class, () -> quizService.getQuizById(99L));
+        assertThrows(RuntimeException.class, () -> quizService.getQuizById(99L).orElseThrow(() -> new RuntimeException("Not found")));
     }
 }
