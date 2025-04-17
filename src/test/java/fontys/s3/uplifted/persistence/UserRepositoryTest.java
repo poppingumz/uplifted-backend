@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -23,6 +24,9 @@ class UserRepositoryTest {
                 .email("test@example.com")
                 .password("password123")
                 .role(Role.STUDENT)
+                .firstName("John")
+                .lastName("Doe")
+                .dateOfBirth(LocalDate.of(2000, 1, 1))
                 .build();
 
         userRepository.save(user);

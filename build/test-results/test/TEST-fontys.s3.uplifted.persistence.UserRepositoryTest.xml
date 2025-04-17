@@ -1,0 +1,449 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="fontys.s3.uplifted.persistence.UserRepositoryTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2025-04-17T15:17:39" hostname="LAPTOP-RHFQ3ARB" time="0.966">
+  <properties/>
+  <testcase name="shouldReturnEmptyWhenEmailNotExists()" classname="fontys.s3.uplifted.persistence.UserRepositoryTest" time="0.966"/>
+  <system-out><![CDATA[17:17:32.301 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [fontys.s3.uplifted.persistence.UserRepositoryTest]: UserRepositoryTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+17:17:32.544 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration fontys.s3.uplifted.UpliftEdApplication for test class fontys.s3.uplifted.persistence.UserRepositoryTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.1.0)
+
+2025-04-17T17:17:33.493+02:00  INFO 22416 --- [    Test worker] f.s.u.persistence.UserRepositoryTest     : Starting UserRepositoryTest using Java 17.0.14 with PID 22416 (started by gugus in C:\Projects\uplifted-learning-platform)
+2025-04-17T17:17:33.495+02:00  INFO 22416 --- [    Test worker] f.s.u.persistence.UserRepositoryTest     : No active profile set, falling back to 1 default profile: "default"
+2025-04-17T17:17:34.200+02:00  INFO 22416 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-04-17T17:17:34.383+02:00  INFO 22416 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 165 ms. Found 9 JPA repository interfaces.
+2025-04-17T17:17:34.489+02:00  INFO 22416 --- [    Test worker] beddedDataSourceBeanFactoryPostProcessor : Replacing 'dataSource' DataSource bean with embedded version
+2025-04-17T17:17:34.783+02:00  INFO 22416 --- [    Test worker] o.s.j.d.e.EmbeddedDatabaseFactory        : Starting embedded database: url='jdbc:h2:mem:9fd13ae5-2991-41d3-b5db-b4f24c519db4;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=false', username='sa'
+2025-04-17T17:17:35.421+02:00  INFO 22416 --- [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-04-17T17:17:35.550+02:00  INFO 22416 --- [    Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.2.2.Final
+2025-04-17T17:17:35.556+02:00  INFO 22416 --- [    Test worker] org.hibernate.cfg.Environment            : HHH000406: Using bytecode reflection optimizer
+2025-04-17T17:17:35.894+02:00  INFO 22416 --- [    Test worker] o.h.b.i.BytecodeProviderInitiator        : HHH000021: Bytecode provider name : bytebuddy
+2025-04-17T17:17:36.177+02:00  INFO 22416 --- [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-04-17T17:17:36.268+02:00  INFO 22416 --- [    Test worker] org.hibernate.orm.dialect                : HHH035001: Using dialect: org.hibernate.dialect.H2Dialect, version: 2.1.214
+2025-04-17T17:17:36.841+02:00  INFO 22416 --- [    Test worker] o.h.b.i.BytecodeProviderInitiator        : HHH000021: Bytecode provider name : bytebuddy
+2025-04-17T17:17:38.299+02:00  INFO 22416 --- [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2025-04-17T17:17:38.334+02:00 DEBUG 22416 --- [    Test worker] org.hibernate.SQL                        : 
+    drop table if exists answers cascade 
+Hibernate: 
+    drop table if exists answers cascade 
+2025-04-17T17:17:38.341+02:00 DEBUG 22416 --- [    Test worker] org.hibernate.SQL                        : 
+    drop table if exists course_enrollments cascade 
+Hibernate: 
+    drop table if exists course_enrollments cascade 
+2025-04-17T17:17:38.341+02:00 DEBUG 22416 --- [    Test worker] org.hibernate.SQL                        : 
+    drop table if exists courses cascade 
+Hibernate: 
+    drop table if exists courses cascade 
+2025-04-17T17:17:38.342+02:00 DEBUG 22416 --- [    Test worker] org.hibernate.SQL                        : 
+    drop table if exists files cascade 
+Hibernate: 
+    drop table if exists files cascade 
+2025-04-17T17:17:38.342+02:00 DEBUG 22416 --- [    Test worker] org.hibernate.SQL                        : 
+    drop table if exists progress cascade 
+Hibernate: 
+    drop table if exists progress cascade 
+2025-04-17T17:17:38.343+02:00 DEBUG 22416 --- [    Test worker] org.hibernate.SQL                        : 
+    drop table if exists questions cascade 
+Hibernate: 
+    drop table if exists questions cascade 
+2025-04-17T17:17:38.343+02:00 DEBUG 22416 --- [    Test worker] org.hibernate.SQL                        : 
+    drop table if exists quizzes cascade 
+Hibernate: 
+    drop table if exists quizzes cascade 
+2025-04-17T17:17:38.344+02:00 DEBUG 22416 --- [    Test worker] org.hibernate.SQL                        : 
+    drop table if exists reviews cascade 
+Hibernate: 
+    drop table if exists reviews cascade 
+2025-04-17T17:17:38.345+02:00 DEBUG 22416 --- [    Test worker] org.hibernate.SQL                        : 
+    drop table if exists student_answers cascade 
+Hibernate: 
+    drop table if exists student_answers cascade 
+2025-04-17T17:17:38.346+02:00 DEBUG 22416 --- [    Test worker] org.hibernate.SQL                        : 
+    drop table if exists user_course cascade 
+Hibernate: 
+    drop table if exists user_course cascade 
+2025-04-17T17:17:38.346+02:00 DEBUG 22416 --- [    Test worker] org.hibernate.SQL                        : 
+    drop table if exists users cascade 
+Hibernate: 
+    drop table if exists users cascade 
+2025-04-17T17:17:38.355+02:00 DEBUG 22416 --- [    Test worker] org.hibernate.SQL                        : 
+    create table answers (
+        correct boolean not null,
+        id bigint generated by default as identity,
+        question_id bigint not null,
+        explanation varchar(255),
+        text varchar(255),
+        primary key (id)
+    )
+Hibernate: 
+    create table answers (
+        correct boolean not null,
+        id bigint generated by default as identity,
+        question_id bigint not null,
+        explanation varchar(255),
+        text varchar(255),
+        primary key (id)
+    )
+2025-04-17T17:17:38.374+02:00 DEBUG 22416 --- [    Test worker] org.hibernate.SQL                        : 
+    create table course_enrollments (
+        course_id bigint not null,
+        user_id bigint not null,
+        primary key (course_id, user_id)
+    )
+Hibernate: 
+    create table course_enrollments (
+        course_id bigint not null,
+        user_id bigint not null,
+        primary key (course_id, user_id)
+    )
+2025-04-17T17:17:38.377+02:00 DEBUG 22416 --- [    Test worker] org.hibernate.SQL                        : 
+    create table courses (
+        enrollment_limit integer not null,
+        published boolean not null,
+        id bigint generated by default as identity,
+        instructor_id bigint not null,
+        category varchar(255),
+        description TEXT not null,
+        title varchar(255) not null,
+        primary key (id)
+    )
+Hibernate: 
+    create table courses (
+        enrollment_limit integer not null,
+        published boolean not null,
+        id bigint generated by default as identity,
+        instructor_id bigint not null,
+        category varchar(255),
+        description TEXT not null,
+        title varchar(255) not null,
+        primary key (id)
+    )
+2025-04-17T17:17:38.379+02:00 DEBUG 22416 --- [    Test worker] org.hibernate.SQL                        : 
+    create table files (
+        upload_date date,
+        course_id bigint,
+        id bigint generated by default as identity,
+        uploader_id bigint,
+        name varchar(255),
+        type varchar(255),
+        data blob,
+        primary key (id)
+    )
+Hibernate: 
+    create table files (
+        upload_date date,
+        course_id bigint,
+        id bigint generated by default as identity,
+        uploader_id bigint,
+        name varchar(255),
+        type varchar(255),
+        data blob,
+        primary key (id)
+    )
+2025-04-17T17:17:38.381+02:00 DEBUG 22416 --- [    Test worker] org.hibernate.SQL                        : 
+    create table progress (
+        progress_percentage float(53) not null,
+        course_id bigint not null,
+        id bigint generated by default as identity,
+        user_id bigint not null,
+        primary key (id)
+    )
+Hibernate: 
+    create table progress (
+        progress_percentage float(53) not null,
+        course_id bigint not null,
+        id bigint generated by default as identity,
+        user_id bigint not null,
+        primary key (id)
+    )
+2025-04-17T17:17:38.384+02:00 DEBUG 22416 --- [    Test worker] org.hibernate.SQL                        : 
+    create table questions (
+        marks integer,
+        requires_review boolean not null,
+        id bigint generated by default as identity,
+        quiz_id bigint not null,
+        correct_answer varchar(255),
+        text varchar(255),
+        type varchar(255) check (type in ('MULTIPLE_CHOICE','TRUE_FALSE','OPEN_ENDED')),
+        primary key (id)
+    )
+Hibernate: 
+    create table questions (
+        marks integer,
+        requires_review boolean not null,
+        id bigint generated by default as identity,
+        quiz_id bigint not null,
+        correct_answer varchar(255),
+        text varchar(255),
+        type varchar(255) check (type in ('MULTIPLE_CHOICE','TRUE_FALSE','OPEN_ENDED')),
+        primary key (id)
+    )
+2025-04-17T17:17:38.395+02:00 DEBUG 22416 --- [    Test worker] org.hibernate.SQL                        : 
+    create table quizzes (
+        passing_marks integer not null,
+        total_marks integer not null,
+        course_id bigint not null,
+        creator_id bigint not null,
+        id bigint generated by default as identity,
+        description varchar(255) not null,
+        title varchar(255) not null,
+        primary key (id)
+    )
+Hibernate: 
+    create table quizzes (
+        passing_marks integer not null,
+        total_marks integer not null,
+        course_id bigint not null,
+        creator_id bigint not null,
+        id bigint generated by default as identity,
+        description varchar(255) not null,
+        title varchar(255) not null,
+        primary key (id)
+    )
+2025-04-17T17:17:38.398+02:00 DEBUG 22416 --- [    Test worker] org.hibernate.SQL                        : 
+    create table reviews (
+        rating float(53) not null,
+        course_id bigint not null,
+        id bigint generated by default as identity,
+        user_id bigint not null,
+        review_text varchar(255) not null,
+        primary key (id)
+    )
+Hibernate: 
+    create table reviews (
+        rating float(53) not null,
+        course_id bigint not null,
+        id bigint generated by default as identity,
+        user_id bigint not null,
+        review_text varchar(255) not null,
+        primary key (id)
+    )
+2025-04-17T17:17:38.400+02:00 DEBUG 22416 --- [    Test worker] org.hibernate.SQL                        : 
+    create table student_answers (
+        awarded_marks integer,
+        reviewed boolean not null,
+        id bigint generated by default as identity,
+        question_id bigint not null,
+        quiz_id bigint not null,
+        user_id bigint not null,
+        mentor_feedback varchar(255),
+        submitted_answer TEXT,
+        primary key (id)
+    )
+Hibernate: 
+    create table student_answers (
+        awarded_marks integer,
+        reviewed boolean not null,
+        id bigint generated by default as identity,
+        question_id bigint not null,
+        quiz_id bigint not null,
+        user_id bigint not null,
+        mentor_feedback varchar(255),
+        submitted_answer TEXT,
+        primary key (id)
+    )
+2025-04-17T17:17:38.402+02:00 DEBUG 22416 --- [    Test worker] org.hibernate.SQL                        : 
+    create table user_course (
+        course_id bigint not null,
+        user_id bigint not null,
+        primary key (course_id, user_id)
+    )
+Hibernate: 
+    create table user_course (
+        course_id bigint not null,
+        user_id bigint not null,
+        primary key (course_id, user_id)
+    )
+2025-04-17T17:17:38.407+02:00 DEBUG 22416 --- [    Test worker] org.hibernate.SQL                        : 
+    create table users (
+        date_of_birth date not null,
+        id bigint generated by default as identity,
+        email varchar(255) not null unique,
+        first_name varchar(255) not null,
+        last_name varchar(255) not null,
+        password varchar(255) not null,
+        role varchar(255) check (role in ('ADMIN','STUDENT','TEACHER')),
+        username varchar(255) not null unique,
+        primary key (id)
+    )
+Hibernate: 
+    create table users (
+        date_of_birth date not null,
+        id bigint generated by default as identity,
+        email varchar(255) not null unique,
+        first_name varchar(255) not null,
+        last_name varchar(255) not null,
+        password varchar(255) not null,
+        role varchar(255) check (role in ('ADMIN','STUDENT','TEACHER')),
+        username varchar(255) not null unique,
+        primary key (id)
+    )
+2025-04-17T17:17:38.412+02:00 DEBUG 22416 --- [    Test worker] org.hibernate.SQL                        : 
+    alter table if exists answers 
+       add constraint FK3erw1a3t0r78st8ty27x6v3g1 
+       foreign key (question_id) 
+       references questions
+Hibernate: 
+    alter table if exists answers 
+       add constraint FK3erw1a3t0r78st8ty27x6v3g1 
+       foreign key (question_id) 
+       references questions
+2025-04-17T17:17:38.430+02:00 DEBUG 22416 --- [    Test worker] org.hibernate.SQL                        : 
+    alter table if exists course_enrollments 
+       add constraint FKn0jagyiydh9aqty8r055q3kka 
+       foreign key (user_id) 
+       references users
+Hibernate: 
+    alter table if exists course_enrollments 
+       add constraint FKn0jagyiydh9aqty8r055q3kka 
+       foreign key (user_id) 
+       references users
+2025-04-17T17:17:38.433+02:00 DEBUG 22416 --- [    Test worker] org.hibernate.SQL                        : 
+    alter table if exists course_enrollments 
+       add constraint FKf78cq7ecdpk1clt1w5ofnb34t 
+       foreign key (course_id) 
+       references courses
+Hibernate: 
+    alter table if exists course_enrollments 
+       add constraint FKf78cq7ecdpk1clt1w5ofnb34t 
+       foreign key (course_id) 
+       references courses
+2025-04-17T17:17:38.436+02:00 DEBUG 22416 --- [    Test worker] org.hibernate.SQL                        : 
+    alter table if exists courses 
+       add constraint FKcyfum8goa6q5u13uog0563gyp 
+       foreign key (instructor_id) 
+       references users
+Hibernate: 
+    alter table if exists courses 
+       add constraint FKcyfum8goa6q5u13uog0563gyp 
+       foreign key (instructor_id) 
+       references users
+2025-04-17T17:17:38.438+02:00 DEBUG 22416 --- [    Test worker] org.hibernate.SQL                        : 
+    alter table if exists progress 
+       add constraint FK1j6c6ve6bm0t822a2kqdnt6ce 
+       foreign key (course_id) 
+       references courses
+Hibernate: 
+    alter table if exists progress 
+       add constraint FK1j6c6ve6bm0t822a2kqdnt6ce 
+       foreign key (course_id) 
+       references courses
+2025-04-17T17:17:38.441+02:00 DEBUG 22416 --- [    Test worker] org.hibernate.SQL                        : 
+    alter table if exists progress 
+       add constraint FK7fyumbty8qgbd7sfbbjnqdo62 
+       foreign key (user_id) 
+       references users
+Hibernate: 
+    alter table if exists progress 
+       add constraint FK7fyumbty8qgbd7sfbbjnqdo62 
+       foreign key (user_id) 
+       references users
+2025-04-17T17:17:38.443+02:00 DEBUG 22416 --- [    Test worker] org.hibernate.SQL                        : 
+    alter table if exists questions 
+       add constraint FKn3gvco4b0kewxc0bywf1igfms 
+       foreign key (quiz_id) 
+       references quizzes
+Hibernate: 
+    alter table if exists questions 
+       add constraint FKn3gvco4b0kewxc0bywf1igfms 
+       foreign key (quiz_id) 
+       references quizzes
+2025-04-17T17:17:38.446+02:00 DEBUG 22416 --- [    Test worker] org.hibernate.SQL                        : 
+    alter table if exists quizzes 
+       add constraint FKpxdnhxeppxx606nhyjtjyharp 
+       foreign key (course_id) 
+       references courses
+Hibernate: 
+    alter table if exists quizzes 
+       add constraint FKpxdnhxeppxx606nhyjtjyharp 
+       foreign key (course_id) 
+       references courses
+2025-04-17T17:17:38.448+02:00 DEBUG 22416 --- [    Test worker] org.hibernate.SQL                        : 
+    alter table if exists quizzes 
+       add constraint FKplhvx7t0bggerxe3oycaam5f2 
+       foreign key (creator_id) 
+       references users
+Hibernate: 
+    alter table if exists quizzes 
+       add constraint FKplhvx7t0bggerxe3oycaam5f2 
+       foreign key (creator_id) 
+       references users
+2025-04-17T17:17:38.451+02:00 DEBUG 22416 --- [    Test worker] org.hibernate.SQL                        : 
+    alter table if exists reviews 
+       add constraint FKccbfc9u1qimejr5ll7yuxbtqs 
+       foreign key (course_id) 
+       references courses
+Hibernate: 
+    alter table if exists reviews 
+       add constraint FKccbfc9u1qimejr5ll7yuxbtqs 
+       foreign key (course_id) 
+       references courses
+2025-04-17T17:17:38.454+02:00 DEBUG 22416 --- [    Test worker] org.hibernate.SQL                        : 
+    alter table if exists reviews 
+       add constraint FKcgy7qjc1r99dp117y9en6lxye 
+       foreign key (user_id) 
+       references users
+Hibernate: 
+    alter table if exists reviews 
+       add constraint FKcgy7qjc1r99dp117y9en6lxye 
+       foreign key (user_id) 
+       references users
+2025-04-17T17:17:38.457+02:00 DEBUG 22416 --- [    Test worker] org.hibernate.SQL                        : 
+    alter table if exists user_course 
+       add constraint FKf4qni5wnlq0x70fm39w9tv7x4 
+       foreign key (course_id) 
+       references courses
+Hibernate: 
+    alter table if exists user_course 
+       add constraint FKf4qni5wnlq0x70fm39w9tv7x4 
+       foreign key (course_id) 
+       references courses
+2025-04-17T17:17:38.459+02:00 DEBUG 22416 --- [    Test worker] org.hibernate.SQL                        : 
+    alter table if exists user_course 
+       add constraint FKoc4yl478i6o8hf240vumhjgrb 
+       foreign key (user_id) 
+       references users
+Hibernate: 
+    alter table if exists user_course 
+       add constraint FKoc4yl478i6o8hf240vumhjgrb 
+       foreign key (user_id) 
+       references users
+2025-04-17T17:17:38.464+02:00  INFO 22416 --- [    Test worker] o.h.t.s.i.e.GenerationTargetToDatabase   : HHH000476: Executing script '[injected ScriptSourceInputNonExistentImpl script]'
+2025-04-17T17:17:38.469+02:00  INFO 22416 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-04-17T17:17:39.325+02:00  INFO 22416 --- [    Test worker] f.s.u.persistence.UserRepositoryTest     : Started UserRepositoryTest in 6.616 seconds (process running for 8.991)
+2025-04-17T17:17:40.253+02:00 DEBUG 22416 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        u1_0.id,
+        u1_0.date_of_birth,
+        u1_0.email,
+        u1_0.first_name,
+        u1_0.last_name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.date_of_birth,
+        u1_0.email,
+        u1_0.first_name,
+        u1_0.last_name,
+        u1_0.password,
+        u1_0.role,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

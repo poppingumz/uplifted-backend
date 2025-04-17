@@ -30,6 +30,7 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter'
     testImplementation 'org.mockito:mockito-core'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'com.h2database:h2'
 }
 
 test {
@@ -39,6 +40,7 @@ test {
 sonar {
     properties {
         property "sonar.projectKey", "uplifted"
+        property "sonar.gradle.skipCompile", "true"
         property "sonar.host.url", "http://localhost:9000"
         property "sonar.coverage.jacoco.xmlReportPaths", "$buildDir/reports/jacoco/test/jacocoTestReport.xml"
 

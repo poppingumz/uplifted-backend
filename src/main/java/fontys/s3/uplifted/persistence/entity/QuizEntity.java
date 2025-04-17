@@ -42,5 +42,6 @@ public class QuizEntity {
     private UserEntity createdBy;
 
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<QuestionEntity> questions = new ArrayList<>();
 }
