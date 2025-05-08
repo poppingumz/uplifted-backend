@@ -28,37 +28,22 @@ public class FileController {
             fileService.uploadFile(file);
             return ResponseEntity.ok("File uploaded successfully.");
         } catch (IOException e) {
-            log.error("IOException while uploading file: {}", file.getOriginalFilename(), e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to upload file due to an I/O error.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to upload file due to an I/O error.");
         } catch (Exception e) {
-            log.error("Unexpected error while uploading file: {}", file.getOriginalFilename(), e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred while uploading the file.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An unexpected error occurred while uploading the file.");
         }
     }
 
     @GetMapping("/all")
     public ResponseEntity<List<File>> getAllFiles() {
-        try {
-            return ResponseEntity.ok(fileService.getAllFiles());
-        } catch (Exception e) {
-            log.error("Failed to fetch files", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+        return ResponseEntity.ok(fileService.getAllFiles());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<File> getFileById(@PathVariable Long id) {
-        try {
-            File file = fileService.getFileById(id);
-            if (file != null) {
-                return ResponseEntity.ok(file);
-            } else {
-                log.warn("File not found with ID: {}", id);
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-            }
-        } catch (Exception e) {
-            log.error("Failed to fetch file with ID: {}", id, e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+        File file = fileService.getFileById(id);
+        return file != null ? ResponseEntity.ok(file) : ResponseEntity.notFound().build();
     }
 }

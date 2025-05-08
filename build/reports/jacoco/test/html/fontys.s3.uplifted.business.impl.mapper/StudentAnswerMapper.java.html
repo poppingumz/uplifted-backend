@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>StudentAnswerMapper.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">uplifted-learning-platform</a> &gt; <a href="index.source.html" class="el_package">fontys.s3.uplifted.business.impl.mapper</a> &gt; <span class="el_source">StudentAnswerMapper.java</span></div><h1>StudentAnswerMapper.java</h1><pre class="source lang-java linenums">package fontys.s3.uplifted.business.impl.mapper;
+
+import fontys.s3.uplifted.domain.StudentAnswer;
+import fontys.s3.uplifted.persistence.entity.StudentAnswerEntity;
+
+<span class="nc" id="L6">public final class StudentAnswerMapper {</span>
+
+    public static StudentAnswer toDomain(StudentAnswerEntity entity) {
+<span class="nc" id="L9">        return StudentAnswer.builder()</span>
+<span class="nc" id="L10">                .id(entity.getId())</span>
+<span class="nc" id="L11">                .userId(entity.getUserId())</span>
+<span class="nc" id="L12">                .quizId(entity.getQuizId())</span>
+<span class="nc" id="L13">                .questionId(entity.getQuestionId())</span>
+<span class="nc" id="L14">                .submittedAnswer(entity.getSubmittedAnswer())</span>
+<span class="nc" id="L15">                .awardedMarks(entity.getAwardedMarks())</span>
+<span class="nc" id="L16">                .mentorFeedback(entity.getMentorFeedback())</span>
+<span class="nc" id="L17">                .reviewed(entity.isReviewed())</span>
+<span class="nc" id="L18">                .build();</span>
+    }
+
+    public static StudentAnswerEntity toEntity(StudentAnswer answer) {
+<span class="nc" id="L22">        return StudentAnswerEntity.builder()</span>
+<span class="nc" id="L23">                .id(answer.getId())</span>
+<span class="nc" id="L24">                .userId(answer.getUserId())</span>
+<span class="nc" id="L25">                .quizId(answer.getQuizId())</span>
+<span class="nc" id="L26">                .questionId(answer.getQuestionId())</span>
+<span class="nc" id="L27">                .submittedAnswer(answer.getSubmittedAnswer())</span>
+<span class="nc" id="L28">                .reviewed(answer.isReviewed())</span>
+<span class="nc" id="L29">                .mentorFeedback(answer.getMentorFeedback())</span>
+<span class="nc" id="L30">                .awardedMarks(answer.getAwardedMarks())</span>
+<span class="nc" id="L31">                .build();</span>
+    }
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

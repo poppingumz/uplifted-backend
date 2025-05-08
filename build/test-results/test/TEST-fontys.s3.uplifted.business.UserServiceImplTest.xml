@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="fontys.s3.uplifted.business.UserServiceImplTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2025-05-08T18:51:33" hostname="LAPTOP-RHFQ3ARB" time="0.051">
+  <properties/>
+  <testcase name="testGetUserByEmail()" classname="fontys.s3.uplifted.business.UserServiceImplTest" time="0.01"/>
+  <testcase name="testGetAllUsers()" classname="fontys.s3.uplifted.business.UserServiceImplTest" time="0.004"/>
+  <testcase name="testUpdateUser()" classname="fontys.s3.uplifted.business.UserServiceImplTest" time="0.005"/>
+  <testcase name="testDeleteUserSuccess()" classname="fontys.s3.uplifted.business.UserServiceImplTest" time="0.004"/>
+  <testcase name="testCreateUser()" classname="fontys.s3.uplifted.business.UserServiceImplTest" time="0.004"/>
+  <testcase name="testGetUserById()" classname="fontys.s3.uplifted.business.UserServiceImplTest" time="0.004"/>
+  <testcase name="testDeleteUserNotFound()" classname="fontys.s3.uplifted.business.UserServiceImplTest" time="0.013"/>
+  <system-out><![CDATA[20:51:33.470 [Test worker] INFO fontys.s3.uplifted.business.impl.UserServiceImpl -- User created with ID: 1
+20:51:33.479 [Test worker] WARN fontys.s3.uplifted.business.impl.UserServiceImpl -- No user found with ID 2 to delete
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

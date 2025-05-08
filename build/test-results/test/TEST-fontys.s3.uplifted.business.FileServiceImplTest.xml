@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="fontys.s3.uplifted.business.FileServiceImplTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2025-05-08T18:51:32" hostname="LAPTOP-RHFQ3ARB" time="0.216">
+  <properties/>
+  <testcase name="uploadFile_success()" classname="fontys.s3.uplifted.business.FileServiceImplTest" time="0.202"/>
+  <testcase name="getFileById_notFound()" classname="fontys.s3.uplifted.business.FileServiceImplTest" time="0.011"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

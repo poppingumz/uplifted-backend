@@ -3,8 +3,6 @@ package fontys.s3.uplifted.controller;
 import fontys.s3.uplifted.business.impl.UserServiceImpl;
 import fontys.s3.uplifted.config.security.JwtUtil;
 import fontys.s3.uplifted.domain.User;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,11 +33,12 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody User user) {
         try {
-            User registered = userService.createUser(user);
-            return ResponseEntity.ok(registered);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Registration failed: " + e.getMessage());
+            User createdUser = userService.createUser(user);
+            return ResponseEntity.ok(createdUser);
+        } catch (RuntimeException ex) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("Registration failed: " + ex.getMessage());
         }
     }
 }
-

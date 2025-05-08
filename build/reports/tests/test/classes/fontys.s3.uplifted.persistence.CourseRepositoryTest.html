@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=edge"/>
+<title>Test results - CourseRepositoryTest</title>
+<link href="../css/base-style.css" rel="stylesheet" type="text/css"/>
+<link href="../css/style.css" rel="stylesheet" type="text/css"/>
+<script src="../js/report.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="content">
+<h1>CourseRepositoryTest</h1>
+<div class="breadcrumbs">
+<a href="../index.html">all</a> &gt; 
+<a href="../packages/fontys.s3.uplifted.persistence.html">fontys.s3.uplifted.persistence</a> &gt; CourseRepositoryTest</div>
+<div id="summary">
+<table>
+<tr>
+<td>
+<div class="summaryGroup">
+<table>
+<tr>
+<td>
+<div class="infoBox" id="tests">
+<div class="counter">1</div>
+<p>tests</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="failures">
+<div class="counter">0</div>
+<p>failures</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="ignored">
+<div class="counter">0</div>
+<p>ignored</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="duration">
+<div class="counter">0.635s</div>
+<p>duration</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</td>
+<td>
+<div class="infoBox success" id="successRate">
+<div class="percent">100%</div>
+<p>successful</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div id="tabs">
+<ul class="tabLinks">
+<li>
+<a href="#tab0">Tests</a>
+</li>
+<li>
+<a href="#tab1">Standard output</a>
+</li>
+</ul>
+<div id="tab0" class="tab">
+<h2>Tests</h2>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>Method name</th>
+<th>Duration</th>
+<th>Result</th>
+</tr>
+</thead>
+<tr>
+<td class="success">Save and find by instructor ID</td>
+<td class="success">testFindByInstructorId()</td>
+<td class="success">0.635s</td>
+<td class="success">passed</td>
+</tr>
+</table>
+</div>
+<div id="tab1" class="tab">
+<h2>Standard output</h2>
+<span class="code">
+<pre>2025-05-08T20:51:44.373+02:00  INFO 17808 --- [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [fontys.s3.uplifted.persistence.CourseRepositoryTest]: CourseRepositoryTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2025-05-08T20:51:44.408+02:00  INFO 17808 --- [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration fontys.s3.uplifted.UpliftEdApplication for test class fontys.s3.uplifted.persistence.CourseRepositoryTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.2.5)
+
+2025-05-08T20:51:44.471+02:00  INFO 17808 --- [    Test worker] f.s.u.persistence.CourseRepositoryTest   : Starting CourseRepositoryTest using Java 17.0.14 with PID 17808 (started by gugus in C:\Projects\uplifted-learning-platform)
+2025-05-08T20:51:44.472+02:00  INFO 17808 --- [    Test worker] f.s.u.persistence.CourseRepositoryTest   : No active profile set, falling back to 1 default profile: &quot;default&quot;
+2025-05-08T20:51:44.847+02:00  INFO 17808 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-05-08T20:51:45.080+02:00  INFO 17808 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 205 ms. Found 9 JPA repository interfaces.
+2025-05-08T20:51:45.227+02:00  INFO 17808 --- [    Test worker] beddedDataSourceBeanFactoryPostProcessor : Replacing 'dataSource' DataSource bean with embedded version
+2025-05-08T20:51:45.399+02:00  INFO 17808 --- [    Test worker] o.s.j.d.e.EmbeddedDatabaseFactory        : Starting embedded database: url='jdbc:h2:mem:0565028f-cd26-44e7-85b6-755d2e9772e2;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=false', username='sa'
+2025-05-08T20:51:46.288+02:00  INFO 17808 --- [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-05-08T20:51:46.480+02:00  INFO 17808 --- [    Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.4.Final
+2025-05-08T20:51:46.570+02:00  INFO 17808 --- [    Test worker] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-05-08T20:51:46.884+02:00  INFO 17808 --- [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-05-08T20:51:47.019+02:00  WARN 17808 --- [    Test worker] org.hibernate.orm.deprecation            : HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-05-08T20:51:48.875+02:00  INFO 17808 --- [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+Hibernate: drop table if exists answer cascade 
+Hibernate: drop table if exists course cascade 
+Hibernate: drop table if exists course_enrollments cascade 
+Hibernate: drop table if exists file cascade 
+Hibernate: drop table if exists progress cascade 
+Hibernate: drop table if exists question cascade 
+Hibernate: drop table if exists quiz cascade 
+Hibernate: drop table if exists review cascade 
+Hibernate: drop table if exists student_answer cascade 
+Hibernate: drop table if exists &quot;user&quot; cascade 
+Hibernate: create table answer (correct boolean not null, id bigint generated by default as identity, question_id bigint not null, explanation varchar(255), text varchar(255), primary key (id))
+Hibernate: create table course (enrollment_limit integer not null, number_of_reviews integer not null, published boolean not null, rating float(53) not null, id bigint generated by default as identity, instructor_id bigint not null, category varchar(255), description TEXT not null, title varchar(255) not null, image_data LONGBLOB, primary key (id))
+Hibernate: create table course_enrollments (course_id bigint not null, user_id bigint not null, primary key (course_id, user_id))
+Hibernate: create table file (upload_date date, course_id bigint, id bigint generated by default as identity, uploader_id bigint, name varchar(255), type varchar(255), data blob, primary key (id))
+Hibernate: create table progress (progress_percentage float(53) not null, course_id bigint not null, id bigint generated by default as identity, user_id bigint not null, primary key (id))
+Hibernate: create table question (marks integer, requires_review boolean not null, id bigint generated by default as identity, quiz_id bigint not null, correct_answer varchar(255), text varchar(255), type varchar(255) check (type in ('MULTIPLE_CHOICE','TRUE_FALSE','OPEN_ENDED')), primary key (id))
+Hibernate: create table quiz (passing_marks integer not null, total_marks integer not null, course_id bigint not null, creator_id bigint not null, id bigint generated by default as identity, description varchar(255) not null, title varchar(255) not null, primary key (id))
+Hibernate: create table review (rating float(53) not null, course_id bigint not null, id bigint generated by default as identity, user_id bigint not null, review_text varchar(255) not null, primary key (id))
+Hibernate: create table student_answer (awarded_marks integer, reviewed boolean not null, id bigint generated by default as identity, question_id bigint not null, quiz_id bigint not null, user_id bigint not null, mentor_feedback varchar(255), submitted_answer TEXT, primary key (id))
+Hibernate: create table &quot;user&quot; (date_of_birth date, is_active boolean not null, joined_date date, id bigint generated by default as identity, bio TEXT, email varchar(255) not null unique, first_name varchar(255), last_name varchar(255), password varchar(255) not null, role varchar(255) check (role in ('ADMIN','STUDENT','TEACHER')), username varchar(255) not null unique, profile_image LONGBLOB, primary key (id))
+Hibernate: alter table if exists answer add constraint FK8frr4bcabmmeyyu60qt7iiblo foreign key (question_id) references question
+Hibernate: alter table if exists course add constraint FKgf932mhq82ns36fmq0wesiheb foreign key (instructor_id) references &quot;user&quot;
+Hibernate: alter table if exists course_enrollments add constraint FK9ya21atlsjnalls1dejd9pt0y foreign key (user_id) references &quot;user&quot;
+Hibernate: alter table if exists course_enrollments add constraint FKrk0d1a7wqlqao0ypno720c0sb foreign key (course_id) references course
+Hibernate: alter table if exists progress add constraint FKsyhehp7u3ky9phqokro91ih4v foreign key (course_id) references course
+Hibernate: alter table if exists progress add constraint FKfyqupnlfosaj1kyy67accfdyn foreign key (user_id) references &quot;user&quot;
+Hibernate: alter table if exists question add constraint FKb0yh0c1qaxfwlcnwo9dms2txf foreign key (quiz_id) references quiz
+Hibernate: alter table if exists quiz add constraint FKce16mrsgeokucc022mpyev7xk foreign key (course_id) references course
+Hibernate: alter table if exists quiz add constraint FKgud1x8wtgdwb3y830s1k6dajl foreign key (creator_id) references &quot;user&quot;
+Hibernate: alter table if exists review add constraint FKprox8elgnr8u5wrq1983degk foreign key (course_id) references course
+Hibernate: alter table if exists review add constraint FKj8m0asijw8lfl4jxhcps8tf4y foreign key (user_id) references &quot;user&quot;
+2025-05-08T20:51:49.003+02:00  INFO 17808 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-05-08T20:51:49.737+02:00  INFO 17808 --- [    Test worker] f.s.u.persistence.CourseRepositoryTest   : Started CourseRepositoryTest in 5.324 seconds (process running for 22.102)
+Hibernate: insert into &quot;user&quot; (bio,date_of_birth,email,first_name,is_active,joined_date,last_name,password,profile_image,role,username,id) values (?,?,?,?,?,?,?,?,?,?,?,default)
+Hibernate: select ue1_0.id,ue1_0.bio,ue1_0.date_of_birth,ue1_0.email,ue1_0.first_name,ue1_0.is_active,ue1_0.joined_date,ue1_0.last_name,ue1_0.password,ue1_0.profile_image,ue1_0.role,ue1_0.username from &quot;user&quot; ue1_0 where ue1_0.id=?
+Hibernate: insert into course (category,description,enrollment_limit,image_data,instructor_id,number_of_reviews,published,rating,title,id) values (?,?,?,?,?,?,?,?,?,default)
+Hibernate: select ce1_0.id,ce1_0.category,ce1_0.description,ce1_0.enrollment_limit,ce1_0.image_data,ce1_0.instructor_id,ce1_0.number_of_reviews,ce1_0.published,ce1_0.rating,ce1_0.title from course ce1_0 left join &quot;user&quot; i1_0 on i1_0.id=ce1_0.instructor_id where i1_0.id=?
+</pre>
+</span>
+</div>
+</div>
+<div id="footer">
+<p>
+<div>
+<label class="hidden" id="label-for-line-wrapping-toggle" for="line-wrapping-toggle">Wrap lines
+<input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
+</label>
+</div>Generated by 
+<a href="http://www.gradle.org">Gradle 8.5</a> at May 8, 2025, 8:51:51 PM</p>
+</div>
+</div>
+</body>
+</html>

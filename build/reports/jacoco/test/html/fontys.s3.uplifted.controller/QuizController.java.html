@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>QuizController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">uplifted-learning-platform</a> &gt; <a href="index.source.html" class="el_package">fontys.s3.uplifted.controller</a> &gt; <span class="el_source">QuizController.java</span></div><h1>QuizController.java</h1><pre class="source lang-java linenums">package fontys.s3.uplifted.controller;
+
+import fontys.s3.uplifted.business.QuizService;
+import fontys.s3.uplifted.domain.Quiz;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+<span class="fc" id="L11">@Slf4j</span>
+@RestController
+@RequestMapping(&quot;/api/quizzes&quot;)
+public class QuizController {
+
+    private final QuizService quizService;
+
+<span class="fc" id="L18">    public QuizController(QuizService quizService) {</span>
+<span class="fc" id="L19">        this.quizService = quizService;</span>
+<span class="fc" id="L20">    }</span>
+
+    @PostMapping
+    public ResponseEntity&lt;Quiz&gt; createQuiz(@RequestBody Quiz quiz) {
+        try {
+<span class="fc" id="L25">            Quiz created = quizService.createQuiz(quiz);</span>
+<span class="fc" id="L26">            return ResponseEntity.ok(created);</span>
+<span class="fc" id="L27">        } catch (Exception e) {</span>
+<span class="fc" id="L28">            log.error(&quot;Failed to create quiz for course ID {}&quot;, quiz.getCourseId(), e);</span>
+<span class="fc" id="L29">            return ResponseEntity.internalServerError().build();</span>
+        }
+    }
+
+    @GetMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;Quiz&gt; getQuizById(@PathVariable Long id) {
+        try {
+<span class="fc" id="L36">            return quizService.getQuizById(id)</span>
+<span class="fc" id="L37">                    .map(ResponseEntity::ok)</span>
+<span class="fc" id="L38">                    .orElseGet(() -&gt; {</span>
+<span class="fc" id="L39">                        log.warn(&quot;Quiz with ID {} not found&quot;, id);</span>
+<span class="fc" id="L40">                        return ResponseEntity.notFound().build();</span>
+                    });
+<span class="nc" id="L42">        } catch (Exception e) {</span>
+<span class="nc" id="L43">            log.error(&quot;Error retrieving quiz with ID {}&quot;, id, e);</span>
+<span class="nc" id="L44">            return ResponseEntity.internalServerError().build();</span>
+        }
+    }
+
+    @GetMapping(&quot;/course/{courseId}&quot;)
+    public ResponseEntity&lt;List&lt;Quiz&gt;&gt; getQuizzesByCourseId(@PathVariable Long courseId) {
+        try {
+<span class="fc" id="L51">            List&lt;Quiz&gt; quizzes = quizService.getQuizzesByCourseId(courseId);</span>
+<span class="fc" id="L52">            return ResponseEntity.ok(quizzes);</span>
+<span class="nc" id="L53">        } catch (Exception e) {</span>
+<span class="nc" id="L54">            log.error(&quot;Failed to get quizzes for course ID {}&quot;, courseId, e);</span>
+<span class="nc" id="L55">            return ResponseEntity.internalServerError().build();</span>
+        }
+    }
+
+    @PutMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;Quiz&gt; updateQuiz(@PathVariable Long id, @RequestBody Quiz quiz) {
+        try {
+<span class="fc" id="L62">            Quiz updated = quizService.updateQuiz(id, quiz);</span>
+<span class="fc bfc" id="L63" title="All 2 branches covered.">            if (updated != null) {</span>
+<span class="fc" id="L64">                return ResponseEntity.ok(updated);</span>
+            } else {
+<span class="fc" id="L66">                log.warn(&quot;No quiz found with ID {} to update&quot;, id);</span>
+<span class="fc" id="L67">                return ResponseEntity.notFound().build();</span>
+            }
+<span class="nc" id="L69">        } catch (Exception e) {</span>
+<span class="nc" id="L70">            log.error(&quot;Failed to update quiz with ID {}&quot;, id, e);</span>
+<span class="nc" id="L71">            return ResponseEntity.internalServerError().build();</span>
+        }
+    }
+
+    @DeleteMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;Void&gt; deleteQuiz(@PathVariable Long id) {
+        try {
+<span class="fc" id="L78">            quizService.deleteQuiz(id);</span>
+<span class="fc" id="L79">            return ResponseEntity.noContent().build();</span>
+<span class="nc" id="L80">        } catch (Exception e) {</span>
+<span class="nc" id="L81">            log.error(&quot;Failed to delete quiz with ID {}&quot;, id, e);</span>
+<span class="nc" id="L82">            return ResponseEntity.internalServerError().build();</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>
