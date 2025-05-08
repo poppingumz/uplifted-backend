@@ -1,13 +1,8 @@
 package fontys.s3.uplifted.domain;
 
 import fontys.s3.uplifted.domain.enums.Role;
-import jakarta.persistence.*;
 import lombok.*;
-
 import java.time.LocalDate;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -23,5 +18,11 @@ public class User {
     private String firstName;
     private String lastName;
     private LocalDate dateOfBirth;
+
+    private byte[] profileImage;
+    private String bio;
+    private LocalDate joinedDate;
+    private boolean isActive;
 }
+
 

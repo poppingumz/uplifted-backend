@@ -1,7 +1,8 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '3.1.0'
+    id 'org.springframework.boot' version '3.2.5'
     id 'io.spring.dependency-management' version '1.1.0'
+    id 'org.flywaydb.flyway' version '10.11.0'
     id "org.sonarqube" version "4.4.1.3373"
     id "jacoco"
 }
@@ -14,19 +15,28 @@ repositories {
 }
 
 dependencies {
+    // Spring Boot
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
 
+    // JWT
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
-    runtimeOnly('io.jsonwebtoken:jjwt-jackson:0.11.5')
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
-    runtimeOnly 'com.mysql:mysql-connector-j'
 
+    // Flyway core + MySQL support
+    implementation 'com.mysql:mysql-connector-j:8.3.0'
+    implementation 'org.flywaydb:flyway-core:10.11.0'
+    implementation 'org.flywaydb:flyway-mysql:10.11.0'
+
+    // Lombok
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
+    // Testing
     testImplementation 'org.junit.jupiter:junit-jupiter'
     testImplementation 'org.mockito:mockito-core'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -37,15 +47,6 @@ test {
     useJUnitPlatform()
 }
 
-sonar {
-    properties {
-        property "sonar.projectKey", "uplifted"
-        property "sonar.gradle.skipCompile", "true"
-        property "sonar.host.url", "http://localhost:9000"
-        property "sonar.coverage.jacoco.xmlReportPaths", "$buildDir/reports/jacoco/test/jacocoTestReport.xml"
-
-    }
-}
 jacoco {
     toolVersion = "0.8.10"
 }
@@ -58,3 +59,21 @@ jacocoTestReport {
         csv.required = false
     }
 }
+
+sonar {
+    properties {
+        property "sonar.projectKey", "uplifted"
+        property "sonar.gradle.skipCompile", "true"
+        property "sonar.host.url", "http://localhost:9000"
+        property "sonar.coverage.jacoco.xmlReportPaths", "$buildDir/reports/jacoco/test/jacocoTestReport.xml"
+    }
+}
+
+flyway {
+    url = 'jdbc:mysql://localhost:3306/uplifted_db?useSSL=false&allowPublicKeyRetrieval=true'
+    user = 'root'
+    password = 'ChatGPT69$'
+    driver = 'com.mysql.cj.jdbc.Driver'
+    locations = ['filesystem:src/main/resources/db/migration']
+}
+

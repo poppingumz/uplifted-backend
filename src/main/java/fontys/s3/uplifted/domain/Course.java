@@ -13,9 +13,12 @@ public class Course {
     private Long id;
     private String title;
     private String description;
+    private byte[] imageData;
     private Long instructorId;
+    private String category;
     private Set<Long> enrolledStudentIds;
     private int enrollmentLimit;
     private boolean published;
-    private String category;
+    private double rating;
+    private int numberOfReviews;
 }

@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "answers")
+@Table(name = "answer")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -23,6 +23,6 @@ public class AnswerEntity {
     private String explanation;
 
     @ManyToOne
-    @JoinColumn(name = "question_id", nullable = false)
+    @JoinColumn(name = "questionId", nullable = false)
     private QuestionEntity question;
 }

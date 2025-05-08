@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/review")
+@RequestMapping("/api/mentor_review")
 @RequiredArgsConstructor
 public class MentorReviewController {
 

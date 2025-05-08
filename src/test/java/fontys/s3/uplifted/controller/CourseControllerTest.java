@@ -8,6 +8,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,6 +27,7 @@ class CourseControllerTest {
     private CourseController courseController;
 
     private Course sampleCourse;
+    private MultipartFile mockImage;
 
     @BeforeEach
     void setUp() {
@@ -40,8 +43,9 @@ class CourseControllerTest {
                 .published(true)
                 .category("Programming")
                 .build();
-    }
 
+        mockImage = new MockMultipartFile("image", "test.jpg", "image/jpeg", "image content".getBytes());
+    }
 
     @Test
     void shouldReturnAllCourses() {
@@ -76,10 +80,10 @@ class CourseControllerTest {
     }
 
     @Test
-    void shouldCreateNewCourse() {
+    void shouldCreateNewCourseWithImage() throws Exception {
         when(courseService.createCourse(sampleCourse)).thenReturn(sampleCourse);
 
-        ResponseEntity<Course> response = courseController.createCourse(sampleCourse);
+        ResponseEntity<Course> response = courseController.createCourse(sampleCourse, mockImage);
 
         assertEquals(200, response.getStatusCodeValue());
         assertEquals(sampleCourse, response.getBody());
@@ -87,10 +91,10 @@ class CourseControllerTest {
     }
 
     @Test
-    void shouldUpdateExistingCourse() {
+    void shouldUpdateExistingCourseWithImage() throws Exception {
         when(courseService.updateCourse(eq(1L), any(Course.class))).thenReturn(Optional.of(sampleCourse));
 
-        ResponseEntity<Course> response = courseController.updateCourse(1L, sampleCourse);
+        ResponseEntity<Course> response = courseController.updateCourse(1L, sampleCourse, mockImage);
 
         assertEquals(200, response.getStatusCodeValue());
         assertEquals(sampleCourse, response.getBody());
@@ -98,10 +102,10 @@ class CourseControllerTest {
     }
 
     @Test
-    void shouldReturnNotFoundWhenUpdatingNonExistingCourse() {
+    void shouldReturnNotFoundWhenUpdatingNonExistingCourse() throws Exception {
         when(courseService.updateCourse(eq(99L), any(Course.class))).thenReturn(Optional.empty());
 
-        ResponseEntity<Course> response = courseController.updateCourse(99L, sampleCourse);
+        ResponseEntity<Course> response = courseController.updateCourse(99L, sampleCourse, mockImage);
 
         assertEquals(404, response.getStatusCodeValue());
         verify(courseService, times(1)).updateCourse(eq(99L), any(Course.class));

@@ -5,8 +5,12 @@ import fontys.s3.uplifted.business.impl.exception.CourseNotFoundException;
 import fontys.s3.uplifted.business.impl.mapper.CourseMapper;
 import fontys.s3.uplifted.domain.Course;
 import fontys.s3.uplifted.persistence.CourseRepository;
+import fontys.s3.uplifted.persistence.UserRepository;
 import fontys.s3.uplifted.persistence.entity.CourseEntity;
+import fontys.s3.uplifted.persistence.entity.UserEntity;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,10 +22,13 @@ import java.util.stream.Collectors;
 public class CourseServiceImpl implements CourseService {
 
     private final CourseRepository courseRepository;
+    private final UserRepository userRepository;
 
-    public CourseServiceImpl(CourseRepository courseRepository) {
+    public CourseServiceImpl(CourseRepository courseRepository, UserRepository userRepository) {
         this.courseRepository = courseRepository;
+        this.userRepository = userRepository;
     }
+
 
     public List<Course> getAllCourses() {
         return courseRepository.findAll()
@@ -35,16 +42,33 @@ public class CourseServiceImpl implements CourseService {
                 .map(CourseMapper::toDomain);
     }
 
+    public List<Course> getCoursesByInstructor(Long instructorId) {
+        return courseRepository.findByInstructorId(instructorId)
+                .stream()
+                .map(CourseMapper::toDomain)
+                .collect(Collectors.toList());
+    }
+
     public Course createCourse(Course course) {
-        CourseEntity entity = CourseMapper.toEntity(course);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+
+        UserEntity instructor = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("Instructor not found"));
+
+        CourseEntity entity = CourseMapper.toEntity(course, instructor);
         CourseEntity saved = courseRepository.save(entity);
         return CourseMapper.toDomain(saved);
     }
 
+
     public Optional<Course> updateCourse(Long id, Course course) {
         return courseRepository.findById(id).map(existing -> {
-            CourseEntity entity = CourseMapper.toEntity(course);
-            entity.setId(id); 
+            UserEntity instructor = userRepository.findById(course.getInstructorId())
+                    .orElseThrow(() -> new RuntimeException("Instructor not found with ID: " + course.getInstructorId()));
+
+            CourseEntity entity = CourseMapper.toEntity(course, instructor);
+            entity.setId(id);
             CourseEntity updated = courseRepository.save(entity);
             return CourseMapper.toDomain(updated);
         });

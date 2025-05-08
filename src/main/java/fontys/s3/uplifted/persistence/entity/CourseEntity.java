@@ -11,7 +11,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "courses")
+@Table(name = "course")
 public class CourseEntity {
 
     @Id
@@ -23,6 +23,10 @@ public class CourseEntity {
 
     @Column(nullable = false, columnDefinition = "TEXT")
     private String description;
+
+    @Lob
+    @Column(name = "image_data", columnDefinition = "LONGBLOB")
+    private byte[] imageData;
 
     @ManyToOne
     @JoinColumn(name = "instructor_id", nullable = false)
@@ -43,4 +47,7 @@ public class CourseEntity {
     private boolean published;
 
     private String category;
+
+    private double rating;
+    private int numberOfReviews;
 }

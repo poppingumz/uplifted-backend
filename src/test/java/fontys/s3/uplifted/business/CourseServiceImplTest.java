@@ -4,6 +4,7 @@ import fontys.s3.uplifted.business.impl.CourseServiceImpl;
 import fontys.s3.uplifted.domain.Course;
 import fontys.s3.uplifted.domain.enums.Role;
 import fontys.s3.uplifted.persistence.CourseRepository;
+import fontys.s3.uplifted.persistence.UserRepository;
 import fontys.s3.uplifted.persistence.entity.CourseEntity;
 import fontys.s3.uplifted.persistence.entity.UserEntity;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,17 +19,18 @@ import static org.mockito.Mockito.*;
 class CourseServiceImplTest {
 
     private CourseRepository courseRepository;
+    private UserRepository userRepository;
     private CourseServiceImpl courseService;
 
     @BeforeEach
     void setUp() {
         courseRepository = mock(CourseRepository.class);
-        courseService = new CourseServiceImpl(courseRepository);
+        userRepository = mock(UserRepository.class);
+        courseService = new CourseServiceImpl(courseRepository, userRepository);
     }
 
     @Test
     void getCourseById_success() {
-        // Create a mock instructor entity with required fields
         UserEntity instructor = UserEntity.builder()
                 .id(100L)
                 .username("instructor1")
@@ -54,7 +56,6 @@ class CourseServiceImplTest {
         assertTrue(result.isPresent());
         assertEquals("Math", result.get().getTitle());
         assertEquals(100L, result.get().getInstructorId());
-
     }
 
     @Test

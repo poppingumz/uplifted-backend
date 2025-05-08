@@ -1,0 +1,32 @@
+services:
+  mysql:
+    container_name: uplifted-mysql
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ChatGPT69$
+      MYSQL_DATABASE: uplifted_db
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - uplifted-network
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: uplifted-phpmyadmin
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: mysql
+      MYSQL_ROOT_PASSWORD: ChatGPT69$
+    depends_on:
+      - mysql
+    networks:
+      - uplifted-network
+
+networks:
+  uplifted-network:
+
+volumes:
+  mysql_data:

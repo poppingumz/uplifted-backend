@@ -6,7 +6,7 @@ import lombok.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "files")
+@Table(name = "file")
 @Getter
 @Setter
 @NoArgsConstructor

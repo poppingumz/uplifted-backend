@@ -14,7 +14,7 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "quizzes")
+@Table(name = "quiz")
 public class QuizEntity {
 
     @Id

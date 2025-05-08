@@ -10,6 +10,6 @@ import java.util.List;
 public interface CourseRepository extends JpaRepository<CourseEntity, Long> {
 
     List<CourseEntity> findByTitleContainingIgnoreCase(String title);
-    List<CourseEntity> findByInstructor_Id(Long instructorId);
+    List<CourseEntity> findByInstructorId(Long instructorId);
     boolean existsByTitle(String title);
 }

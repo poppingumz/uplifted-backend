@@ -3,8 +3,10 @@ package fontys.s3.uplifted.controller;
 import fontys.s3.uplifted.domain.User;
 import fontys.s3.uplifted.business.impl.UserServiceImpl;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -44,13 +46,24 @@ public class UserController {
         }
     }
 
-    @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
+    @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<User> updateUser(
+            @PathVariable Long id,
+            @RequestPart("user") User user,
+            @RequestPart(value = "profileImage", required = false) MultipartFile profileImage
+    ) {
         try {
-            User createdUser = userServiceImpl.createUser(user);
-            return ResponseEntity.ok(createdUser);
+            if (profileImage != null && !profileImage.isEmpty()) {
+                user.setProfileImage(profileImage.getBytes());
+            }
+            return userServiceImpl.updateUser(id, user)
+                    .map(ResponseEntity::ok)
+                    .orElseGet(() -> {
+                        log.warn("User with ID {} not found for update", id);
+                        return ResponseEntity.notFound().build();
+                    });
         } catch (Exception e) {
-            log.error("Failed to create user", e);
+            log.error("Failed to update user with ID {}", id, e);
             return ResponseEntity.internalServerError().build();
         }
     }
@@ -86,4 +99,16 @@ public class UserController {
             return ResponseEntity.internalServerError().build();
         }
     }
+
+    @PostMapping("/register")
+    public ResponseEntity<User> registerUser(@RequestBody User user) {
+        try {
+            User created = userServiceImpl.createUser(user);
+            return ResponseEntity.ok(created);
+        } catch (Exception e) {
+            log.error("Registration failed", e);
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
 }
