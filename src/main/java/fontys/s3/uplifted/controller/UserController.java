@@ -3,12 +3,15 @@ package fontys.s3.uplifted.controller;
 import fontys.s3.uplifted.domain.User;
 import fontys.s3.uplifted.business.impl.UserServiceImpl;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -32,18 +35,38 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
+    public ResponseEntity<User> getUserById(@PathVariable Long id, Authentication authentication) {
         try {
-            return userServiceImpl.getUserById(id)
-                    .map(ResponseEntity::ok)
-                    .orElseGet(() -> {
-                        log.warn("User with ID {} not found", id);
-                        return ResponseEntity.notFound().build();
-                    });
+            String emailFromToken = authentication.getName();
+
+            Optional<User> userOpt = userServiceImpl.getUserByEmail(emailFromToken);
+
+            if (userOpt.isEmpty()) {
+                log.warn("User with email {} not found", emailFromToken);
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
+
+            User user = userOpt.get();
+
+            if (!user.getId().equals(id)) {
+                log.warn("User {} attempted to access user {}", user.getId(), id);
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
+
+            return ResponseEntity.ok(user);
+
         } catch (Exception e) {
             log.error("Failed to retrieve user with ID {}", id, e);
             return ResponseEntity.internalServerError().build();
         }
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<User> getCurrentUser(Authentication authentication) {
+        String email = authentication.getName();
+        return userServiceImpl.getUserByEmail(email)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -99,16 +122,4 @@ public class UserController {
             return ResponseEntity.internalServerError().build();
         }
     }
-
-    @PostMapping("/register")
-    public ResponseEntity<User> registerUser(@RequestBody User user) {
-        try {
-            User created = userServiceImpl.createUser(user);
-            return ResponseEntity.ok(created);
-        } catch (Exception e) {
-            log.error("Registration failed", e);
-            return ResponseEntity.internalServerError().build();
-        }
-    }
-
 }
