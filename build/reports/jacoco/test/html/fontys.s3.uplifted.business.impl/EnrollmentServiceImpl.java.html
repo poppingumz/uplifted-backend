@@ -8,39 +8,39 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-<span class="nc" id="L11">@Slf4j</span>
+<span class="fc" id="L11">@Slf4j</span>
 @Service
-<span class="nc" id="L13">public class EnrollmentServiceImpl implements EnrollmentService {</span>
+<span class="fc" id="L13">public class EnrollmentServiceImpl implements EnrollmentService {</span>
 
-<span class="nc" id="L15">    private final Map&lt;Long, Set&lt;Long&gt;&gt; enrollments = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L15">    private final Map&lt;Long, Set&lt;Long&gt;&gt; enrollments = new HashMap&lt;&gt;();</span>
 
     public void enrollStudent(Long courseId, Long studentId) {
         try {
-<span class="nc" id="L19">            enrollments.computeIfAbsent(courseId, k -&gt; new HashSet&lt;&gt;()).add(studentId);</span>
-<span class="nc" id="L20">            log.info(&quot;Enrolled student {} to course {}&quot;, studentId, courseId);</span>
+<span class="fc" id="L19">            enrollments.computeIfAbsent(courseId, k -&gt; new HashSet&lt;&gt;()).add(studentId);</span>
+<span class="fc" id="L20">            log.info(&quot;Enrolled student {} to course {}&quot;, studentId, courseId);</span>
 <span class="nc" id="L21">        } catch (Exception e) {</span>
 <span class="nc" id="L22">            log.error(&quot;Failed to enroll student {} to course {}&quot;, studentId, courseId, e);</span>
 <span class="nc" id="L23">            throw new RuntimeException(&quot;Unable to enroll student.&quot;);</span>
-<span class="nc" id="L24">        }</span>
-<span class="nc" id="L25">    }</span>
+<span class="fc" id="L24">        }</span>
+<span class="fc" id="L25">    }</span>
 
     public void unenrollStudent(Long courseId, Long studentId) {
         try {
-<span class="nc" id="L29">            Set&lt;Long&gt; students = enrollments.get(courseId);</span>
-<span class="nc bnc" id="L30" title="All 4 branches missed.">            if (students != null &amp;&amp; students.remove(studentId)) {</span>
-<span class="nc" id="L31">                log.info(&quot;Unenrolled student {} from course {}&quot;, studentId, courseId);</span>
+<span class="fc" id="L29">            Set&lt;Long&gt; students = enrollments.get(courseId);</span>
+<span class="pc bpc" id="L30" title="1 of 4 branches missed.">            if (students != null &amp;&amp; students.remove(studentId)) {</span>
+<span class="fc" id="L31">                log.info(&quot;Unenrolled student {} from course {}&quot;, studentId, courseId);</span>
             } else {
-<span class="nc" id="L33">                log.warn(&quot;Student {} was not enrolled in course {}&quot;, studentId, courseId);</span>
+<span class="fc" id="L33">                log.warn(&quot;Student {} was not enrolled in course {}&quot;, studentId, courseId);</span>
             }
 <span class="nc" id="L35">        } catch (Exception e) {</span>
 <span class="nc" id="L36">            log.error(&quot;Failed to unenroll student {} from course {}&quot;, studentId, courseId, e);</span>
 <span class="nc" id="L37">            throw new RuntimeException(&quot;Unable to unenroll student.&quot;);</span>
-<span class="nc" id="L38">        }</span>
-<span class="nc" id="L39">    }</span>
+<span class="fc" id="L38">        }</span>
+<span class="fc" id="L39">    }</span>
 
     public Set&lt;Long&gt; getEnrolledStudents(Long courseId) {
         try {
-<span class="nc" id="L43">            return new HashSet&lt;&gt;(enrollments.getOrDefault(courseId, Collections.emptySet()));</span>
+<span class="fc" id="L43">            return new HashSet&lt;&gt;(enrollments.getOrDefault(courseId, Collections.emptySet()));</span>
 <span class="nc" id="L44">        } catch (Exception e) {</span>
 <span class="nc" id="L45">            log.error(&quot;Failed to retrieve enrolled students for course {}&quot;, courseId, e);</span>
 <span class="nc" id="L46">            throw new RuntimeException(&quot;Unable to get enrolled students.&quot;);</span>

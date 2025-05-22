@@ -4,41 +4,46 @@ import fontys.s3.uplifted.business.impl.UserServiceImpl;
 import fontys.s3.uplifted.config.security.JwtUtil;
 import fontys.s3.uplifted.domain.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequestMapping(&quot;/auth&quot;)
-<span class="fc" id="L15">@RequiredArgsConstructor</span>
+<span class="fc" id="L16">@RequiredArgsConstructor</span>
 public class AuthController {
 
     private final UserServiceImpl userService;
     private final JwtUtil jwtUtil;
+    private final PasswordEncoder passwordEncoder;
 
     @PostMapping(&quot;/login&quot;)
     public ResponseEntity&lt;?&gt; login(@RequestBody User loginRequest) {
-<span class="fc" id="L23">        Optional&lt;User&gt; userOpt = userService.getUserByEmail(loginRequest.getEmail());</span>
-
-<span class="fc bfc" id="L25" title="All 4 branches covered.">        if (userOpt.isPresent() &amp;&amp; userOpt.get().getPassword().equals(loginRequest.getPassword())) {</span>
-<span class="fc" id="L26">            String token = jwtUtil.generateToken(loginRequest.getEmail());</span>
-<span class="fc" id="L27">            return ResponseEntity.ok().body(Map.of(&quot;token&quot;, token, &quot;user&quot;, userOpt.get()));</span>
-        } else {
-<span class="fc" id="L29">            return ResponseEntity.status(401).body(&quot;Invalid email or password&quot;);</span>
-        }
+<span class="fc" id="L25">        return userService.getUserByEmail(loginRequest.getEmail())</span>
+<span class="fc" id="L26">                .filter(u -&gt; passwordEncoder.matches(loginRequest.getPassword(), u.getPassword()))</span>
+<span class="fc" id="L27">                .map(u -&gt; {</span>
+<span class="fc" id="L28">                    String token = jwtUtil.generateToken(u.getEmail());</span>
+<span class="fc" id="L29">                    u.setPassword(null);</span>
+<span class="fc" id="L30">                    return ResponseEntity.ok(Map.of(&quot;token&quot;, token, &quot;user&quot;, u));</span>
+                })
+<span class="fc" id="L32">                .orElseGet(() -&gt; ResponseEntity</span>
+<span class="fc" id="L33">                        .status(HttpStatus.UNAUTHORIZED)</span>
+<span class="fc" id="L34">                        .body(Map.of(&quot;error&quot;, &quot;Invalid email or password&quot;)));</span>
     }
 
     @PostMapping(&quot;/register&quot;)
     public ResponseEntity&lt;?&gt; register(@RequestBody User user) {
         try {
-<span class="fc" id="L36">            User createdUser = userService.createUser(user);</span>
-<span class="fc" id="L37">            return ResponseEntity.ok(createdUser);</span>
-<span class="fc" id="L38">        } catch (RuntimeException ex) {</span>
-<span class="fc" id="L39">            return ResponseEntity</span>
-<span class="fc" id="L40">                    .badRequest()</span>
-<span class="fc" id="L41">                    .body(&quot;Registration failed: &quot; + ex.getMessage());</span>
+<span class="fc" id="L40">            User created = userService.createUser(user);</span>
+<span class="fc" id="L41">            created.setPassword(null);</span>
+<span class="fc" id="L42">            return ResponseEntity.ok(created);</span>
+<span class="fc" id="L43">        } catch (RuntimeException ex) {</span>
+<span class="fc" id="L44">            return ResponseEntity</span>
+<span class="fc" id="L45">                    .badRequest()</span>
+<span class="fc" id="L46">                    .body(&quot;Registration failed: &quot; + ex.getMessage());</span>
         }
     }
 }

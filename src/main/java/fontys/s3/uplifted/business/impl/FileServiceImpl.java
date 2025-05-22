@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,6 +24,7 @@ public class FileServiceImpl implements FileService {
         this.fileRepository = fileRepository;
     }
 
+    @Override
     public void uploadFile(MultipartFile file) {
         try {
             FileEntity entity = FileEntity.builder()
@@ -38,6 +40,7 @@ public class FileServiceImpl implements FileService {
         }
     }
 
+    @Override
     public List<File> getAllFiles() {
         return fileRepository.findAll()
                 .stream()
@@ -45,9 +48,27 @@ public class FileServiceImpl implements FileService {
                 .collect(Collectors.toList());
     }
 
-    public File getFileById(Long id) {
+    @Override
+    public Optional<File> getFileById(Long id) {
         return fileRepository.findById(id)
-                .map(FileMapper::toDomain)
-                .orElseThrow(() -> new RuntimeException("File not found with ID: " + id));
+                .map(FileMapper::toDomain);
     }
+
+    @Override
+    public void deleteFile(Long id) {
+        if (!fileRepository.existsById(id)) {
+            throw new RuntimeException("File not found with ID: " + id);
+        }
+        fileRepository.deleteById(id);
+    }
+
+    @Override
+    public List<File> getFilesByCourse(Long courseId) {
+        return fileRepository.findByCourseId(courseId)
+                .stream()
+                .map(FileMapper::toDomain)
+                .collect(Collectors.toList());
+    }
+
+
 }

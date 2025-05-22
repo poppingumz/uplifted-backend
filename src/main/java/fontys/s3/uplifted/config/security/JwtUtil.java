@@ -1,11 +1,13 @@
 package fontys.s3.uplifted.config.security;
 
+import fontys.s3.uplifted.domain.User;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.Map;
 
 @Component
 public class JwtUtil {
@@ -14,9 +16,11 @@ public class JwtUtil {
 
     private final Key key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
 
-    public String generateToken(String email) {
+    public String generateToken(User user) {
         return Jwts.builder()
-                .setSubject(email)
+                .setSubject(user.getEmail())
+                .claim("userId", user.getId())
+                .claim("role", user.getRole().name())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(key, SignatureAlgorithm.HS256)

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="fontys.s3.uplifted.controller.UserControllerTest" tests="10" skipped="0" failures="0" errors="0" timestamp="2025-05-16T13:20:44" hostname="LAPTOP-RHFQ3ARB" time="5.128">
+  <properties/>
+  <testcase name="getCurrentUser_success()" classname="fontys.s3.uplifted.controller.UserControllerTest" time="4.766"/>
+  <testcase name="deleteUser_success()" classname="fontys.s3.uplifted.controller.UserControllerTest" time="0.09"/>
+  <testcase name="updateUser_withImage_success()" classname="fontys.s3.uplifted.controller.UserControllerTest" time="0.076"/>
+  <testcase name="updateUser_basic_success()" classname="fontys.s3.uplifted.controller.UserControllerTest" time="0.01"/>
+  <testcase name="getAllUsers_success()" classname="fontys.s3.uplifted.controller.UserControllerTest" time="0.011"/>
+  <testcase name="deleteUser_notFound()" classname="fontys.s3.uplifted.controller.UserControllerTest" time="0.018"/>
+  <testcase name="updateUser_notFound()" classname="fontys.s3.uplifted.controller.UserControllerTest" time="0.027"/>
+  <testcase name="getUserById_unauthorized()" classname="fontys.s3.uplifted.controller.UserControllerTest" time="0.008"/>
+  <testcase name="getUserById_forbidden()" classname="fontys.s3.uplifted.controller.UserControllerTest" time="0.007"/>
+  <testcase name="getUserById_success()" classname="fontys.s3.uplifted.controller.UserControllerTest" time="0.049"/>
+  <system-out><![CDATA[15:20:49.516 [Test worker] INFO fontys.s3.uplifted.controller.UserController -- User with ID 1 deleted successfully
+15:20:49.705 [Test worker] WARN fontys.s3.uplifted.controller.UserController -- User with ID 1 not found for deletion
+15:20:49.733 [Test worker] WARN fontys.s3.uplifted.controller.UserController -- User with ID 1 not found for update
+15:20:49.749 [Test worker] WARN fontys.s3.uplifted.controller.UserController -- User with email invalid@example.com not found
+15:20:49.761 [Test worker] WARN fontys.s3.uplifted.controller.UserController -- User 2 attempted to access user 1
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

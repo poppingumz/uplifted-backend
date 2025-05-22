@@ -1,114 +1,140 @@
 package fontys.s3.uplifted.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import fontys.s3.uplifted.business.impl.UserServiceImpl;
-import fontys.s3.uplifted.config.TestSecurityConfig;
 import fontys.s3.uplifted.config.security.JwtUtil;
 import fontys.s3.uplifted.domain.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.Map;
 import java.util.Optional;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
+class AuthControllerTest {
 
-@WebMvcTest(AuthController.class)
-@Import(TestSecurityConfig.class)
-public class AuthControllerTest {
-
-    @Autowired
-    private MockMvc mockMvc;
-
-    @MockBean
+    @Mock
     private UserServiceImpl userService;
 
-    @MockBean
+    @Mock
     private JwtUtil jwtUtil;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    @Mock
+    private PasswordEncoder passwordEncoder;
+
+    @InjectMocks
+    private AuthController authController;
 
     private User validUser;
 
     @BeforeEach
     void setUp() {
+        MockitoAnnotations.openMocks(this);
+
         validUser = new User();
         validUser.setEmail("test@example.com");
         validUser.setPassword("password123");
     }
 
     @Test
-    void testLoginSuccess() throws Exception {
-        when(userService.getUserByEmail("test@example.com")).thenReturn(Optional.of(validUser));
-        when(jwtUtil.generateToken("test@example.com")).thenReturn("fake-jwt-token");
+    void shouldLoginSuccess() {
+        User userFromDb = new User();
+        userFromDb.setEmail("test@example.com");
+        userFromDb.setPassword("encoded-password");
 
-        mockMvc.perform(post("/auth/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(validUser)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.token").value("fake-jwt-token"))
-                .andExpect(jsonPath("$.user.email").value("test@example.com"));
+        when(userService.getUserByEmail(validUser.getEmail()))
+                .thenReturn(Optional.of(userFromDb));
+        when(passwordEncoder.matches("password123", "encoded-password"))
+                .thenReturn(true);
+        when(jwtUtil.generateToken(validUser.getEmail()))
+                .thenReturn("fake-jwt-token");
+
+        validUser.setPassword("password123");
+
+        ResponseEntity<?> response = authController.login(validUser);
+
+        assertEquals(200, response.getStatusCodeValue());
+        @SuppressWarnings("unchecked")
+        Map<String, Object> body = (Map<String, Object>) response.getBody();
+        assertEquals("fake-jwt-token", body.get("token"));
+        assertNotNull(body.get("user"));
+
+        verify(userService).getUserByEmail("test@example.com");
+        verify(passwordEncoder).matches("password123", "encoded-password");
+        verify(jwtUtil).generateToken("test@example.com");
     }
 
     @Test
-    void testLoginInvalidPassword() throws Exception {
-        User wrongPasswordUser = new User();
-        wrongPasswordUser.setEmail("test@example.com");
-        wrongPasswordUser.setPassword("wrongpass");
+    void shouldLoginInvalidPassword() {
+        when(userService.getUserByEmail(validUser.getEmail()))
+                .thenReturn(Optional.of(validUser));
+        when(passwordEncoder.matches("wrongpass", validUser.getPassword()))
+                .thenReturn(false);
 
-        when(userService.getUserByEmail("test@example.com")).thenReturn(Optional.of(validUser));
+        User wrongUser = new User();
+        wrongUser.setEmail(validUser.getEmail());
+        wrongUser.setPassword("wrongpass");
 
-        mockMvc.perform(post("/auth/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(wrongPasswordUser)))
-                .andExpect(status().isUnauthorized())
-                .andExpect(content().string("Invalid email or password"));
+        ResponseEntity<?> response = authController.login(wrongUser);
+
+        assertEquals(401, response.getStatusCodeValue());
+        @SuppressWarnings("unchecked")
+        Map<String, Object> body = (Map<String, Object>) response.getBody();
+        assertEquals("Invalid email or password", body.get("error"));
+
+        verify(userService).getUserByEmail("test@example.com");
+        verify(passwordEncoder).matches("wrongpass", validUser.getPassword());
+        verify(jwtUtil, never()).generateToken(anyString());
     }
 
     @Test
-    void testLoginUserNotFound() throws Exception {
-        when(userService.getUserByEmail("notfound@example.com")).thenReturn(Optional.empty());
+    void shouldLoginUserNotFound() {
+        when(userService.getUserByEmail("notfound@example.com"))
+                .thenReturn(Optional.empty());
 
-        User loginUser = new User();
-        loginUser.setEmail("notfound@example.com");
-        loginUser.setPassword("somepass");
+        User missing = new User();
+        missing.setEmail("notfound@example.com");
+        missing.setPassword("irrelevant");
 
-        mockMvc.perform(post("/auth/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(loginUser)))
-                .andExpect(status().isUnauthorized())
-                .andExpect(content().string("Invalid email or password"));
+        ResponseEntity<?> response = authController.login(missing);
+
+        assertEquals(401, response.getStatusCodeValue());
+        @SuppressWarnings("unchecked")
+        Map<String, Object> body = (Map<String, Object>) response.getBody();
+        assertEquals("Invalid email or password", body.get("error"));
+
+        verify(userService).getUserByEmail("notfound@example.com");
+        verify(passwordEncoder, never()).matches(anyString(), anyString());
+        verify(jwtUtil, never()).generateToken(anyString());
     }
 
     @Test
-    void testRegisterSuccess() throws Exception {
-        when(userService.createUser(any(User.class))).thenReturn(validUser);
+    void shouldRegisterSuccess() {
+        when(userService.createUser(validUser))
+                .thenReturn(validUser);
 
-        mockMvc.perform(post("/auth/register")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(validUser)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.email").value("test@example.com"));
+        ResponseEntity<?> response = authController.register(validUser);
+
+        assertEquals(200, response.getStatusCodeValue());
+        assertSame(validUser, response.getBody());
+        verify(userService).createUser(validUser);
     }
 
     @Test
-    void testRegisterFailure() throws Exception {
-        when(userService.createUser(any(User.class))).thenThrow(new RuntimeException("Database error"));
+    void shouldRegisterFailure() {
+        when(userService.createUser(validUser))
+                .thenThrow(new RuntimeException("Database error"));
 
-        mockMvc.perform(post("/auth/register")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(validUser)))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().string("Registration failed: Database error"));
+        ResponseEntity<?> response = authController.register(validUser);
+
+        assertEquals(400, response.getStatusCodeValue());
+        assertEquals("Registration failed: Database error", response.getBody());
+        verify(userService).createUser(validUser);
     }
 }

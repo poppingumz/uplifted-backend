@@ -81,5 +81,34 @@ public class CourseServiceImpl implements CourseService {
         courseRepository.deleteById(id);
         return true;
     }
+
+    public List<Course> getCoursesByEnrolledUser(Long userId) {
+        return courseRepository.findAll().stream()
+                .filter(course -> course.getEnrolledStudents().stream()
+                        .anyMatch(student -> student.getId().equals(userId)))
+                .map(CourseMapper::toDomain)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void enrollInCourse(Long courseId, String username) {
+        CourseEntity course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new CourseNotFoundException("Course not found with ID: " + courseId));
+
+        UserEntity user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found: " + username));
+
+        if (course.getEnrolledStudents().contains(user)) {
+            throw new RuntimeException("User already enrolled in this course.");
+        }
+
+        if (course.getEnrollmentLimit() > 0 &&
+                course.getEnrolledStudents().size() >= course.getEnrollmentLimit()) {
+            throw new RuntimeException("Course enrollment limit reached.");
+        }
+
+        course.getEnrolledStudents().add(user);
+        courseRepository.save(course);
+    }
 }
 

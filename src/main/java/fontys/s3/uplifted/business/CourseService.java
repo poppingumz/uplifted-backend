@@ -11,4 +11,6 @@ public interface CourseService {
     Course createCourse(Course course);
     Optional<Course> updateCourse(Long id, Course course);
     boolean deleteCourse(Long id);
+    List<Course> getCoursesByEnrolledUser(Long userId);
+    void enrollInCourse(Long courseId, String username);
 }

@@ -1,3 +1,4 @@
+// UserServiceImpl.java
 package fontys.s3.uplifted.business.impl;
 
 import fontys.s3.uplifted.business.UserService;
@@ -6,6 +7,8 @@ import fontys.s3.uplifted.domain.User;
 import fontys.s3.uplifted.persistence.UserRepository;
 import fontys.s3.uplifted.persistence.entity.UserEntity;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,11 +20,16 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository) {
+
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
+    @Override
     public List<User> getAllUsers() {
         try {
             return userRepository.findAll()
@@ -34,6 +42,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
     public Optional<User> getUserById(Long id) {
         try {
             return userRepository.findById(id).map(UserMapper::convert);
@@ -43,8 +52,10 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
     public User createUser(User user) {
         try {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
             UserEntity entity = UserMapper.convertToEntity(user);
             UserEntity savedEntity = userRepository.save(entity);
             log.info("User created with ID: {}", savedEntity.getId());
@@ -55,9 +66,13 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
     public Optional<User> updateUser(Long id, User user) {
         try {
             return userRepository.findById(id).map(existing -> {
+                if (user.getPassword() != null && !user.getPassword().isBlank()) {
+                    user.setPassword(passwordEncoder.encode(user.getPassword()));
+                }
                 UserEntity entity = UserMapper.convertToEntity(user);
                 entity.setId(id);
                 UserEntity updated = userRepository.save(entity);
@@ -69,6 +84,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
     public boolean deleteUser(Long id) {
         try {
             if (!userRepository.existsById(id)) {
@@ -87,5 +103,6 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByEmail(email)
                 .map(UserMapper::convert);
     }
-}
 
+
+}

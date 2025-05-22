@@ -1,5 +1,9 @@
 package fontys.s3.uplifted.controller;
 
+import fontys.s3.uplifted.business.CourseService;
+import fontys.s3.uplifted.business.UserService;
+import fontys.s3.uplifted.business.impl.CourseServiceImpl;
+import fontys.s3.uplifted.domain.Course;
 import fontys.s3.uplifted.domain.User;
 import fontys.s3.uplifted.business.impl.UserServiceImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -18,16 +22,19 @@ import java.util.Optional;
 @RequestMapping("/api/users")
 public class UserController {
 
-    private final UserServiceImpl userServiceImpl;
+    private final UserService userService;
+    private final CourseService courseService;
 
-    public UserController(UserServiceImpl userServiceImpl) {
-        this.userServiceImpl = userServiceImpl;
+
+    public UserController(UserService userService, CourseService courseService) {
+        this.userService = userService;
+        this.courseService = courseService;
     }
 
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers() {
         try {
-            return ResponseEntity.ok(userServiceImpl.getAllUsers());
+            return ResponseEntity.ok(userService.getAllUsers());
         } catch (Exception e) {
             log.error("Failed to retrieve users", e);
             return ResponseEntity.internalServerError().build();
@@ -39,7 +46,7 @@ public class UserController {
         try {
             String emailFromToken = authentication.getName();
 
-            Optional<User> userOpt = userServiceImpl.getUserByEmail(emailFromToken);
+            Optional<User> userOpt = userService.getUserByEmail(emailFromToken);
 
             if (userOpt.isEmpty()) {
                 log.warn("User with email {} not found", emailFromToken);
@@ -64,7 +71,7 @@ public class UserController {
     @GetMapping("/me")
     public ResponseEntity<User> getCurrentUser(Authentication authentication) {
         String email = authentication.getName();
-        return userServiceImpl.getUserByEmail(email)
+        return userService.getUserByEmail(email)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -79,22 +86,7 @@ public class UserController {
             if (profileImage != null && !profileImage.isEmpty()) {
                 user.setProfileImage(profileImage.getBytes());
             }
-            return userServiceImpl.updateUser(id, user)
-                    .map(ResponseEntity::ok)
-                    .orElseGet(() -> {
-                        log.warn("User with ID {} not found for update", id);
-                        return ResponseEntity.notFound().build();
-                    });
-        } catch (Exception e) {
-            log.error("Failed to update user with ID {}", id, e);
-            return ResponseEntity.internalServerError().build();
-        }
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
-        try {
-            return userServiceImpl.updateUser(id, user)
+            return userService.updateUser(id, user)
                     .map(ResponseEntity::ok)
                     .orElseGet(() -> {
                         log.warn("User with ID {} not found for update", id);
@@ -109,7 +101,7 @@ public class UserController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         try {
-            boolean deleted = userServiceImpl.deleteUser(id);
+            boolean deleted = userService.deleteUser(id);
             if (deleted) {
                 log.info("User with ID {} deleted successfully", id);
                 return ResponseEntity.noContent().build();
@@ -122,4 +114,69 @@ public class UserController {
             return ResponseEntity.internalServerError().build();
         }
     }
+
+    @GetMapping("/{id}/created-courses")
+    public ResponseEntity<List<Course>> getCreatedCourses(@PathVariable Long id) {
+        return ResponseEntity.ok(courseService.getCoursesByInstructor(id));
+    }
+
+    @GetMapping("/{id}/enrolled-courses")
+    public ResponseEntity<List<Course>> getEnrolledCourses(@PathVariable Long id) {
+        return ResponseEntity.ok(courseService.getCoursesByEnrolledUser(id));
+    }
+
+    @CrossOrigin(origins = "http://localhost:5173")
+    @GetMapping("/{id}/profile-image")
+    public ResponseEntity<byte[]> getProfileImage(@PathVariable Long id, Authentication authentication) {
+        String emailFromToken = authentication.getName();
+        Optional<User> requestingUser = userService.getUserByEmail(emailFromToken);
+
+        if (requestingUser.isEmpty() || !requestingUser.get().getId().equals(id)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        Optional<User> targetUser = userService.getUserById(id);
+        if (targetUser.isEmpty() || targetUser.get().getProfileImage() == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        byte[] imageBytes = targetUser.get().getProfileImage();
+        String contentType = "application/octet-stream";
+
+        try {
+            contentType = java.nio.file.Files.probeContentType(
+                    java.nio.file.Paths.get("dummy." + detectImageExtension(imageBytes))
+            );
+        } catch (Exception e) {
+            log.warn("Could not detect content type", e);
+        }
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .body(imageBytes);
+    }
+
+
+    private String detectImageExtension(byte[] imageBytes) {
+        if (imageBytes.length >= 4) {
+            // JPEG
+            if ((imageBytes[0] & 0xFF) == 0xFF && (imageBytes[1] & 0xFF) == 0xD8) {
+                return "jpg";
+            }
+            // PNG
+            if ((imageBytes[0] & 0xFF) == 0x89 && (imageBytes[1] & 0xFF) == 0x50) {
+                return "png";
+            }
+            // WEBP
+            if ((char) imageBytes[8] == 'W' && (char) imageBytes[9] == 'E') {
+                return "webp";
+            }
+            // GIF
+            if ((char) imageBytes[0] == 'G' && (char) imageBytes[1] == 'I') {
+                return "gif";
+            }
+        }
+        return "bin";
+    }
+
 }

@@ -19,14 +19,25 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
+                        // Public endpoints
                         .requestMatchers(
                                 "/api/users/register",
                                 "/api/auth/**",
-                                "/api/courses",
-                                "/api/courses/**",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**"
                         ).permitAll()
+
+                        // Course browsing is public
+                        .requestMatchers("/api/courses", "/api/courses/**").permitAll()
+
+                        // Only TEACHER can create or manage courses
+                        .requestMatchers("/api/courses/create", "/api/courses/update/**", "/api/courses/delete/**")
+                        .hasRole("TEACHER")
+
+                        // Only STUDENT can enroll
+                        .requestMatchers("/api/enrollments/**").hasRole("STUDENT")
+
+                        // All other requests require authentication
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
@@ -34,8 +45,10 @@ public class SecurityConfig {
         return http.build();
     }
 
+
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
+
 }

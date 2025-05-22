@@ -1,44 +1,34 @@
 package fontys.s3.uplifted.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import fontys.s3.uplifted.business.QuizService;
 import fontys.s3.uplifted.domain.Quiz;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 import java.util.Optional;
 
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
-@WebMvcTest(QuizController.class)
-@Import(fontys.s3.uplifted.config.TestSecurityConfig.class)
-public class QuizControllerTest {
+class QuizControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
-
-    @MockBean
+    @Mock
     private QuizService quizService;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    @InjectMocks
+    private QuizController quizController;
 
     private Quiz quiz;
 
     @BeforeEach
-    void setup() {
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+
         quiz = Quiz.builder()
                 .id(10L)
                 .title("Test Quiz")
@@ -48,86 +38,109 @@ public class QuizControllerTest {
     }
 
     @Test
-    void testCreateQuizSuccess() throws Exception {
-        when(quizService.createQuiz(any())).thenReturn(quiz);
+    void shouldCreateQuizSuccessfully() {
+        when(quizService.createQuiz(any(Quiz.class))).thenReturn(quiz);
 
-        mockMvc.perform(post("/api/quizzes")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(quiz)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(10))
-                .andExpect(jsonPath("$.title").value("Test Quiz"));
+        ResponseEntity<Quiz> response = quizController.createQuiz(quiz);
+
+        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(quiz, response.getBody());
+        verify(quizService, times(1)).createQuiz(quiz);
     }
 
     @Test
-    void testGetQuizByIdFound() throws Exception {
+    void shouldReturn500WhenCreateQuizThrows() {
+        when(quizService.createQuiz(any(Quiz.class))).thenThrow(new RuntimeException("DB error"));
+
+        ResponseEntity<Quiz> response = quizController.createQuiz(quiz);
+
+        assertEquals(500, response.getStatusCodeValue());
+        assertNull(response.getBody());
+        verify(quizService, times(1)).createQuiz(quiz);
+    }
+
+    @Test
+    void shouldReturnQuizWhenFoundById() {
         when(quizService.getQuizById(10L)).thenReturn(Optional.of(quiz));
 
-        mockMvc.perform(get("/api/quizzes/10"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.title").value("Test Quiz"));
+        ResponseEntity<Quiz> response = quizController.getQuizById(10L);
+
+        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(quiz, response.getBody());
+        verify(quizService, times(1)).getQuizById(10L);
     }
 
     @Test
-    void testGetQuizByIdNotFound() throws Exception {
+    void shouldReturn404WhenQuizNotFoundById() {
         when(quizService.getQuizById(99L)).thenReturn(Optional.empty());
 
-        mockMvc.perform(get("/api/quizzes/99"))
-                .andExpect(status().isNotFound());
+        ResponseEntity<Quiz> response = quizController.getQuizById(99L);
+
+        assertEquals(404, response.getStatusCodeValue());
+        assertNull(response.getBody());
+        verify(quizService, times(1)).getQuizById(99L);
     }
 
     @Test
-    void testGetQuizzesByCourseId() throws Exception {
+    void shouldReturnQuizzesByCourseId() {
         when(quizService.getQuizzesByCourseId(1L)).thenReturn(List.of(quiz));
 
-        mockMvc.perform(get("/api/quizzes/course/1"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(1));
+        ResponseEntity<List<Quiz>> response = quizController.getQuizzesByCourseId(1L);
+
+        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(1, response.getBody().size());
+        assertEquals(quiz, response.getBody().get(0));
+        verify(quizService, times(1)).getQuizzesByCourseId(1L);
     }
 
     @Test
-    void testUpdateQuizSuccess() throws Exception {
-        Quiz updatedQuiz = Quiz.builder()
+    void shouldUpdateQuizSuccessfully() {
+        Quiz updated = Quiz.builder()
                 .id(10L)
                 .title("Updated Quiz")
                 .courseId(1L)
                 .description("Updated")
                 .build();
+        when(quizService.updateQuiz(eq(10L), any(Quiz.class))).thenReturn(updated);
 
-        when(quizService.updateQuiz(eq(10L), any())).thenReturn(updatedQuiz);
+        ResponseEntity<Quiz> response = quizController.updateQuiz(10L, updated);
 
-        mockMvc.perform(put("/api/quizzes/10")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(updatedQuiz)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.title").value("Updated Quiz"));
+        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(updated, response.getBody());
+        verify(quizService, times(1)).updateQuiz(10L, updated);
     }
 
     @Test
-    void testUpdateQuizNotFound() throws Exception {
-        when(quizService.updateQuiz(eq(999L), any())).thenReturn(null);
+    void shouldReturn404WhenUpdatingNonexistentQuiz() {
+        when(quizService.updateQuiz(eq(999L), any(Quiz.class))).thenReturn(null);
 
-        mockMvc.perform(put("/api/quizzes/999")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(quiz)))
-                .andExpect(status().isNotFound());
+        ResponseEntity<Quiz> response = quizController.updateQuiz(999L, quiz);
+
+        assertEquals(404, response.getStatusCodeValue());
+        assertNull(response.getBody());
+        verify(quizService, times(1)).updateQuiz(999L, quiz);
     }
 
     @Test
-    void testDeleteQuizSuccess() throws Exception {
+    void shouldDeleteQuizSuccessfully() {
+        // quizService.deleteQuiz returns void, so just do nothing()
         doNothing().when(quizService).deleteQuiz(10L);
 
-        mockMvc.perform(delete("/api/quizzes/10"))
-                .andExpect(status().isNoContent());
+        ResponseEntity<Void> response = quizController.deleteQuiz(10L);
+
+        assertEquals(204, response.getStatusCodeValue());
+        assertNull(response.getBody());
+        verify(quizService, times(1)).deleteQuiz(10L);
     }
 
     @Test
-    void testCreateQuizThrowsException() throws Exception {
-        when(quizService.createQuiz(any())).thenThrow(new RuntimeException("DB error"));
+    void shouldReturn500WhenDeleteQuizThrows() {
+        doThrow(new RuntimeException("DB error")).when(quizService).deleteQuiz(10L);
 
-        mockMvc.perform(post("/api/quizzes")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(quiz)))
-                .andExpect(status().isInternalServerError());
+        ResponseEntity<Void> response = quizController.deleteQuiz(10L);
+
+        assertEquals(500, response.getStatusCodeValue());
+        assertNull(response.getBody());
+        verify(quizService, times(1)).deleteQuiz(10L);
     }
 }

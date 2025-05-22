@@ -5,6 +5,7 @@ import fontys.s3.uplifted.domain.StudentAnswer;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,30 +13,35 @@ import java.util.List;
 
 @RestController
 @RequestMapping(&quot;/api/mentor_review&quot;)
-<span class="fc" id="L15">@RequiredArgsConstructor</span>
+<span class="fc" id="L16">@RequiredArgsConstructor</span>
 public class MentorReviewController {
 
     private final StudentAnswerService answerService;
 
     @GetMapping(&quot;/pending&quot;)
     public ResponseEntity&lt;List&lt;StudentAnswer&gt;&gt; getPendingReviews() {
-<span class="fc" id="L22">        return ResponseEntity.ok(answerService.getPendingReviews());</span>
+<span class="fc" id="L23">        return ResponseEntity.ok(answerService.getPendingReviews());</span>
     }
 
     @PatchMapping(&quot;/{answerId}&quot;)
-    public ResponseEntity&lt;Void&gt; reviewAnswer(
+    public ResponseEntity&lt;?&gt; reviewAnswer(
             @PathVariable Long answerId,
             @RequestBody ReviewRequest request
     ) {
-<span class="fc" id="L30">        answerService.reviewAnswer(answerId, request.getMarks(), request.getFeedback());</span>
-<span class="fc" id="L31">        return ResponseEntity.ok().build();</span>
+        try {
+<span class="fc" id="L32">            answerService.reviewAnswer(answerId, request.getMarks(), request.getFeedback());</span>
+<span class="fc" id="L33">            return ResponseEntity.ok().build();</span>
+<span class="fc" id="L34">        } catch (Exception e) {</span>
+<span class="fc" id="L35">            return ResponseEntity</span>
+<span class="fc" id="L36">                    .status(HttpStatus.INTERNAL_SERVER_ERROR)</span>
+<span class="fc" id="L37">                    .body(&quot;Registration failed: &quot; + e.getMessage());</span>
+        }
     }
 
-    @Getter
-<span class="fc" id="L35">    @Setter</span>
-<span class="fc" id="L36">    public static class ReviewRequest {</span>
-<span class="fc" id="L37">        private int marks;</span>
-<span class="fc" id="L38">        private String feedback;</span>
+<span class="fc" id="L41">    @Getter @Setter</span>
+<span class="fc" id="L42">    public static class ReviewRequest {</span>
+<span class="fc" id="L43">        private int marks;</span>
+<span class="fc" id="L44">        private String feedback;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

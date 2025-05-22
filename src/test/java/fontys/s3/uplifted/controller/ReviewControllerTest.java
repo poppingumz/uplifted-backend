@@ -1,117 +1,124 @@
 package fontys.s3.uplifted.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import fontys.s3.uplifted.business.ReviewService;
-import fontys.s3.uplifted.config.TestSecurityConfig;
 import fontys.s3.uplifted.domain.Review;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 import java.util.Optional;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
-@WebMvcTest(ReviewController.class)
-@Import(TestSecurityConfig.class)
 class ReviewControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
-
-    @MockBean
+    @Mock
     private ReviewService reviewService;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    @InjectMocks
+    private ReviewController controller;
 
-    @Test
-    void testGetAllReviews() throws Exception {
-        Review review = new Review(1L, 1L, 2L, "Great course!", 5);
-        Mockito.when(reviewService.getAllReviews()).thenReturn(List.of(review));
+    private Review sampleReview;
 
-        mockMvc.perform(get("/api/reviews"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].reviewText").value("Great course!"));
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+        sampleReview = new Review(1L, 1L, 2L, "Great!", 5);
     }
 
     @Test
-    void testGetReviewById_Found() throws Exception {
-        Review review = new Review(1L, 1L, 2L, "Good!", 4);
-        Mockito.when(reviewService.getReviewById(1L)).thenReturn(Optional.of(review));
+    void shouldGetAllReviews() {
+        when(reviewService.getAllReviews()).thenReturn(List.of(sampleReview));
 
-        mockMvc.perform(get("/api/reviews/1"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.rating").value(4));
+        ResponseEntity<List<Review>> resp = controller.getAllReviews();
+
+        assertEquals(200, resp.getStatusCodeValue());
+        assertEquals("Great!", resp.getBody().get(0).getReviewText());
+        verify(reviewService).getAllReviews();
     }
 
     @Test
-    void testGetReviewById_NotFound() throws Exception {
-        Mockito.when(reviewService.getReviewById(99L)).thenReturn(Optional.empty());
+    void shouldGetReviewByIdWhenFound() {
+        when(reviewService.getReviewById(1L)).thenReturn(Optional.of(sampleReview));
 
-        mockMvc.perform(get("/api/reviews/99"))
-                .andExpect(status().isNotFound());
+        ResponseEntity<Review> resp = controller.getReviewById(1L);
+
+        assertEquals(200, resp.getStatusCodeValue());
+        assertEquals(5, resp.getBody().getRating());
+        verify(reviewService).getReviewById(1L);
     }
 
     @Test
-    void testCreateReview() throws Exception {
-        Review review = new Review(null, 1L, 2L, "Awesome", 5);
-        Review saved = new Review(1L, 1L, 2L, "Awesome", 5);
+    void shouldReturn404WhenReviewNotFound() {
+        when(reviewService.getReviewById(99L)).thenReturn(Optional.empty());
 
-        Mockito.when(reviewService.createReview(any())).thenReturn(saved);
+        ResponseEntity<Review> resp = controller.getReviewById(99L);
 
-        mockMvc.perform(post("/api/reviews")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(review)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1));
+        assertEquals(404, resp.getStatusCodeValue());
+        assertNull(resp.getBody());
+        verify(reviewService).getReviewById(99L);
     }
 
     @Test
-    void testUpdateReview_Found() throws Exception {
+    void shouldCreateReview() {
+        Review toCreate = new Review(null, 1L, 2L, "Awesome", 5);
+        when(reviewService.createReview(toCreate)).thenReturn(sampleReview);
+
+        ResponseEntity<Review> resp = controller.createReview(toCreate);
+
+        assertEquals(200, resp.getStatusCodeValue());
+        assertEquals(1L, resp.getBody().getId());
+        verify(reviewService).createReview(toCreate);
+    }
+
+    @Test
+    void shouldUpdateReviewWhenFound() {
         Review updated = new Review(1L, 1L, 2L, "Updated", 4);
-        Mockito.when(reviewService.updateReview(eq(1L), any())).thenReturn(Optional.of(updated));
+        when(reviewService.updateReview(eq(1L), any(Review.class)))
+                .thenReturn(Optional.of(updated));
 
-        mockMvc.perform(put("/api/reviews/1")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(updated)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.reviewText").value("Updated"));
+        ResponseEntity<Review> resp = controller.updateReview(1L, updated);
+
+        assertEquals(200, resp.getStatusCodeValue());
+        assertEquals("Updated", resp.getBody().getReviewText());
+        verify(reviewService).updateReview(1L, updated);
     }
 
     @Test
-    void testUpdateReview_NotFound() throws Exception {
-        Review review = new Review(null, 1L, 2L, "Updated", 4);
-        Mockito.when(reviewService.updateReview(eq(99L), any())).thenReturn(Optional.empty());
+    void shouldReturn404WhenUpdateReviewNotFound() {
+        Review updated = new Review(null, 1L, 2L, "Updated", 4);
+        when(reviewService.updateReview(eq(99L), any(Review.class)))
+                .thenReturn(Optional.empty());
 
-        mockMvc.perform(put("/api/reviews/99")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(review)))
-                .andExpect(status().isNotFound());
+        ResponseEntity<Review> resp = controller.updateReview(99L, updated);
+
+        assertEquals(404, resp.getStatusCodeValue());
+        assertNull(resp.getBody());
+        verify(reviewService).updateReview(99L, updated);
     }
 
     @Test
-    void testDeleteReview_Found() throws Exception {
-        Mockito.when(reviewService.deleteReview(1L)).thenReturn(true);
+    void shouldDeleteReviewWhenFound() {
+        when(reviewService.deleteReview(1L)).thenReturn(true);
 
-        mockMvc.perform(delete("/api/reviews/1"))
-                .andExpect(status().isNoContent());
+        ResponseEntity<Void> resp = controller.deleteReview(1L);
+
+        assertEquals(204, resp.getStatusCodeValue());
+        verify(reviewService).deleteReview(1L);
     }
 
     @Test
-    void testDeleteReview_NotFound() throws Exception {
-        Mockito.when(reviewService.deleteReview(99L)).thenReturn(false);
+    void shouldReturn404WhenDeleteReviewNotFound() {
+        when(reviewService.deleteReview(99L)).thenReturn(false);
 
-        mockMvc.perform(delete("/api/reviews/99"))
-                .andExpect(status().isNotFound());
+        ResponseEntity<Void> resp = controller.deleteReview(99L);
+
+        assertEquals(404, resp.getStatusCodeValue());
+        verify(reviewService).deleteReview(99L);
     }
 }

@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Arrays;
 import java.util.List;
@@ -23,6 +24,9 @@ public class UserServiceImplTest {
 
     @Mock
     private UserRepository userRepository;
+
+    @Mock
+    private PasswordEncoder passwordEncoder;
 
     @InjectMocks
     private UserServiceImpl userService;
@@ -70,22 +74,31 @@ public class UserServiceImplTest {
 
     @Test
     public void testCreateUser() {
+        when(passwordEncoder.encode(sampleUser.getPassword())).thenReturn("hashedpassword");
         when(userRepository.save(any(UserEntity.class))).thenReturn(sampleEntity);
 
         User created = userService.createUser(sampleUser);
+
         assertNotNull(created);
         assertEquals("johndoe", created.getUsername());
+        verify(passwordEncoder).encode("securepassword");
+        verify(userRepository).save(any(UserEntity.class));
     }
 
     @Test
     public void testUpdateUser() {
         when(userRepository.findById(1L)).thenReturn(Optional.of(sampleEntity));
+        when(passwordEncoder.encode(sampleUser.getPassword())).thenReturn("hashedpassword");
         when(userRepository.save(any(UserEntity.class))).thenReturn(sampleEntity);
 
         Optional<User> updated = userService.updateUser(1L, sampleUser);
+
         assertTrue(updated.isPresent());
         assertEquals("johndoe", updated.get().getUsername());
+        verify(passwordEncoder).encode("securepassword");
+        verify(userRepository).save(any(UserEntity.class));
     }
+
 
     @Test
     public void testDeleteUserSuccess() {

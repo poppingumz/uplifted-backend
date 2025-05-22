@@ -77,9 +77,9 @@ public class QuizController {
         try {
 <span class="fc" id="L78">            quizService.deleteQuiz(id);</span>
 <span class="fc" id="L79">            return ResponseEntity.noContent().build();</span>
-<span class="nc" id="L80">        } catch (Exception e) {</span>
-<span class="nc" id="L81">            log.error(&quot;Failed to delete quiz with ID {}&quot;, id, e);</span>
-<span class="nc" id="L82">            return ResponseEntity.internalServerError().build();</span>
+<span class="fc" id="L80">        } catch (Exception e) {</span>
+<span class="fc" id="L81">            log.error(&quot;Failed to delete quiz with ID {}&quot;, id, e);</span>
+<span class="fc" id="L82">            return ResponseEntity.internalServerError().build();</span>
         }
     }
 }

@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="fontys.s3.uplifted.business.QuizServiceImplTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2025-05-08T18:51:32" hostname="LAPTOP-RHFQ3ARB" time="0.205">
-  <properties/>
-  <testcase name="createQuiz_success()" classname="fontys.s3.uplifted.business.QuizServiceImplTest" time="0.196"/>
-  <testcase name="getQuizById_notFound()" classname="fontys.s3.uplifted.business.QuizServiceImplTest" time="0.007"/>
-  <system-out><![CDATA[20:51:33.129 [Test worker] INFO fontys.s3.uplifted.business.impl.QuizServiceImpl -- Quiz created successfully with ID: 10
-]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>

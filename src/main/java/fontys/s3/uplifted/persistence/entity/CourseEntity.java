@@ -3,6 +3,7 @@ package fontys.s3.uplifted.persistence.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -38,7 +39,7 @@ public class CourseEntity {
             joinColumns = @JoinColumn(name = "course_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
-    private Set<UserEntity> enrolledStudents;
+    private Set<UserEntity> enrolledStudents = new HashSet<>();
 
     @Column(nullable = false)
     private int enrollmentLimit;

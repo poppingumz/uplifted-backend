@@ -1,43 +1,34 @@
 package fontys.s3.uplifted.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import fontys.s3.uplifted.business.StudentAnswerService;
 import fontys.s3.uplifted.controller.MentorReviewController.ReviewRequest;
 import fontys.s3.uplifted.domain.StudentAnswer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(MentorReviewController.class)
-@Import(fontys.s3.uplifted.config.TestSecurityConfig.class)
-public class MentorReviewControllerTest {
+class MentorReviewControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
-
-    @MockBean
+    @Mock
     private StudentAnswerService answerService;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    @InjectMocks
+    private MentorReviewController controller;
 
     private StudentAnswer pendingAnswer;
+    private ReviewRequest request;
 
     @BeforeEach
-    void setup() {
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
         pendingAnswer = StudentAnswer.builder()
                 .id(1L)
                 .userId(101L)
@@ -46,46 +37,43 @@ public class MentorReviewControllerTest {
                 .awardedMarks(null)
                 .mentorFeedback(null)
                 .build();
-    }
 
-    @Test
-    void testGetPendingReviewsSuccess() throws Exception {
-        when(answerService.getPendingReviews()).thenReturn(List.of(pendingAnswer));
-
-        mockMvc.perform(get("/api/mentor_review/pending"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(1))
-                .andExpect(jsonPath("$[0].submittedAnswer").value("My answer"));
-    }
-
-    @Test
-    void testReviewAnswerSuccess() throws Exception {
-        ReviewRequest request = new ReviewRequest();
+        request = new ReviewRequest();
         request.setMarks(85);
         request.setFeedback("Good job");
-
-        doNothing().when(answerService).reviewAnswer(eq(1L), eq(85), eq("Good job"));
-
-        mockMvc.perform(patch("/api/mentor_review/1")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isOk());
     }
 
     @Test
-    void testReviewAnswerThrowsException() throws Exception {
-        ReviewRequest request = new ReviewRequest();
-        request.setMarks(40);
-        request.setFeedback("Needs improvement");
+    void shouldGetPendingReviews() {
+        when(answerService.getPendingReviews()).thenReturn(List.of(pendingAnswer));
 
-        doThrow(new RuntimeException("DB failure"))
-                .when(answerService).reviewAnswer(anyLong(), eq(40), eq("Needs improvement"));
+        ResponseEntity<List<StudentAnswer>> response = controller.getPendingReviews();
 
-        mockMvc.perform(patch("/api/mentor_review/99")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isInternalServerError())
-                .andExpect(content().string("Registration failed: DB failure"));
+        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(1, response.getBody().size());
+        assertEquals("My answer", response.getBody().get(0).getSubmittedAnswer());
+        verify(answerService).getPendingReviews();
     }
 
+    @Test
+    void shouldReviewAnswerSuccessfully() {
+        doNothing().when(answerService).reviewAnswer(1L, 85, "Good job");
+
+        ResponseEntity<?> response = controller.reviewAnswer(1L, request);
+
+        assertEquals(200, response.getStatusCodeValue());
+        verify(answerService).reviewAnswer(1L, 85, "Good job");
+    }
+
+    @Test
+    void shouldReturn500OnReviewError() {
+        doThrow(new RuntimeException("DB failure"))
+                .when(answerService).reviewAnswer(eq(99L), anyInt(), anyString());
+
+        ResponseEntity<?> response = controller.reviewAnswer(99L, request);
+
+        assertEquals(500, response.getStatusCodeValue());
+        assertEquals("Registration failed: DB failure", response.getBody());
+        verify(answerService).reviewAnswer(99L, 85, "Good job");
+    }
 }

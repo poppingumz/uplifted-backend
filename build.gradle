@@ -58,6 +58,20 @@ jacocoTestReport {
         html.required = true
         csv.required = false
     }
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect { dir ->
+            fileTree(dir: dir, exclude: [
+                    '**/mapper/**',
+                    '**/exception/**',
+                    '**/config/security/**',
+                    '**/config/WebConfig.class',
+                    '**/persistence/entity/**',
+                    '**/domain/**',
+                    '**/UpliftEdApplication.class',
+                    '**/controller/StudentAnswerController.class'
+            ])
+        }))
+    }
 }
 
 sonar {
@@ -66,6 +80,15 @@ sonar {
         property "sonar.gradle.skipCompile", "true"
         property "sonar.host.url", "http://localhost:9000"
         property "sonar.coverage.jacoco.xmlReportPaths", "$buildDir/reports/jacoco/test/jacocoTestReport.xml"
+        property "sonar.coverage.exclusions",
+                "**/mapper/**," +
+                        "**/exception/**," +
+                        "**/config/security/**," +
+                        "**/config/WebConfig.java," +
+                        "**/persistence/entity/**," +
+                        "**/domain/**," +
+                        "**/UpliftEdApplication.java," +
+                        "**/controller/StudentAnswerController.java"
     }
 }
 

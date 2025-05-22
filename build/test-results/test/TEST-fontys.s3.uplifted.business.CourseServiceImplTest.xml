@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="fontys.s3.uplifted.business.CourseServiceImplTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2025-05-08T18:51:29" hostname="LAPTOP-RHFQ3ARB" time="2.846">
-  <properties/>
-  <testcase name="deleteCourse_notFound()" classname="fontys.s3.uplifted.business.CourseServiceImplTest" time="2.815"/>
-  <testcase name="getCourseById_success()" classname="fontys.s3.uplifted.business.CourseServiceImplTest" time="0.028"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>
