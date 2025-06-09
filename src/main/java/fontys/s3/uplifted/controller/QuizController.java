@@ -56,6 +56,17 @@ public class QuizController {
         }
     }
 
+    @GetMapping("/creator/{creatorId}")
+    public ResponseEntity<List<Quiz>> getQuizzesByCreatorId(@PathVariable Long creatorId) {
+        try {
+            List<Quiz> quizzes = quizService.getQuizzesByCreatorId(creatorId);
+            return ResponseEntity.ok(quizzes);
+        } catch (Exception e) {
+            log.error("Failed to get quizzes for creator ID {}", creatorId, e);
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<Quiz> updateQuiz(@PathVariable Long id, @RequestBody Quiz quiz) {
         try {

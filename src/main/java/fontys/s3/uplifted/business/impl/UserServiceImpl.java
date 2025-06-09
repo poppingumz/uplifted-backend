@@ -52,10 +52,11 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    @Override
     public User createUser(User user) {
         try {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            if (!user.getPassword().startsWith("$2a$")) {
+                user.setPassword(passwordEncoder.encode(user.getPassword()));
+            }
             UserEntity entity = UserMapper.convertToEntity(user);
             UserEntity savedEntity = userRepository.save(entity);
             log.info("User created with ID: {}", savedEntity.getId());

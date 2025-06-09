@@ -3,41 +3,50 @@ package fontys.s3.uplifted.business.impl;
 import fontys.s3.uplifted.business.FileService;
 import fontys.s3.uplifted.business.impl.mapper.FileMapper;
 import fontys.s3.uplifted.domain.File;
+import fontys.s3.uplifted.persistence.CourseRepository;
 import fontys.s3.uplifted.persistence.FileRepository;
+import fontys.s3.uplifted.persistence.UserRepository;
+import fontys.s3.uplifted.persistence.entity.CourseEntity;
 import fontys.s3.uplifted.persistence.entity.FileEntity;
+import fontys.s3.uplifted.persistence.entity.UserEntity;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class FileServiceImpl implements FileService {
 
     private final FileRepository fileRepository;
-
-    public FileServiceImpl(FileRepository fileRepository) {
-        this.fileRepository = fileRepository;
-    }
+    private final UserRepository userRepository;
+    private final CourseRepository courseRepository;
 
     @Override
-    public void uploadFile(MultipartFile file) {
-        try {
-            FileEntity entity = FileEntity.builder()
-                    .name(file.getOriginalFilename())
-                    .type(file.getContentType())
-                    .data(file.getBytes())
-                    .build();
+    public Long uploadFile(MultipartFile file, Long uploaderId, Long courseId) throws IOException {
+        UserEntity uploader = userRepository.findById(uploaderId)
+                .orElseThrow(() -> new RuntimeException("Uploader not found"));
 
-            fileRepository.save(entity);
-        } catch (IOException e) {
-            log.error("File upload failed", e);
-            throw new RuntimeException("Failed to upload file");
-        }
+        CourseEntity course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new RuntimeException("Course not found"));
+
+        FileEntity entity = FileEntity.builder()
+                .name(file.getOriginalFilename())
+                .type(file.getContentType())
+                .data(file.getBytes())
+                .uploader(uploader)
+                .course(course)
+                .uploadDate(LocalDate.now())
+                .build();
+
+        return fileRepository.save(entity).getId();
     }
 
     @Override
@@ -55,6 +64,11 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
+    public Optional<FileEntity> getRawFileEntityById(Long id) {
+        return fileRepository.findById(id);
+    }
+
+    @Override
     public void deleteFile(Long id) {
         if (!fileRepository.existsById(id)) {
             throw new RuntimeException("File not found with ID: " + id);
@@ -69,6 +83,4 @@ public class FileServiceImpl implements FileService {
                 .map(FileMapper::toDomain)
                 .collect(Collectors.toList());
     }
-
-
 }

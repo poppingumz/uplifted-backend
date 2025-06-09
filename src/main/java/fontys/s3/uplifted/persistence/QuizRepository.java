@@ -12,6 +12,5 @@ public interface QuizRepository extends JpaRepository<QuizEntity, Long> {
 
     List<QuizEntity> findByCourseId(Long courseId);
     List<QuizEntity> findByTitleContainingIgnoreCase(String keyword);
-    List<QuizEntity> findByCreatedBy(UserEntity createdBy);
-
+    List<QuizEntity> findByCreatedBy_Id(Long userId);
 }

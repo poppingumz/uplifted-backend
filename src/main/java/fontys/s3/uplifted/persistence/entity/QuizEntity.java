@@ -34,7 +34,7 @@ public class QuizEntity {
     private Integer passingMarks;
 
     @ManyToOne
-    @JoinColumn(name = "course_id", nullable = false)
+    @JoinColumn(name = "course_id", nullable = true)
     private CourseEntity course;
 
     @ManyToOne

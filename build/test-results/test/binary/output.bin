@@ -1,6 +1,0 @@
-u15:20:49.516 [Test worker] INFO fontys.s3.uplifted.controller.UserController -- User with ID 1 deleted successfully
-w15:20:49.705 [Test worker] WARN fontys.s3.uplifted.controller.UserController -- User with ID 1 not found for deletion
-u15:20:49.733 [Test worker] WARN fontys.s3.uplifted.controller.UserController -- User with ID 1 not found for update
-	15:20:49.749 [Test worker] WARN fontys.s3.uplifted.controller.UserController -- User with email invalid@example.com not found
-
-s15:20:49.761 [Test worker] WARN fontys.s3.uplifted.controller.UserController -- User 2 attempted to access user 1

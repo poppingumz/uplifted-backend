@@ -3,6 +3,7 @@ package fontys.s3.uplifted.controller;
 import fontys.s3.uplifted.business.impl.UserServiceImpl;
 import fontys.s3.uplifted.config.security.JwtUtil;
 import fontys.s3.uplifted.domain.User;
+import fontys.s3.uplifted.domain.dto.LoginRequestDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,33 +22,42 @@ public class AuthController {
     private final PasswordEncoder passwordEncoder;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody User loginRequest) {
-        System.out.println("Login attempt: email = " + loginRequest.getEmail() + ", password = " + loginRequest.getPassword());
-
+    public ResponseEntity<?> login(@RequestBody LoginRequestDTO loginRequest) {
         return userService.getUserByEmail(loginRequest.getEmail())
                 .map(u -> {
-                    System.out.println("User found: " + u.getEmail());
-                    System.out.println("Stored hash: " + u.getPassword());
-                    boolean matches = passwordEncoder.matches(loginRequest.getPassword(), u.getPassword());
-                    System.out.println("Password match result: " + matches);
-
-                    if (!matches) {
-                        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                                .body(Map.of("error", "Wrong password"));
+                    if (u.getPassword() == null || loginRequest.getPassword() == null) {
+                        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Missing password"));
                     }
 
-                    String token = jwtUtil.generateToken(u);
+                    if (!passwordEncoder.matches(loginRequest.getPassword(), u.getPassword())) {
+                        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Invalid credentials"));
+                    }
 
-                    u.setPassword(null);
-                    return ResponseEntity.ok(Map.of("token", token, "user", u));
+                    try {
+                        String token = jwtUtil.generateToken(u);
+                        Map<String, Object> userResponse = Map.ofEntries(
+                                Map.entry("id", u.getId()),
+                                Map.entry("email", u.getEmail()),
+                                Map.entry("username", u.getUsername()),
+                                Map.entry("role", u.getRole()),
+                                Map.entry("firstName", u.getFirstName()),
+                                Map.entry("lastName", u.getLastName()),
+                                Map.entry("dateOfBirth", u.getDateOfBirth() != null ? u.getDateOfBirth() : ""),
+                                Map.entry("profileImage", u.getProfileImage() != null ? u.getProfileImage() : ""),
+                                Map.entry("bio", u.getBio() != null ? u.getBio() : ""),
+                                Map.entry("joinedDate", u.getJoinedDate() != null ? u.getJoinedDate() : ""),
+                                Map.entry("active", u.isActive())
+                        );
+
+                        return ResponseEntity.ok(Map.of("user", userResponse, "token", token));
+                    } catch (Exception e) {
+                        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                                .body(Map.of("error", "Internal server error: " + e.getMessage()));
+                    }
                 })
-                .orElseGet(() -> {
-                    System.out.println("No user with email: " + loginRequest.getEmail());
-                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                            .body(Map.of("error", "Invalid email or password"));
-                });
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(Map.of("error", "Invalid credentials")));
     }
-
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody User user) {
@@ -56,9 +66,13 @@ public class AuthController {
             created.setPassword(null);
             return ResponseEntity.ok(created);
         } catch (RuntimeException ex) {
-            return ResponseEntity
-                    .badRequest()
-                    .body("Registration failed: " + ex.getMessage());
+            return ResponseEntity.badRequest().body("Registration failed: " + ex.getMessage());
         }
+    }
+
+    @PostMapping("/debug/reset-password")
+    public void resetPassword() {
+        String rawPassword = "AAA";
+        System.out.println("Encoded hash for 'AAA': " + passwordEncoder.encode(rawPassword));
     }
 }

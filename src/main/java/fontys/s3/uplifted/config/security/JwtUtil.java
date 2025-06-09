@@ -17,6 +17,10 @@ public class JwtUtil {
     private final Key key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
 
     public String generateToken(User user) {
+        if (user.getRole() == null) {
+            throw new IllegalStateException("User role is null for user: " + user.getEmail());
+        }
+
         return Jwts.builder()
                 .setSubject(user.getEmail())
                 .claim("userId", user.getId())
@@ -26,6 +30,7 @@ public class JwtUtil {
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
+
 
     public String extractEmail(String token) {
         return Jwts.parserBuilder()

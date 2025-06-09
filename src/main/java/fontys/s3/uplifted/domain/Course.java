@@ -2,6 +2,7 @@ package fontys.s3.uplifted.domain;
 
 import lombok.*;
 
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -21,4 +22,5 @@ public class Course {
     private boolean published;
     private double rating;
     private int numberOfReviews;
+    private List<CoursePart> parts;
 }

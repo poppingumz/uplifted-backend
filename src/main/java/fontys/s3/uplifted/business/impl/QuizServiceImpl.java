@@ -1,6 +1,8 @@
 package fontys.s3.uplifted.business.impl;
 
 import fontys.s3.uplifted.business.QuizService;
+import fontys.s3.uplifted.business.impl.mapper.AnswerMapper;
+import fontys.s3.uplifted.business.impl.mapper.QuestionMapper;
 import fontys.s3.uplifted.business.impl.mapper.QuizMapper;
 import fontys.s3.uplifted.domain.Quiz;
 import fontys.s3.uplifted.persistence.CourseRepository;
@@ -35,14 +37,36 @@ public class QuizServiceImpl implements QuizService {
     @Override
     public Quiz createQuiz(Quiz quiz) {
         try {
-            CourseEntity course = courseRepository.findById(quiz.getCourseId())
-                    .orElseThrow(() -> new RuntimeException("Course not found with ID: " + quiz.getCourseId()));
+            CourseEntity course = null;
+            if (quiz.getCourseId() != null) {
+                course = courseRepository.findById(quiz.getCourseId())
+                        .orElseThrow(() -> new RuntimeException("Course not found with ID: " + quiz.getCourseId()));
+            }
 
             UserEntity creator = userRepository.findById(quiz.getCreatedById())
                     .orElseThrow(() -> new RuntimeException("User not found with ID: " + quiz.getCreatedById()));
 
-            QuizEntity entity = QuizMapper.toEntity(quiz, course, creator);
-            QuizEntity savedEntity = quizRepository.save(entity);
+            QuizEntity quizEntity = QuizMapper.toEntity(quiz, course, creator);
+
+            if (quiz.getQuestions() != null) {
+                quizEntity.setQuestions(
+                        quiz.getQuestions().stream().map(q -> {
+                            var questionEntity = QuestionMapper.toEntity(q, quizEntity);
+
+                            if (q.getAnswers() != null) {
+                                questionEntity.setAnswers(
+                                        q.getAnswers().stream()
+                                                .map(a -> AnswerMapper.toEntity(a, questionEntity))
+                                                .collect(Collectors.toList())
+                                );
+                            }
+
+                            return questionEntity;
+                        }).collect(Collectors.toList())
+                );
+            }
+
+            QuizEntity savedEntity = quizRepository.save(quizEntity);
 
             log.info("Quiz created successfully with ID: {}", savedEntity.getId());
             return QuizMapper.toDomain(savedEntity);
@@ -76,8 +100,11 @@ public class QuizServiceImpl implements QuizService {
         try {
             return quizRepository.findById(id)
                     .map(existing -> {
-                        CourseEntity course = courseRepository.findById(updatedQuiz.getCourseId())
-                                .orElseThrow(() -> new RuntimeException("Course not found"));
+                        CourseEntity course = null;
+                        if (updatedQuiz.getCourseId() != null) {
+                            course = courseRepository.findById(updatedQuiz.getCourseId())
+                                    .orElseThrow(() -> new RuntimeException("Course not found"));
+                        }
 
                         UserEntity creator = userRepository.findById(updatedQuiz.getCreatedById())
                                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -109,4 +136,13 @@ public class QuizServiceImpl implements QuizService {
             throw new RuntimeException("Could not delete quiz.");
         }
     }
+
+    @Override
+    public List<Quiz> getQuizzesByCreatorId(Long userId) {
+        return quizRepository.findByCreatedBy_Id(userId)
+                .stream()
+                .map(QuizMapper::toDomain)
+                .collect(Collectors.toList());
+    }
+
 }

@@ -4,76 +4,76 @@ import fontys.s3.uplifted.business.CourseService;
 import fontys.s3.uplifted.business.impl.exception.CourseNotFoundException;
 import fontys.s3.uplifted.business.impl.mapper.CourseMapper;
 import fontys.s3.uplifted.domain.Course;
+import fontys.s3.uplifted.domain.enums.ContentType;
 import fontys.s3.uplifted.persistence.CourseRepository;
+import fontys.s3.uplifted.persistence.FileRepository;
 import fontys.s3.uplifted.persistence.UserRepository;
-import fontys.s3.uplifted.persistence.entity.CourseEntity;
-import fontys.s3.uplifted.persistence.entity.UserEntity;
+import fontys.s3.uplifted.persistence.entity.*;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class CourseServiceImpl implements CourseService {
 
     private final CourseRepository courseRepository;
     private final UserRepository userRepository;
+    private final FileRepository fileRepository;
 
-    public CourseServiceImpl(CourseRepository courseRepository, UserRepository userRepository) {
-        this.courseRepository = courseRepository;
-        this.userRepository = userRepository;
-    }
-
-
+    @Override
     public List<Course> getAllCourses() {
-        return courseRepository.findAll()
-                .stream()
+        return courseRepository.findAll().stream()
+                .filter(CourseEntity::isPublished)
                 .map(CourseMapper::toDomain)
                 .collect(Collectors.toList());
     }
 
+    @Override
     public Optional<Course> getCourseById(Long id) {
         return courseRepository.findById(id)
                 .map(CourseMapper::toDomain);
     }
 
+    @Override
     public List<Course> getCoursesByInstructor(Long instructorId) {
-        return courseRepository.findByInstructorId(instructorId)
-                .stream()
+        return courseRepository.findByInstructorId(instructorId).stream()
                 .map(CourseMapper::toDomain)
                 .collect(Collectors.toList());
     }
 
-    public Course createCourse(Course course) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String username = auth.getName();
-
-        UserEntity instructor = userRepository.findByUsername(username)
+    @Override
+    public Course createCourse(Course course, List<MultipartFile> uploadedFiles) {
+        UserEntity instructor = userRepository.findById(course.getInstructorId())
                 .orElseThrow(() -> new RuntimeException("Instructor not found"));
 
-        CourseEntity entity = CourseMapper.toEntity(course, instructor);
-        CourseEntity saved = courseRepository.save(entity);
-        return CourseMapper.toDomain(saved);
+        CourseEntity saved = courseRepository.save(CourseMapper.toEntity(course, instructor));
+        attachFilesToContents(saved, uploadedFiles, instructor);
+        return CourseMapper.toDomain(courseRepository.save(saved));
     }
 
-
-    public Optional<Course> updateCourse(Long id, Course course) {
+    @Override
+    public Optional<Course> updateCourse(Long id, Course course, List<MultipartFile> uploadedFiles) {
         return courseRepository.findById(id).map(existing -> {
             UserEntity instructor = userRepository.findById(course.getInstructorId())
-                    .orElseThrow(() -> new RuntimeException("Instructor not found with ID: " + course.getInstructorId()));
+                    .orElseThrow(() -> new RuntimeException("Instructor not found"));
 
-            CourseEntity entity = CourseMapper.toEntity(course, instructor);
-            entity.setId(id);
-            CourseEntity updated = courseRepository.save(entity);
-            return CourseMapper.toDomain(updated);
+            CourseEntity updated = CourseMapper.toEntity(course, instructor);
+            updated.setId(id);
+            attachFilesToContents(updated, uploadedFiles, instructor);
+            return CourseMapper.toDomain(courseRepository.save(updated));
         });
     }
 
+    @Override
     public boolean deleteCourse(Long id) {
         if (!courseRepository.existsById(id)) {
             throw new CourseNotFoundException("Course with ID " + id + " not found.");
@@ -82,6 +82,7 @@ public class CourseServiceImpl implements CourseService {
         return true;
     }
 
+    @Override
     public List<Course> getCoursesByEnrolledUser(Long userId) {
         return courseRepository.findAll().stream()
                 .filter(course -> course.getEnrolledStudents().stream()
@@ -94,21 +95,42 @@ public class CourseServiceImpl implements CourseService {
     public void enrollInCourse(Long courseId, String username) {
         CourseEntity course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new CourseNotFoundException("Course not found with ID: " + courseId));
-
         UserEntity user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found: " + username));
-
         if (course.getEnrolledStudents().contains(user)) {
             throw new RuntimeException("User already enrolled in this course.");
         }
-
-        if (course.getEnrollmentLimit() > 0 &&
-                course.getEnrolledStudents().size() >= course.getEnrollmentLimit()) {
+        if (course.getEnrollmentLimit() > 0 && course.getEnrolledStudents().size() >= course.getEnrollmentLimit()) {
             throw new RuntimeException("Course enrollment limit reached.");
         }
-
         course.getEnrolledStudents().add(user);
         courseRepository.save(course);
     }
-}
 
+    private void attachFilesToContents(CourseEntity courseEntity, List<MultipartFile> uploadedFiles, UserEntity instructor) {
+        int idx = 0;
+        for (CoursePartEntity part : courseEntity.getParts()) {
+            for (CoursePartContentEntity content : part.getContents()) {
+                if (content.getContentType() == ContentType.FILE) {
+                    if (uploadedFiles != null && idx < uploadedFiles.size()) {
+                        MultipartFile mf = uploadedFiles.get(idx++);
+                        try {
+                            FileEntity f = fileRepository.save(FileEntity.builder()
+                                    .name(mf.getOriginalFilename())
+                                    .type(mf.getContentType())
+                                    .course(courseEntity)
+                                    .uploader(instructor)
+                                    .data(mf.getBytes())
+                                    .uploadDate(LocalDate.now())
+                                    .build());
+                            content.setContentId(f.getId());
+                        } catch (IOException e) {
+                            log.error("Could not store part file {}", content.getTitle(), e);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+}

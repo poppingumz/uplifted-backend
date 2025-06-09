@@ -3,34 +3,29 @@ package fontys.s3.uplifted.persistence.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
+import java.util.List;
 
 @Entity
-@Table(name = "file")
+@Table(name = "course_part")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class FileEntity {
-
+public class CoursePartEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
-    private String type;
+    private String title;
+    private Integer sequence;
 
-    @Lob
-    private byte[] data;
-
-    @ManyToOne
-    @JoinColumn(name = "uploader_id", nullable = false)
-    private UserEntity uploader;
+    private Integer weekNumber;
 
     @ManyToOne
     @JoinColumn(name = "course_id", nullable = false)
     private CourseEntity course;
 
-    private LocalDate uploadDate;
+    @OneToMany(mappedBy = "part", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CoursePartContentEntity> contents;
 }
