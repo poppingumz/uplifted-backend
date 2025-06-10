@@ -69,10 +69,4 @@ public class AuthController {
             return ResponseEntity.badRequest().body("Registration failed: " + ex.getMessage());
         }
     }
-
-    @PostMapping("/debug/reset-password")
-    public void resetPassword() {
-        String rawPassword = "AAA";
-        System.out.println("Encoded hash for 'AAA': " + passwordEncoder.encode(rawPassword));
-    }
 }

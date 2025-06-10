@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>QuizServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">uplifted-learning-platform</a> &gt; <a href="index.source.html" class="el_package">fontys.s3.uplifted.business.impl</a> &gt; <span class="el_source">QuizServiceImpl.java</span></div><h1>QuizServiceImpl.java</h1><pre class="source lang-java linenums">package fontys.s3.uplifted.business.impl;
+
+import fontys.s3.uplifted.business.QuizService;
+import fontys.s3.uplifted.business.impl.mapper.AnswerMapper;
+import fontys.s3.uplifted.business.impl.mapper.QuestionMapper;
+import fontys.s3.uplifted.business.impl.mapper.QuizMapper;
+import fontys.s3.uplifted.domain.Quiz;
+import fontys.s3.uplifted.persistence.CourseRepository;
+import fontys.s3.uplifted.persistence.QuizRepository;
+import fontys.s3.uplifted.persistence.UserRepository;
+import fontys.s3.uplifted.persistence.entity.CourseEntity;
+import fontys.s3.uplifted.persistence.entity.QuizEntity;
+import fontys.s3.uplifted.persistence.entity.UserEntity;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+<span class="fc" id="L21">@Slf4j</span>
+@Service
+public class QuizServiceImpl implements QuizService {
+
+    private final QuizRepository quizRepository;
+    private final CourseRepository courseRepository;
+    private final UserRepository userRepository;
+
+    public QuizServiceImpl(QuizRepository quizRepository,
+                           CourseRepository courseRepository,
+<span class="fc" id="L31">                           UserRepository userRepository) {</span>
+<span class="fc" id="L32">        this.quizRepository = quizRepository;</span>
+<span class="fc" id="L33">        this.courseRepository = courseRepository;</span>
+<span class="fc" id="L34">        this.userRepository = userRepository;</span>
+<span class="fc" id="L35">    }</span>
+
+    @Override
+    public Quiz createQuiz(Quiz quiz) {
+        try {
+<span class="fc" id="L40">            CourseEntity course = null;</span>
+<span class="pc bpc" id="L41" title="1 of 2 branches missed.">            if (quiz.getCourseId() != null) {</span>
+<span class="fc" id="L42">                course = courseRepository.findById(quiz.getCourseId())</span>
+<span class="fc" id="L43">                        .orElseThrow(() -&gt; new RuntimeException(&quot;Course not found with ID: &quot; + quiz.getCourseId()));</span>
+            }
+
+<span class="fc" id="L46">            UserEntity creator = userRepository.findById(quiz.getCreatedById())</span>
+<span class="fc" id="L47">                    .orElseThrow(() -&gt; new RuntimeException(&quot;User not found with ID: &quot; + quiz.getCreatedById()));</span>
+
+<span class="fc" id="L49">            QuizEntity quizEntity = QuizMapper.toEntity(quiz, course, creator);</span>
+
+<span class="pc bpc" id="L51" title="1 of 2 branches missed.">            if (quiz.getQuestions() != null) {</span>
+<span class="nc" id="L52">                quizEntity.setQuestions(</span>
+<span class="nc" id="L53">                        quiz.getQuestions().stream().map(q -&gt; {</span>
+<span class="nc" id="L54">                            var questionEntity = QuestionMapper.toEntity(q, quizEntity);</span>
+
+<span class="nc bnc" id="L56" title="All 2 branches missed.">                            if (q.getAnswers() != null) {</span>
+<span class="nc" id="L57">                                questionEntity.setAnswers(</span>
+<span class="nc" id="L58">                                        q.getAnswers().stream()</span>
+<span class="nc" id="L59">                                                .map(a -&gt; AnswerMapper.toEntity(a, questionEntity))</span>
+<span class="nc" id="L60">                                                .collect(Collectors.toList())</span>
+                                );
+                            }
+
+<span class="nc" id="L64">                            return questionEntity;</span>
+<span class="nc" id="L65">                        }).collect(Collectors.toList())</span>
+                );
+            }
+
+<span class="fc" id="L69">            QuizEntity savedEntity = quizRepository.save(quizEntity);</span>
+
+<span class="fc" id="L71">            log.info(&quot;Quiz created successfully with ID: {}&quot;, savedEntity.getId());</span>
+<span class="fc" id="L72">            return QuizMapper.toDomain(savedEntity);</span>
+<span class="fc" id="L73">        } catch (Exception e) {</span>
+<span class="fc" id="L74">            log.error(&quot;Failed to create quiz&quot;, e);</span>
+<span class="fc" id="L75">            throw new RuntimeException(&quot;Could not create quiz. Please try again.&quot;);</span>
+        }
+    }
+
+    @Override
+    public Optional&lt;Quiz&gt; getQuizById(Long id) {
+<span class="fc" id="L81">        return quizRepository.findById(id)</span>
+<span class="fc" id="L82">                .map(QuizMapper::toDomain);</span>
+    }
+
+    @Override
+    public List&lt;Quiz&gt; getQuizzesByCourseId(Long courseId) {
+        try {
+<span class="fc" id="L88">            return quizRepository.findByCourseId(courseId)</span>
+<span class="fc" id="L89">                    .stream()</span>
+<span class="fc" id="L90">                    .map(QuizMapper::toDomain)</span>
+<span class="fc" id="L91">                    .collect(Collectors.toList());</span>
+<span class="fc" id="L92">        } catch (Exception e) {</span>
+<span class="fc" id="L93">            log.error(&quot;Failed to retrieve quizzes for course ID: {}&quot;, courseId, e);</span>
+<span class="fc" id="L94">            throw new RuntimeException(&quot;Could not load quizzes for course.&quot;);</span>
+        }
+    }
+
+    @Override
+    public Quiz updateQuiz(Long id, Quiz updatedQuiz) {
+        try {
+<span class="fc" id="L101">            return quizRepository.findById(id)</span>
+<span class="fc" id="L102">                    .map(existing -&gt; {</span>
+<span class="fc" id="L103">                        CourseEntity course = null;</span>
+<span class="pc bpc" id="L104" title="1 of 2 branches missed.">                        if (updatedQuiz.getCourseId() != null) {</span>
+<span class="fc" id="L105">                            course = courseRepository.findById(updatedQuiz.getCourseId())</span>
+<span class="pc" id="L106">                                    .orElseThrow(() -&gt; new RuntimeException(&quot;Course not found&quot;));</span>
+                        }
+
+<span class="fc" id="L109">                        UserEntity creator = userRepository.findById(updatedQuiz.getCreatedById())</span>
+<span class="pc" id="L110">                                .orElseThrow(() -&gt; new RuntimeException(&quot;User not found&quot;));</span>
+
+<span class="fc" id="L112">                        QuizEntity updatedEntity = QuizMapper.toEntity(updatedQuiz, course, creator);</span>
+<span class="fc" id="L113">                        updatedEntity.setId(id);</span>
+
+<span class="fc" id="L115">                        QuizEntity saved = quizRepository.save(updatedEntity);</span>
+<span class="fc" id="L116">                        return QuizMapper.toDomain(saved);</span>
+                    })
+<span class="fc" id="L118">                    .orElseThrow(() -&gt; new RuntimeException(&quot;Quiz not found with ID: &quot; + id));</span>
+<span class="fc" id="L119">        } catch (Exception e) {</span>
+<span class="fc" id="L120">            log.error(&quot;Failed to update quiz with ID: {}&quot;, id, e);</span>
+<span class="fc" id="L121">            throw new RuntimeException(&quot;Could not update quiz.&quot;);</span>
+        }
+    }
+
+    @Override
+    public void deleteQuiz(Long id) {
+        try {
+<span class="fc bfc" id="L128" title="All 2 branches covered.">            if (!quizRepository.existsById(id)) {</span>
+<span class="fc" id="L129">                throw new RuntimeException(&quot;Quiz with ID &quot; + id + &quot; not found.&quot;);</span>
+            }
+
+<span class="fc" id="L132">            quizRepository.deleteById(id);</span>
+<span class="fc" id="L133">            log.info(&quot;Quiz with ID {} deleted successfully&quot;, id);</span>
+<span class="fc" id="L134">        } catch (Exception e) {</span>
+<span class="fc" id="L135">            log.error(&quot;Failed to delete quiz with ID: {}&quot;, id, e);</span>
+<span class="fc" id="L136">            throw new RuntimeException(&quot;Could not delete quiz.&quot;);</span>
+<span class="fc" id="L137">        }</span>
+<span class="fc" id="L138">    }</span>
+
+    @Override
+    public List&lt;Quiz&gt; getQuizzesByCreatorId(Long userId) {
+<span class="nc" id="L142">        return quizRepository.findByCreatedBy_Id(userId)</span>
+<span class="nc" id="L143">                .stream()</span>
+<span class="nc" id="L144">                .map(QuizMapper::toDomain)</span>
+<span class="nc" id="L145">                .collect(Collectors.toList());</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

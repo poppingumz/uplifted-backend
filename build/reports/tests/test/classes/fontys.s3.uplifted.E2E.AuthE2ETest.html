@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=edge"/>
+<title>Test results - AuthE2ETest</title>
+<link href="../css/base-style.css" rel="stylesheet" type="text/css"/>
+<link href="../css/style.css" rel="stylesheet" type="text/css"/>
+<script src="../js/report.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="content">
+<h1>AuthE2ETest</h1>
+<div class="breadcrumbs">
+<a href="../index.html">all</a> &gt; 
+<a href="../packages/fontys.s3.uplifted.E2E.html">fontys.s3.uplifted.E2E</a> &gt; AuthE2ETest</div>
+<div id="summary">
+<table>
+<tr>
+<td>
+<div class="summaryGroup">
+<table>
+<tr>
+<td>
+<div class="infoBox" id="tests">
+<div class="counter">1</div>
+<p>tests</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="failures">
+<div class="counter">0</div>
+<p>failures</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="ignored">
+<div class="counter">0</div>
+<p>ignored</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="duration">
+<div class="counter">1.684s</div>
+<p>duration</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</td>
+<td>
+<div class="infoBox success" id="successRate">
+<div class="percent">100%</div>
+<p>successful</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div id="tabs">
+<ul class="tabLinks">
+<li>
+<a href="#tab0">Tests</a>
+</li>
+<li>
+<a href="#tab1">Standard output</a>
+</li>
+</ul>
+<div id="tab0" class="tab">
+<h2>Tests</h2>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>Duration</th>
+<th>Result</th>
+</tr>
+</thead>
+<tr>
+<td class="success">login_shouldReturnJwtTokenAndUserDetails()</td>
+<td class="success">1.684s</td>
+<td class="success">passed</td>
+</tr>
+</table>
+</div>
+<div id="tab1" class="tab">
+<h2>Standard output</h2>
+<span class="code">
+<pre>
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.2.5)
+
+2025-06-10T21:16:53.034+02:00  INFO 48676 --- [    Test worker] fontys.s3.uplifted.E2E.AuthE2ETest       : Starting AuthE2ETest using Java 17.0.14 with PID 48676 (started by gugus in C:\Projects\uplifted-learning-platform)
+2025-06-10T21:16:53.039+02:00  INFO 48676 --- [    Test worker] fontys.s3.uplifted.E2E.AuthE2ETest       : The following 1 profile is active: &quot;test&quot;
+2025-06-10T21:16:54.802+02:00  INFO 48676 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-06-10T21:16:54.961+02:00  INFO 48676 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 145 ms. Found 9 JPA repository interfaces.
+2025-06-10T21:16:56.402+02:00  INFO 48676 --- [    Test worker] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 0 (http)
+2025-06-10T21:16:56.422+02:00  INFO 48676 --- [    Test worker] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-06-10T21:16:56.422+02:00  INFO 48676 --- [    Test worker] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.20]
+2025-06-10T21:16:56.547+02:00  INFO 48676 --- [    Test worker] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-06-10T21:16:56.549+02:00  INFO 48676 --- [    Test worker] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 3482 ms
+2025-06-10T21:16:57.065+02:00  INFO 48676 --- [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-06-10T21:16:57.194+02:00  INFO 48676 --- [    Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.4.Final
+2025-06-10T21:16:57.262+02:00  INFO 48676 --- [    Test worker] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-06-10T21:16:57.796+02:00  INFO 48676 --- [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-06-10T21:16:57.861+02:00  INFO 48676 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-06-10T21:16:58.342+02:00  INFO 48676 --- [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+2025-06-10T21:16:58.345+02:00  INFO 48676 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-06-10T21:16:58.396+02:00  WARN 48676 --- [    Test worker] org.hibernate.orm.deprecation            : HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-06-10T21:17:00.568+02:00  INFO 48676 --- [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-06-10T21:17:00.717+02:00  INFO 48676 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-06-10T21:17:01.449+02:00  INFO 48676 --- [    Test worker] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-06-10T21:17:02.546+02:00  WARN 48676 --- [    Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-06-10T21:17:02.821+02:00  INFO 48676 --- [    Test worker] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@46dbb06, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@5c90f58d, org.springframework.security.web.context.SecurityContextHolderFilter@43bf950b, org.springframework.security.web.header.HeaderWriterFilter@2ce8935d, org.springframework.web.filter.CorsFilter@1cff2c65, org.springframework.security.web.authentication.logout.LogoutFilter@409c3a22, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@69252ccb, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@506dd1da, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@57c1b28e, org.springframework.security.web.access.ExceptionTranslationFilter@9980665, org.springframework.security.web.access.intercept.AuthorizationFilter@2160ee18]
+2025-06-10T21:17:03.941+02:00  INFO 48676 --- [    Test worker] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint(s) beneath base path '/actuator'
+2025-06-10T21:17:03.991+02:00  WARN 48676 --- [    Test worker] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Mvc [pattern='/ws/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2025-06-10T21:17:03.991+02:00  INFO 48676 --- [    Test worker] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Mvc [pattern='/ws/**']
+2025-06-10T21:17:04.146+02:00  INFO 48676 --- [    Test worker] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 61725 (http) with context path ''
+2025-06-10T21:17:04.149+02:00  INFO 48676 --- [    Test worker] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2025-06-10T21:17:04.150+02:00  INFO 48676 --- [    Test worker] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@56861985]]
+2025-06-10T21:17:04.150+02:00  INFO 48676 --- [    Test worker] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2025-06-10T21:17:04.164+02:00  INFO 48676 --- [    Test worker] fontys.s3.uplifted.E2E.AuthE2ETest       : Started AuthE2ETest in 11.728 seconds (process running for 14.565)
+2025-06-10T21:17:05.456+02:00  INFO 48676 --- [o-auto-1-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-06-10T21:17:05.456+02:00  INFO 48676 --- [o-auto-1-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-06-10T21:17:05.458+02:00  INFO 48676 --- [o-auto-1-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+</pre>
+</span>
+</div>
+</div>
+<div id="footer">
+<p>
+<div>
+<label class="hidden" id="label-for-line-wrapping-toggle" for="line-wrapping-toggle">Wrap lines
+<input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
+</label>
+</div>Generated by 
+<a href="http://www.gradle.org">Gradle 8.5</a> at Jun 10, 2025, 9:17:06 PM</p>
+</div>
+</div>
+</body>
+</html>

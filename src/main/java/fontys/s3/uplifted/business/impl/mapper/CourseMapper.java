@@ -3,9 +3,16 @@ package fontys.s3.uplifted.business.impl.mapper;
 import fontys.s3.uplifted.domain.Course;
 import fontys.s3.uplifted.domain.CoursePart;
 import fontys.s3.uplifted.domain.CoursePartContent;
-import fontys.s3.uplifted.domain.dto.*;
+import fontys.s3.uplifted.domain.dto.CourseDTO;
+import fontys.s3.uplifted.domain.dto.CoursePartContentDTO;
+import fontys.s3.uplifted.domain.dto.CoursePartDTO;
+import fontys.s3.uplifted.domain.dto.CourseResponseDTO;
 import fontys.s3.uplifted.domain.enums.ContentType;
-import fontys.s3.uplifted.persistence.entity.*;
+import fontys.s3.uplifted.domain.enums.InterestCategory;
+import fontys.s3.uplifted.persistence.entity.CourseEntity;
+import fontys.s3.uplifted.persistence.entity.CoursePartContentEntity;
+import fontys.s3.uplifted.persistence.entity.CoursePartEntity;
+import fontys.s3.uplifted.persistence.entity.UserEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +22,7 @@ public final class CourseMapper {
 
     private CourseMapper() {}
 
-    // ======== FROM ENTITY TO DOMAIN ========
+    // ========== FROM ENTITY TO DOMAIN ==========
     public static Course toDomain(CourseEntity entity) {
         return Course.builder()
                 .id(entity.getId())
@@ -51,13 +58,13 @@ public final class CourseMapper {
                 .build()).toList();
     }
 
-    // ======== FROM DTO TO DOMAIN ========
+    // ========== FROM DTO TO DOMAIN ==========
     public static Course toDomain(CourseDTO dto) {
         return Course.builder()
                 .id(dto.getId())
                 .title(dto.getTitle())
                 .description(dto.getDescription())
-                .category(dto.getCategory())
+                .category(InterestCategory.valueOf(dto.getCategory()))
                 .enrollmentLimit(dto.getEnrollmentLimit())
                 .published(dto.isPublished())
                 .instructorId(dto.getInstructorId())
@@ -86,13 +93,13 @@ public final class CourseMapper {
                 .build()).toList();
     }
 
-    // ======== FROM DOMAIN TO RESPONSE DTO ========
+    // ========== FROM DOMAIN TO RESPONSE DTO ==========
     public static CourseResponseDTO toResponseDTO(Course course) {
         return CourseResponseDTO.builder()
                 .id(course.getId())
                 .title(course.getTitle())
                 .description(course.getDescription())
-                .category(course.getCategory())
+                .category(course.getCategory().name()) // enum → string
                 .enrollmentLimit(course.getEnrollmentLimit())
                 .published(course.isPublished())
                 .instructorId(course.getInstructorId())
@@ -115,12 +122,12 @@ public final class CourseMapper {
         if (contents == null) return new ArrayList<>();
         return contents.stream().map(c -> CoursePartContentDTO.builder()
                 .title(c.getTitle())
-                .contentType(c.getContentType().name())
+                .contentType(c.getContentType().name()) // enum → string
                 .contentId(c.getContentId())
                 .build()).toList();
     }
 
-    // ======== FROM DOMAIN TO ENTITY (FOR DB PERSISTENCE) ========
+    // ========== FROM DOMAIN TO ENTITY ==========
     public static CourseEntity toEntity(Course course, UserEntity instructor) {
         CourseEntity entity = CourseEntity.builder()
                 .id(course.getId())
@@ -134,7 +141,7 @@ public final class CourseMapper {
                 .build();
 
         if (course.getParts() != null) {
-            List<CoursePartEntity> parts = toPartEntity(course.getParts(), entity);
+            List<CoursePartEntity> parts = new ArrayList<>(toPartEntity(course.getParts(), entity));
             entity.setParts(parts);
         }
 
@@ -148,12 +155,12 @@ public final class CourseMapper {
                     CoursePart part = parts.get(i);
                     CoursePartEntity entity = CoursePartEntity.builder()
                             .title(part.getTitle())
-                            .sequence(part.getSequence() > 0 ? part.getSequence() : i + 1)
+                            .sequence(part.getSequence() != null && part.getSequence() > 0 ? part.getSequence() : i + 1)
                             .weekNumber(part.getWeekNumber())
                             .course(course)
                             .build();
 
-                    List<CoursePartContentEntity> contentEntities = toContentEntity(part.getContents(), entity);
+                    List<CoursePartContentEntity> contentEntities = new ArrayList<>(toContentEntity(part.getContents(), entity));
                     entity.setContents(contentEntities);
 
                     return entity;

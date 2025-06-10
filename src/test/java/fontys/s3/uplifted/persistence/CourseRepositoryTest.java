@@ -1,5 +1,6 @@
 package fontys.s3.uplifted.persistence;
 
+import fontys.s3.uplifted.domain.enums.InterestCategory;
 import fontys.s3.uplifted.domain.enums.Role;
 import fontys.s3.uplifted.persistence.entity.CourseEntity;
 import fontys.s3.uplifted.persistence.entity.UserEntity;
@@ -47,7 +48,7 @@ class CourseRepositoryTest {
                 .instructor(instructor)
                 .enrollmentLimit(50)
                 .published(true)
-                .category("Programming")
+                .category(InterestCategory.PROGRAMMING)
                 .rating(4.5)
                 .numberOfReviews(10)
                 .build();

@@ -1,5 +1,6 @@
 package fontys.s3.uplifted.persistence;
 
+import fontys.s3.uplifted.domain.enums.InterestCategory;
 import fontys.s3.uplifted.domain.enums.Role;
 import fontys.s3.uplifted.persistence.entity.CourseEntity;
 import fontys.s3.uplifted.persistence.entity.QuizEntity;
@@ -47,7 +48,7 @@ public class QuizRepositoryTest {
                 .instructor(instructor)
                 .enrollmentLimit(50)
                 .published(true)
-                .category("CS")
+                .category(InterestCategory.PROGRAMMING)
                 .rating(5.0)
                 .numberOfReviews(0)
                 .build();
@@ -64,6 +65,7 @@ public class QuizRepositoryTest {
         quizRepository.save(quiz);
 
         List<QuizEntity> result = quizRepository.findByCourseId(course.getId());
+
         assertThat(result).isNotEmpty();
         assertThat(result.get(0).getTitle()).isEqualTo("DSA Quiz");
         assertThat(result.get(0).getCourse().getTitle()).isEqualTo("DSA");

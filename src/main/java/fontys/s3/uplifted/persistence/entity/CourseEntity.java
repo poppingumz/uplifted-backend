@@ -1,5 +1,6 @@
 package fontys.s3.uplifted.persistence.entity;
 
+import fontys.s3.uplifted.domain.enums.InterestCategory;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -48,12 +49,14 @@ public class CourseEntity {
     @Column(nullable = false)
     private boolean published;
 
-    private String category;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private InterestCategory category;
 
     private double rating;
     private int numberOfReviews;
 
-    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<CoursePartEntity> parts;
 
 }

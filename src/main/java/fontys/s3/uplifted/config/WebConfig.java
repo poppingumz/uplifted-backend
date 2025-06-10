@@ -10,7 +10,6 @@ import java.util.Arrays;
 
 @Configuration
 public class WebConfig {
-
     @Bean
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();

@@ -3,17 +3,18 @@ package fontys.s3.uplifted.controller;
 import fontys.s3.uplifted.business.CourseService;
 import fontys.s3.uplifted.domain.dto.CourseDTO;
 import fontys.s3.uplifted.domain.dto.CourseResponseDTO;
+import fontys.s3.uplifted.domain.dto.NotificationMessage;
 import fontys.s3.uplifted.business.impl.mapper.CourseMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 
 @Slf4j
@@ -23,6 +24,7 @@ import java.util.List;
 public class CourseController {
 
     private final CourseService courseService;
+    private final SimpMessagingTemplate messagingTemplate;
 
     @GetMapping
     public ResponseEntity<List<CourseResponseDTO>> getAllCourses() {
@@ -57,8 +59,22 @@ public class CourseController {
             if (image != null && !image.isEmpty()) {
                 course.setImageData(image.getBytes());
             }
+
             var created = courseService.createCourse(course, files);
-            return ResponseEntity.ok(CourseMapper.toResponseDTO(created));
+            var responseDTO = CourseMapper.toResponseDTO(created);
+
+            // ✅ Create and send notification here
+            var categoryName = created.getCategory().name();  // or .toString()
+            var notification = new NotificationMessage(
+                    created.getId(),
+                    "📢 New course \"" + created.getTitle() + "\" is now available in " + categoryName + "!",
+                    categoryName
+            );
+
+            log.info("🔔 Sending real-time notification: {}", notification);
+            messagingTemplate.convertAndSend("/topic/category/" + categoryName, notification);
+
+            return ResponseEntity.ok(responseDTO);
         } catch (Exception e) {
             log.error("Failed to create course", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -95,7 +111,6 @@ public class CourseController {
         courseService.deleteCourse(id);
         return ResponseEntity.noContent().build();
     }
-
 
     @PostMapping("/{courseId}/enroll")
     public ResponseEntity<String> enrollInCourse(@PathVariable Long courseId, Authentication authentication) {

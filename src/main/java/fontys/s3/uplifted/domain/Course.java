@@ -1,5 +1,6 @@
 package fontys.s3.uplifted.domain;
 
+import fontys.s3.uplifted.domain.enums.InterestCategory;
 import lombok.*;
 
 import java.util.List;
@@ -16,7 +17,7 @@ public class Course {
     private String description;
     private byte[] imageData;
     private Long instructorId;
-    private String category;
+    private InterestCategory category;
     private Set<Long> enrolledStudentIds;
     private int enrollmentLimit;
     private boolean published;

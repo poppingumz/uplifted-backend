@@ -3,6 +3,7 @@ package fontys.s3.uplifted.business.impl.mapper;
 import fontys.s3.uplifted.domain.Quiz;
 import fontys.s3.uplifted.persistence.entity.*;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 public final class QuizMapper {
@@ -19,9 +20,12 @@ public final class QuizMapper {
                 .passingMarks(entity.getPassingMarks())
                 .courseId(entity.getCourse() != null ? entity.getCourse().getId() : null)
                 .createdById(entity.getCreatedBy().getId())
-                .questions(entity.getQuestions().stream().map(QuestionMapper::toDomain).toList())
+                .questions(entity.getQuestions() != null
+                        ? entity.getQuestions().stream().map(QuestionMapper::toDomain).toList()
+                        : List.of())
                 .build();
     }
+
 
 
     public static QuizEntity toEntity(Quiz quiz, CourseEntity course, UserEntity creator) {

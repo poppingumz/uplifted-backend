@@ -4,13 +4,16 @@ import fontys.s3.uplifted.business.CourseService;
 import fontys.s3.uplifted.business.impl.exception.CourseNotFoundException;
 import fontys.s3.uplifted.business.impl.mapper.CourseMapper;
 import fontys.s3.uplifted.domain.Course;
+import fontys.s3.uplifted.domain.dto.NotificationMessage;
 import fontys.s3.uplifted.domain.enums.ContentType;
 import fontys.s3.uplifted.persistence.CourseRepository;
 import fontys.s3.uplifted.persistence.FileRepository;
 import fontys.s3.uplifted.persistence.UserRepository;
 import fontys.s3.uplifted.persistence.entity.*;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,6 +31,7 @@ public class CourseServiceImpl implements CourseService {
     private final CourseRepository courseRepository;
     private final UserRepository userRepository;
     private final FileRepository fileRepository;
+    private final SimpMessagingTemplate messagingTemplate;
 
     @Override
     public List<Course> getAllCourses() {
@@ -50,6 +54,7 @@ public class CourseServiceImpl implements CourseService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     @Override
     public Course createCourse(Course course, List<MultipartFile> uploadedFiles) {
         UserEntity instructor = userRepository.findById(course.getInstructorId())
@@ -57,19 +62,48 @@ public class CourseServiceImpl implements CourseService {
 
         CourseEntity saved = courseRepository.save(CourseMapper.toEntity(course, instructor));
         attachFilesToContents(saved, uploadedFiles, instructor);
-        return CourseMapper.toDomain(courseRepository.save(saved));
+        CourseEntity result = courseRepository.save(saved);
+
+        NotificationMessage message = new NotificationMessage(
+                result.getId(),
+                "A new course has been created: " + result.getTitle(),
+                result.getCategory().name()
+        );
+        messagingTemplate.convertAndSend("/topic/course/" + result.getId(), message);
+        messagingTemplate.convertAndSend("/topic/category/" + result.getCategory().name(), message);
+
+        return CourseMapper.toDomain(result);
     }
 
+    @Transactional
     @Override
     public Optional<Course> updateCourse(Long id, Course course, List<MultipartFile> uploadedFiles) {
         return courseRepository.findById(id).map(existing -> {
             UserEntity instructor = userRepository.findById(course.getInstructorId())
                     .orElseThrow(() -> new RuntimeException("Instructor not found"));
 
-            CourseEntity updated = CourseMapper.toEntity(course, instructor);
-            updated.setId(id);
-            attachFilesToContents(updated, uploadedFiles, instructor);
-            return CourseMapper.toDomain(courseRepository.save(updated));
+            // Apply updates
+            existing.setTitle(course.getTitle());
+            existing.setDescription(course.getDescription());
+            existing.setCategory(course.getCategory());
+            existing.setEnrollmentLimit(course.getEnrollmentLimit());
+            existing.setPublished(course.isPublished());
+            existing.setInstructor(instructor);
+
+            attachFilesToContents(existing, uploadedFiles, instructor);
+
+            CourseEntity saved = courseRepository.save(existing);
+
+            NotificationMessage message = new NotificationMessage(
+                    saved.getId(),
+                    "Course updated: " + saved.getTitle(),
+                    saved.getCategory().name()
+            );
+
+            messagingTemplate.convertAndSend("/topic/course/" + saved.getId(), message);
+            messagingTemplate.convertAndSend("/topic/category/" + saved.getCategory().name(), message);
+
+            return CourseMapper.toDomain(saved);
         });
     }
 
@@ -108,8 +142,15 @@ public class CourseServiceImpl implements CourseService {
     }
 
     private void attachFilesToContents(CourseEntity courseEntity, List<MultipartFile> uploadedFiles, UserEntity instructor) {
+        if (courseEntity.getParts() == null) {
+            log.warn("Course has no parts, skipping file attachment.");
+            return;
+        }
+
         int idx = 0;
         for (CoursePartEntity part : courseEntity.getParts()) {
+            if (part.getContents() == null) continue;
+
             for (CoursePartContentEntity content : part.getContents()) {
                 if (content.getContentType() == ContentType.FILE) {
                     if (uploadedFiles != null && idx < uploadedFiles.size()) {
@@ -132,5 +173,4 @@ public class CourseServiceImpl implements CourseService {
             }
         }
     }
-
 }
