@@ -40,8 +40,8 @@ sonarqube:
   image: gradle:7.6-jdk17
   script:
     - echo "Running SonarQube analysis..."
-    - ./gradlew build
-    - ./gradlew sonarqube -Dsonar.gradle.skipCompile=true -Dsonar.login=$env:SONAR_TOKEN -Dsonar.host.url=$env:SONAR_HOST_URL
+    - ./gradlew clean build
+    - ./gradlew -Dsonar.gradle.skipCompile=true -Dsonar.login=$env:SONAR_TOKEN -Dsonar.host.url=$env:SONAR_HOST_URL sonarqube
   allow_failure: true
   only:
     - main
