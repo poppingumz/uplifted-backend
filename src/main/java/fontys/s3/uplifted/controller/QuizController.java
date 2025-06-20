@@ -100,4 +100,10 @@
             return ResponseEntity.ok().build();
         }
 
+        @GetMapping("/passed")
+        public ResponseEntity<List<Long>> getPassedQuizzes(@RequestParam Long userId) {
+            return ResponseEntity.ok(quizService.getPassedQuizIds(userId));
+        }
+
+
     }

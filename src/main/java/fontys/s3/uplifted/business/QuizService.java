@@ -13,4 +13,6 @@ public interface QuizService {
     void deleteQuiz(Long id);
     List<Quiz> getQuizzesByCreatorId(Long userId);
     void saveQuizResult(Long quizId, Long userId, int score, boolean passed);
+    List<Long> getPassedQuizIds(Long userId);
+
 }

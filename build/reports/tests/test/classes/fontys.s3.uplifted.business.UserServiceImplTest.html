@@ -41,7 +41,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">0.147s</div>
+<div class="counter">0.139s</div>
 <p>duration</p>
 </div>
 </td>
@@ -84,7 +84,7 @@
 </tr>
 <tr>
 <td class="success">testCreateUserThrowsException()</td>
-<td class="success">0.007s</td>
+<td class="success">0.009s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
@@ -94,7 +94,7 @@
 </tr>
 <tr>
 <td class="success">testDeleteUserSuccess()</td>
-<td class="success">0.004s</td>
+<td class="success">0.003s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
@@ -104,42 +104,42 @@
 </tr>
 <tr>
 <td class="success">testGetAllUsers()</td>
-<td class="success">0.005s</td>
+<td class="success">0.004s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">testGetAllUsersThrowsException()</td>
-<td class="success">0.007s</td>
-<td class="success">passed</td>
-</tr>
-<tr>
-<td class="success">testGetUserByEmail()</td>
-<td class="success">0.077s</td>
-<td class="success">passed</td>
-</tr>
-<tr>
-<td class="success">testGetUserByEmailThrowsException()</td>
-<td class="success">0.007s</td>
-<td class="success">passed</td>
-</tr>
-<tr>
-<td class="success">testGetUserById()</td>
-<td class="success">0.003s</td>
-<td class="success">passed</td>
-</tr>
-<tr>
-<td class="success">testGetUserByIdThrowsException()</td>
-<td class="success">0.006s</td>
-<td class="success">passed</td>
-</tr>
-<tr>
-<td class="success">testUpdateUser()</td>
 <td class="success">0.008s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
-<td class="success">testUpdateUserThrowsException()</td>
+<td class="success">testGetUserByEmail()</td>
+<td class="success">0.068s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testGetUserByEmailThrowsException()</td>
 <td class="success">0.006s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testGetUserById()</td>
+<td class="success">0.004s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testGetUserByIdThrowsException()</td>
+<td class="success">0.007s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testUpdateUser()</td>
+<td class="success">0.006s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testUpdateUserThrowsException()</td>
+<td class="success">0.007s</td>
 <td class="success">passed</td>
 </tr>
 </table>
@@ -147,7 +147,7 @@
 <div id="tab1" class="tab">
 <h2>Standard output</h2>
 <span class="code">
-<pre>11:58:57.516 [Test worker] ERROR fontys.s3.uplifted.business.impl.UserServiceImpl -- Error deleting user with ID: 1
+<pre>15:17:20.668 [Test worker] ERROR fontys.s3.uplifted.business.impl.UserServiceImpl -- Error deleting user with ID: 1
 java.lang.RuntimeException: DB error
 	at fontys.s3.uplifted.business.impl.UserServiceImpl.deleteUser(UserServiceImpl.java:106)
 	at fontys.s3.uplifted.business.UserServiceImplTest.lambda$testDeleteUserThrowsException$5(UserServiceImplTest.java:164)
@@ -239,7 +239,7 @@ java.lang.RuntimeException: DB error
 	at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:65)
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.run(GradleWorkerMain.java:69)
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74)
-11:58:57.541 [Test worker] ERROR fontys.s3.uplifted.business.impl.UserServiceImpl -- Error creating user
+15:17:20.691 [Test worker] ERROR fontys.s3.uplifted.business.impl.UserServiceImpl -- Error creating user
 java.lang.RuntimeException: DB error
 	at fontys.s3.uplifted.business.impl.UserServiceImpl.createUser(UserServiceImpl.java:72)
 	at fontys.s3.uplifted.business.UserServiceImplTest.lambda$testCreateUserThrowsException$3(UserServiceImplTest.java:119)
@@ -331,7 +331,7 @@ java.lang.RuntimeException: DB error
 	at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:65)
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.run(GradleWorkerMain.java:69)
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74)
-11:58:57.549 [Test worker] ERROR fontys.s3.uplifted.business.impl.UserServiceImpl -- Error updating user with ID: 1
+15:17:20.699 [Test worker] ERROR fontys.s3.uplifted.business.impl.UserServiceImpl -- Error updating user with ID: 1
 java.lang.RuntimeException: DB error
 	at fontys.s3.uplifted.business.impl.UserServiceImpl.updateUser(UserServiceImpl.java:84)
 	at fontys.s3.uplifted.business.UserServiceImplTest.lambda$testUpdateUserThrowsException$4(UserServiceImplTest.java:139)
@@ -423,8 +423,8 @@ java.lang.RuntimeException: DB error
 	at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:65)
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.run(GradleWorkerMain.java:69)
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74)
-11:58:57.560 [Test worker] INFO fontys.s3.uplifted.business.impl.UserServiceImpl -- User created with ID: 1
-11:58:57.566 [Test worker] ERROR fontys.s3.uplifted.business.impl.UserServiceImpl -- Error fetching all users
+15:17:20.709 [Test worker] INFO fontys.s3.uplifted.business.impl.UserServiceImpl -- User created with ID: 1
+15:17:20.718 [Test worker] ERROR fontys.s3.uplifted.business.impl.UserServiceImpl -- Error fetching all users
 java.lang.RuntimeException: DB error
 	at fontys.s3.uplifted.business.impl.UserServiceImpl.getAllUsers(UserServiceImpl.java:33)
 	at fontys.s3.uplifted.business.UserServiceImplTest.lambda$testGetAllUsersThrowsException$0(UserServiceImplTest.java:69)
@@ -516,7 +516,7 @@ java.lang.RuntimeException: DB error
 	at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:65)
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.run(GradleWorkerMain.java:69)
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74)
-11:58:57.574 [Test worker] ERROR fontys.s3.uplifted.business.impl.UserServiceImpl -- Error fetching user with email: john@example.com
+15:17:20.724 [Test worker] ERROR fontys.s3.uplifted.business.impl.UserServiceImpl -- Error fetching user with email: john@example.com
 java.lang.RuntimeException: DB error
 	at fontys.s3.uplifted.business.impl.UserServiceImpl.getUserByEmail(UserServiceImpl.java:57)
 	at fontys.s3.uplifted.business.UserServiceImplTest.lambda$testGetUserByEmailThrowsException$2(UserServiceImplTest.java:99)
@@ -608,7 +608,7 @@ java.lang.RuntimeException: DB error
 	at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:65)
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.run(GradleWorkerMain.java:69)
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74)
-11:58:57.585 [Test worker] ERROR fontys.s3.uplifted.business.impl.UserServiceImpl -- Error fetching user with ID: 1
+15:17:20.738 [Test worker] ERROR fontys.s3.uplifted.business.impl.UserServiceImpl -- Error fetching user with ID: 1
 java.lang.RuntimeException: DB error
 	at fontys.s3.uplifted.business.impl.UserServiceImpl.getUserById(UserServiceImpl.java:46)
 	at fontys.s3.uplifted.business.UserServiceImplTest.lambda$testGetUserByIdThrowsException$1(UserServiceImplTest.java:84)
@@ -700,7 +700,7 @@ java.lang.RuntimeException: DB error
 	at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:65)
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.run(GradleWorkerMain.java:69)
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74)
-11:58:57.592 [Test worker] WARN fontys.s3.uplifted.business.impl.UserServiceImpl -- No user found with ID 2 to delete
+15:17:20.744 [Test worker] WARN fontys.s3.uplifted.business.impl.UserServiceImpl -- No user found with ID 2 to delete
 </pre>
 </span>
 </div>
@@ -712,7 +712,7 @@ java.lang.RuntimeException: DB error
 <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
 </label>
 </div>Generated by 
-<a href="http://www.gradle.org">Gradle 8.5</a> at Jun 20, 2025, 11:59:16 AM</p>
+<a href="http://www.gradle.org">Gradle 8.5</a> at Jun 20, 2025, 3:17:40 PM</p>
 </div>
 </div>
 </body>

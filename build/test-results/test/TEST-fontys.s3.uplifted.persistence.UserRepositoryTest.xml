@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="fontys.s3.uplifted.persistence.UserRepositoryTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2025-06-20T09:59:15" hostname="LAPTOP-RHFQ3ARB" time="0.053">
+<testsuite name="fontys.s3.uplifted.persistence.UserRepositoryTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2025-06-20T13:17:38" hostname="LAPTOP-RHFQ3ARB" time="0.043">
   <properties/>
-  <testcase name="Find user by username" classname="fontys.s3.uplifted.persistence.UserRepositoryTest" time="0.029"/>
-  <testcase name="Find user by email" classname="fontys.s3.uplifted.persistence.UserRepositoryTest" time="0.021"/>
-  <system-out><![CDATA[2025-06-20T11:59:15.306+02:00  INFO 57652 --- [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [fontys.s3.uplifted.persistence.UserRepositoryTest]: UserRepositoryTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-2025-06-20T11:59:15.345+02:00  INFO 57652 --- [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration fontys.s3.uplifted.UpliftEdApplication for test class fontys.s3.uplifted.persistence.UserRepositoryTest
+  <testcase name="Find user by username" classname="fontys.s3.uplifted.persistence.UserRepositoryTest" time="0.022"/>
+  <testcase name="Find user by email" classname="fontys.s3.uplifted.persistence.UserRepositoryTest" time="0.019"/>
+  <system-out><![CDATA[2025-06-20T15:17:38.928+02:00  INFO 31256 --- [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [fontys.s3.uplifted.persistence.UserRepositoryTest]: UserRepositoryTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2025-06-20T15:17:38.962+02:00  INFO 31256 --- [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration fontys.s3.uplifted.UpliftEdApplication for test class fontys.s3.uplifted.persistence.UserRepositoryTest
 Hibernate: insert into "user" (bio,date_of_birth,email,first_name,is_active,joined_date,last_name,password,profile_image,role,username,id) values (?,?,?,?,?,?,?,?,?,?,?,default)
 Hibernate: select ue1_0.id,ue1_0.bio,ue1_0.date_of_birth,ue1_0.email,ue1_0.first_name,ue1_0.is_active,ue1_0.joined_date,ue1_0.last_name,ue1_0.password,ue1_0.profile_image,ue1_0.role,ue1_0.username from "user" ue1_0 where ue1_0.username=?
 Hibernate: insert into "user" (bio,date_of_birth,email,first_name,is_active,joined_date,last_name,password,profile_image,role,username,id) values (?,?,?,?,?,?,?,?,?,?,?,default)

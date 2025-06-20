@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="fontys.s3.uplifted.business.UserServiceImplTest" tests="13" skipped="0" failures="0" errors="0" timestamp="2025-06-20T09:58:57" hostname="LAPTOP-RHFQ3ARB" time="0.16">
+<testsuite name="fontys.s3.uplifted.business.UserServiceImplTest" tests="13" skipped="0" failures="0" errors="0" timestamp="2025-06-20T13:17:20" hostname="LAPTOP-RHFQ3ARB" time="0.152">
   <properties/>
-  <testcase name="testGetUserByEmail()" classname="fontys.s3.uplifted.business.UserServiceImplTest" time="0.077"/>
+  <testcase name="testGetUserByEmail()" classname="fontys.s3.uplifted.business.UserServiceImplTest" time="0.068"/>
   <testcase name="testDeleteUserThrowsException()" classname="fontys.s3.uplifted.business.UserServiceImplTest" time="0.009"/>
-  <testcase name="testGetAllUsers()" classname="fontys.s3.uplifted.business.UserServiceImplTest" time="0.005"/>
-  <testcase name="testUpdateUser()" classname="fontys.s3.uplifted.business.UserServiceImplTest" time="0.008"/>
-  <testcase name="testCreateUserThrowsException()" classname="fontys.s3.uplifted.business.UserServiceImplTest" time="0.007"/>
-  <testcase name="testUpdateUserThrowsException()" classname="fontys.s3.uplifted.business.UserServiceImplTest" time="0.006"/>
-  <testcase name="testDeleteUserSuccess()" classname="fontys.s3.uplifted.business.UserServiceImplTest" time="0.004"/>
+  <testcase name="testGetAllUsers()" classname="fontys.s3.uplifted.business.UserServiceImplTest" time="0.004"/>
+  <testcase name="testUpdateUser()" classname="fontys.s3.uplifted.business.UserServiceImplTest" time="0.006"/>
+  <testcase name="testCreateUserThrowsException()" classname="fontys.s3.uplifted.business.UserServiceImplTest" time="0.009"/>
+  <testcase name="testUpdateUserThrowsException()" classname="fontys.s3.uplifted.business.UserServiceImplTest" time="0.007"/>
+  <testcase name="testDeleteUserSuccess()" classname="fontys.s3.uplifted.business.UserServiceImplTest" time="0.003"/>
   <testcase name="testCreateUser()" classname="fontys.s3.uplifted.business.UserServiceImplTest" time="0.004"/>
-  <testcase name="testGetAllUsersThrowsException()" classname="fontys.s3.uplifted.business.UserServiceImplTest" time="0.007"/>
-  <testcase name="testGetUserByEmailThrowsException()" classname="fontys.s3.uplifted.business.UserServiceImplTest" time="0.007"/>
-  <testcase name="testGetUserById()" classname="fontys.s3.uplifted.business.UserServiceImplTest" time="0.003"/>
-  <testcase name="testGetUserByIdThrowsException()" classname="fontys.s3.uplifted.business.UserServiceImplTest" time="0.006"/>
+  <testcase name="testGetAllUsersThrowsException()" classname="fontys.s3.uplifted.business.UserServiceImplTest" time="0.008"/>
+  <testcase name="testGetUserByEmailThrowsException()" classname="fontys.s3.uplifted.business.UserServiceImplTest" time="0.006"/>
+  <testcase name="testGetUserById()" classname="fontys.s3.uplifted.business.UserServiceImplTest" time="0.004"/>
+  <testcase name="testGetUserByIdThrowsException()" classname="fontys.s3.uplifted.business.UserServiceImplTest" time="0.007"/>
   <testcase name="testDeleteUserNotFound()" classname="fontys.s3.uplifted.business.UserServiceImplTest" time="0.004"/>
-  <system-out><![CDATA[11:58:57.516 [Test worker] ERROR fontys.s3.uplifted.business.impl.UserServiceImpl -- Error deleting user with ID: 1
+  <system-out><![CDATA[15:17:20.668 [Test worker] ERROR fontys.s3.uplifted.business.impl.UserServiceImpl -- Error deleting user with ID: 1
 java.lang.RuntimeException: DB error
 	at fontys.s3.uplifted.business.impl.UserServiceImpl.deleteUser(UserServiceImpl.java:106)
 	at fontys.s3.uplifted.business.UserServiceImplTest.lambda$testDeleteUserThrowsException$5(UserServiceImplTest.java:164)
@@ -106,7 +106,7 @@ java.lang.RuntimeException: DB error
 	at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:65)
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.run(GradleWorkerMain.java:69)
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74)
-11:58:57.541 [Test worker] ERROR fontys.s3.uplifted.business.impl.UserServiceImpl -- Error creating user
+15:17:20.691 [Test worker] ERROR fontys.s3.uplifted.business.impl.UserServiceImpl -- Error creating user
 java.lang.RuntimeException: DB error
 	at fontys.s3.uplifted.business.impl.UserServiceImpl.createUser(UserServiceImpl.java:72)
 	at fontys.s3.uplifted.business.UserServiceImplTest.lambda$testCreateUserThrowsException$3(UserServiceImplTest.java:119)
@@ -198,7 +198,7 @@ java.lang.RuntimeException: DB error
 	at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:65)
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.run(GradleWorkerMain.java:69)
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74)
-11:58:57.549 [Test worker] ERROR fontys.s3.uplifted.business.impl.UserServiceImpl -- Error updating user with ID: 1
+15:17:20.699 [Test worker] ERROR fontys.s3.uplifted.business.impl.UserServiceImpl -- Error updating user with ID: 1
 java.lang.RuntimeException: DB error
 	at fontys.s3.uplifted.business.impl.UserServiceImpl.updateUser(UserServiceImpl.java:84)
 	at fontys.s3.uplifted.business.UserServiceImplTest.lambda$testUpdateUserThrowsException$4(UserServiceImplTest.java:139)
@@ -290,8 +290,8 @@ java.lang.RuntimeException: DB error
 	at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:65)
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.run(GradleWorkerMain.java:69)
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74)
-11:58:57.560 [Test worker] INFO fontys.s3.uplifted.business.impl.UserServiceImpl -- User created with ID: 1
-11:58:57.566 [Test worker] ERROR fontys.s3.uplifted.business.impl.UserServiceImpl -- Error fetching all users
+15:17:20.709 [Test worker] INFO fontys.s3.uplifted.business.impl.UserServiceImpl -- User created with ID: 1
+15:17:20.718 [Test worker] ERROR fontys.s3.uplifted.business.impl.UserServiceImpl -- Error fetching all users
 java.lang.RuntimeException: DB error
 	at fontys.s3.uplifted.business.impl.UserServiceImpl.getAllUsers(UserServiceImpl.java:33)
 	at fontys.s3.uplifted.business.UserServiceImplTest.lambda$testGetAllUsersThrowsException$0(UserServiceImplTest.java:69)
@@ -383,7 +383,7 @@ java.lang.RuntimeException: DB error
 	at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:65)
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.run(GradleWorkerMain.java:69)
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74)
-11:58:57.574 [Test worker] ERROR fontys.s3.uplifted.business.impl.UserServiceImpl -- Error fetching user with email: john@example.com
+15:17:20.724 [Test worker] ERROR fontys.s3.uplifted.business.impl.UserServiceImpl -- Error fetching user with email: john@example.com
 java.lang.RuntimeException: DB error
 	at fontys.s3.uplifted.business.impl.UserServiceImpl.getUserByEmail(UserServiceImpl.java:57)
 	at fontys.s3.uplifted.business.UserServiceImplTest.lambda$testGetUserByEmailThrowsException$2(UserServiceImplTest.java:99)
@@ -475,7 +475,7 @@ java.lang.RuntimeException: DB error
 	at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:65)
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.run(GradleWorkerMain.java:69)
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74)
-11:58:57.585 [Test worker] ERROR fontys.s3.uplifted.business.impl.UserServiceImpl -- Error fetching user with ID: 1
+15:17:20.738 [Test worker] ERROR fontys.s3.uplifted.business.impl.UserServiceImpl -- Error fetching user with ID: 1
 java.lang.RuntimeException: DB error
 	at fontys.s3.uplifted.business.impl.UserServiceImpl.getUserById(UserServiceImpl.java:46)
 	at fontys.s3.uplifted.business.UserServiceImplTest.lambda$testGetUserByIdThrowsException$1(UserServiceImplTest.java:84)
@@ -567,7 +567,7 @@ java.lang.RuntimeException: DB error
 	at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:65)
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.run(GradleWorkerMain.java:69)
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74)
-11:58:57.592 [Test worker] WARN fontys.s3.uplifted.business.impl.UserServiceImpl -- No user found with ID 2 to delete
+15:17:20.744 [Test worker] WARN fontys.s3.uplifted.business.impl.UserServiceImpl -- No user found with ID 2 to delete
 ]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

@@ -60,6 +60,9 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/quizzes/submit")
                         .hasAnyRole(ROLE_STUDENT, ROLE_TEACHER)
 
+                        .requestMatchers(HttpMethod.GET, "/api/quizzes/passed")
+                        .hasAnyRole(ROLE_STUDENT, ROLE_TEACHER)
+
                         // Public API
                         .requestMatchers("/api/auth/**", "/api/users/register").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/courses", "/api/courses/**").permitAll()
@@ -67,6 +70,7 @@ public class SecurityConfig {
 
                         // CORS Preflight
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+
 
                         // File downloads (authenticated)
                         .requestMatchers(HttpMethod.GET, "/api/files/*/download").authenticated()

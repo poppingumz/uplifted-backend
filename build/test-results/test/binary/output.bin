@@ -1,12 +1,12 @@
-›11:58:54.365 [Test worker] WARN fontys.s3.uplifted.business.impl.CourseServiceImpl -- Course has no parts or no uploaded files, skipping file attachment.
-›11:58:55.965 [Test worker] WARN fontys.s3.uplifted.business.impl.CourseServiceImpl -- Course has no parts or no uploaded files, skipping file attachment.
-›11:58:56.004 [Test worker] WARN fontys.s3.uplifted.business.impl.CourseServiceImpl -- Course has no parts or no uploaded files, skipping file attachment.
-x11:58:56.204 [Test worker] INFO fontys.s3.uplifted.business.impl.CourseServiceImpl -- User 10 unenrolled from course 1
-t11:58:56.231 [Test worker] INFO fontys.s3.uplifted.business.impl.CourseServiceImpl -- User 10 enrolled in course 1
-„11:58:56.251 [Test worker] INFO fontys.s3.uplifted.business.impl.EnrollmentServiceImpl -- Persisted enrollment: course=1, user=100
-/.x11:58:56.790 [Test worker] ERROR fontys.s3.uplifted.business.impl.QuizServiceImpl -- Failed to delete quiz with ID: 99
+›15:17:17.738 [Test worker] WARN fontys.s3.uplifted.business.impl.CourseServiceImpl -- Course has no parts or no uploaded files, skipping file attachment.
+›15:17:19.176 [Test worker] WARN fontys.s3.uplifted.business.impl.CourseServiceImpl -- Course has no parts or no uploaded files, skipping file attachment.
+›15:17:19.207 [Test worker] WARN fontys.s3.uplifted.business.impl.CourseServiceImpl -- Course has no parts or no uploaded files, skipping file attachment.
+x15:17:19.390 [Test worker] INFO fontys.s3.uplifted.business.impl.CourseServiceImpl -- User 10 unenrolled from course 1
+t15:17:19.411 [Test worker] INFO fontys.s3.uplifted.business.impl.CourseServiceImpl -- User 10 enrolled in course 1
+„15:17:19.427 [Test worker] INFO fontys.s3.uplifted.business.impl.EnrollmentServiceImpl -- Persisted enrollment: course=1, user=100
+/.x15:17:19.970 [Test worker] ERROR fontys.s3.uplifted.business.impl.QuizServiceImpl -- Failed to delete quiz with ID: 99
 /.`fontys.s3.uplifted.business.impl.exception.EntityNotFoundException: Quiz with ID 99 not found.
-/.[	at fontys.s3.uplifted.business.impl.QuizServiceImpl.deleteQuiz(QuizServiceImpl.java:133)
+/.[	at fontys.s3.uplifted.business.impl.QuizServiceImpl.deleteQuiz(QuizServiceImpl.java:140)
 /.p	at fontys.s3.uplifted.business.QuizServiceImplTest.lambda$deleteQuiz_notFound$5(QuizServiceImplTest.java:162)
 /.K	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:53)
 /.K	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:35)
@@ -96,9 +96,9 @@
 /.‚	at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:65)
 /.^	at worker.org.gradle.process.internal.worker.GradleWorkerMain.run(GradleWorkerMain.java:69)
 /._	at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74)
-/2w11:58:56.844 [Test worker] ERROR fontys.s3.uplifted.business.impl.QuizServiceImpl -- Failed to delete quiz with ID: 1
+/2w15:17:20.032 [Test worker] ERROR fontys.s3.uplifted.business.impl.QuizServiceImpl -- Failed to delete quiz with ID: 1
 /2&java.lang.RuntimeException: DB error
-/2[	at fontys.s3.uplifted.business.impl.QuizServiceImpl.deleteQuiz(QuizServiceImpl.java:135)
+/2[	at fontys.s3.uplifted.business.impl.QuizServiceImpl.deleteQuiz(QuizServiceImpl.java:142)
 /2ƒ	at fontys.s3.uplifted.business.QuizServiceImplTest.lambda$deleteQuiz_failure_throwsQuizException$6(QuizServiceImplTest.java:171)
 /2K	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:53)
 /2K	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:35)
@@ -188,10 +188,10 @@
 /2‚	at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:65)
 /2^	at worker.org.gradle.process.internal.worker.GradleWorkerMain.run(GradleWorkerMain.java:69)
 /2_	at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74)
-/3{11:58:56.886 [Test worker] INFO fontys.s3.uplifted.business.impl.QuizServiceImpl -- Quiz created successfully with ID: 99
-/4l11:58:56.893 [Test worker] ERROR fontys.s3.uplifted.business.impl.QuizServiceImpl -- Failed to create quiz
+/3{15:17:20.084 [Test worker] INFO fontys.s3.uplifted.business.impl.QuizServiceImpl -- Quiz created successfully with ID: 99
+/4l15:17:20.092 [Test worker] ERROR fontys.s3.uplifted.business.impl.QuizServiceImpl -- Failed to create quiz
 /4Vfontys.s3.uplifted.business.impl.exception.EntityNotFoundException: Course not found
-/4Z	at fontys.s3.uplifted.business.impl.QuizServiceImpl.createQuiz(QuizServiceImpl.java:44)
+/4Z	at fontys.s3.uplifted.business.impl.QuizServiceImpl.createQuiz(QuizServiceImpl.java:51)
 /4ˆ	at fontys.s3.uplifted.business.QuizServiceImplTest.lambda$createQuiz_missingCourse_throwsQuizException$1(QuizServiceImplTest.java:72)
 /4K	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:53)
 /4K	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:35)
@@ -281,9 +281,9 @@
 /4‚	at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:65)
 /4^	at worker.org.gradle.process.internal.worker.GradleWorkerMain.run(GradleWorkerMain.java:69)
 /4_	at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74)
-/5w11:58:56.907 [Test worker] ERROR fontys.s3.uplifted.business.impl.QuizServiceImpl -- Failed to update quiz with ID: 1
+/5w15:17:20.105 [Test worker] ERROR fontys.s3.uplifted.business.impl.QuizServiceImpl -- Failed to update quiz with ID: 1
 /5&java.lang.RuntimeException: DB error
-/5[	at fontys.s3.uplifted.business.impl.QuizServiceImpl.updateQuiz(QuizServiceImpl.java:102)
+/5[	at fontys.s3.uplifted.business.impl.QuizServiceImpl.updateQuiz(QuizServiceImpl.java:109)
 /5ƒ	at fontys.s3.uplifted.business.QuizServiceImplTest.lambda$updateQuiz_failure_throwsQuizException$4(QuizServiceImplTest.java:149)
 /5K	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:53)
 /5K	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:35)
@@ -373,9 +373,9 @@
 /5‚	at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:65)
 /5^	at worker.org.gradle.process.internal.worker.GradleWorkerMain.run(GradleWorkerMain.java:69)
 /5_	at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74)
-/6w11:58:56.919 [Test worker] ERROR fontys.s3.uplifted.business.impl.QuizServiceImpl -- Failed to update quiz with ID: 1
+/6w15:17:20.117 [Test worker] ERROR fontys.s3.uplifted.business.impl.QuizServiceImpl -- Failed to update quiz with ID: 1
 /6ufontys.s3.uplifted.business.impl.exception.UnauthorizedAccessException: You are not authorized to update this quiz.
-/6[	at fontys.s3.uplifted.business.impl.QuizServiceImpl.updateQuiz(QuizServiceImpl.java:106)
+/6[	at fontys.s3.uplifted.business.impl.QuizServiceImpl.updateQuiz(QuizServiceImpl.java:113)
 /6t	at fontys.s3.uplifted.business.QuizServiceImplTest.lambda$updateQuiz_unauthorized$3(QuizServiceImplTest.java:140)
 /6K	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:53)
 /6K	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:35)
@@ -465,9 +465,9 @@
 /6‚	at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:65)
 /6^	at worker.org.gradle.process.internal.worker.GradleWorkerMain.run(GradleWorkerMain.java:69)
 /6_	at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74)
-/7‚11:58:56.932 [Test worker] ERROR fontys.s3.uplifted.business.impl.QuizServiceImpl -- Failed to retrieve quizzes for course ID: 1
+/7‚15:17:20.132 [Test worker] ERROR fontys.s3.uplifted.business.impl.QuizServiceImpl -- Failed to retrieve quizzes for course ID: 1
 /7%java.lang.RuntimeException: DB down
-/7d	at fontys.s3.uplifted.business.impl.QuizServiceImpl.getQuizzesByCourseId(QuizServiceImpl.java:89)
+/7d	at fontys.s3.uplifted.business.impl.QuizServiceImpl.getQuizzesByCourseId(QuizServiceImpl.java:96)
 /7y	at fontys.s3.uplifted.business.QuizServiceImplTest.lambda$getQuizzesByCourseId_failure$2(QuizServiceImplTest.java:113)
 /7K	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:53)
 /7K	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:35)
@@ -557,10 +557,10 @@
 /7‚	at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:65)
 /7^	at worker.org.gradle.process.internal.worker.GradleWorkerMain.run(GradleWorkerMain.java:69)
 /7_	at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74)
-/8y11:58:56.939 [Test worker] INFO fontys.s3.uplifted.business.impl.QuizServiceImpl -- Quiz with ID 1 deleted successfully
-<;}11:58:57.117 [Test worker] INFO fontys.s3.uplifted.business.impl.ReviewServiceImpl -- Review with ID 1 deleted successfully
-<=ƒ11:58:57.131 [Test worker] INFO fontys.s3.uplifted.business.impl.ReviewServiceImpl -- Review created for course ID: 1, user ID: 1
-KLu11:58:57.516 [Test worker] ERROR fontys.s3.uplifted.business.impl.UserServiceImpl -- Error deleting user with ID: 1
+/8y15:17:20.145 [Test worker] INFO fontys.s3.uplifted.business.impl.QuizServiceImpl -- Quiz with ID 1 deleted successfully
+<;}15:17:20.309 [Test worker] INFO fontys.s3.uplifted.business.impl.ReviewServiceImpl -- Review with ID 1 deleted successfully
+<=ƒ15:17:20.321 [Test worker] INFO fontys.s3.uplifted.business.impl.ReviewServiceImpl -- Review created for course ID: 1, user ID: 1
+KLu15:17:20.668 [Test worker] ERROR fontys.s3.uplifted.business.impl.UserServiceImpl -- Error deleting user with ID: 1
 KL&java.lang.RuntimeException: DB error
 KL[	at fontys.s3.uplifted.business.impl.UserServiceImpl.deleteUser(UserServiceImpl.java:106)
 KLz	at fontys.s3.uplifted.business.UserServiceImplTest.lambda$testDeleteUserThrowsException$5(UserServiceImplTest.java:164)
@@ -652,7 +652,7 @@
 KL‚	at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:65)
 KL^	at worker.org.gradle.process.internal.worker.GradleWorkerMain.run(GradleWorkerMain.java:69)
 KL_	at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74)
-KOj11:58:57.541 [Test worker] ERROR fontys.s3.uplifted.business.impl.UserServiceImpl -- Error creating user
+KOj15:17:20.691 [Test worker] ERROR fontys.s3.uplifted.business.impl.UserServiceImpl -- Error creating user
 KO&java.lang.RuntimeException: DB error
 KOZ	at fontys.s3.uplifted.business.impl.UserServiceImpl.createUser(UserServiceImpl.java:72)
 KOz	at fontys.s3.uplifted.business.UserServiceImplTest.lambda$testCreateUserThrowsException$3(UserServiceImplTest.java:119)
@@ -744,7 +744,7 @@
 KO‚	at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:65)
 KO^	at worker.org.gradle.process.internal.worker.GradleWorkerMain.run(GradleWorkerMain.java:69)
 KO_	at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74)
-KPu11:58:57.549 [Test worker] ERROR fontys.s3.uplifted.business.impl.UserServiceImpl -- Error updating user with ID: 1
+KPu15:17:20.699 [Test worker] ERROR fontys.s3.uplifted.business.impl.UserServiceImpl -- Error updating user with ID: 1
 KP&java.lang.RuntimeException: DB error
 KPZ	at fontys.s3.uplifted.business.impl.UserServiceImpl.updateUser(UserServiceImpl.java:84)
 KPz	at fontys.s3.uplifted.business.UserServiceImplTest.lambda$testUpdateUserThrowsException$4(UserServiceImplTest.java:139)
@@ -836,8 +836,8 @@
 KP‚	at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:65)
 KP^	at worker.org.gradle.process.internal.worker.GradleWorkerMain.run(GradleWorkerMain.java:69)
 KP_	at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74)
-KRm11:58:57.560 [Test worker] INFO fontys.s3.uplifted.business.impl.UserServiceImpl -- User created with ID: 1
-KSo11:58:57.566 [Test worker] ERROR fontys.s3.uplifted.business.impl.UserServiceImpl -- Error fetching all users
+KRm15:17:20.709 [Test worker] INFO fontys.s3.uplifted.business.impl.UserServiceImpl -- User created with ID: 1
+KSo15:17:20.718 [Test worker] ERROR fontys.s3.uplifted.business.impl.UserServiceImpl -- Error fetching all users
 KS&java.lang.RuntimeException: DB error
 KS[	at fontys.s3.uplifted.business.impl.UserServiceImpl.getAllUsers(UserServiceImpl.java:33)
 KSz	at fontys.s3.uplifted.business.UserServiceImplTest.lambda$testGetAllUsersThrowsException$0(UserServiceImplTest.java:69)
@@ -929,7 +929,7 @@
 KS‚	at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:65)
 KS^	at worker.org.gradle.process.internal.worker.GradleWorkerMain.run(GradleWorkerMain.java:69)
 KS_	at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74)
-KT‡11:58:57.574 [Test worker] ERROR fontys.s3.uplifted.business.impl.UserServiceImpl -- Error fetching user with email: john@example.com
+KT‡15:17:20.724 [Test worker] ERROR fontys.s3.uplifted.business.impl.UserServiceImpl -- Error fetching user with email: john@example.com
 KT&java.lang.RuntimeException: DB error
 KT^	at fontys.s3.uplifted.business.impl.UserServiceImpl.getUserByEmail(UserServiceImpl.java:57)
 KT}	at fontys.s3.uplifted.business.UserServiceImplTest.lambda$testGetUserByEmailThrowsException$2(UserServiceImplTest.java:99)
@@ -1021,7 +1021,7 @@
 KT‚	at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:65)
 KT^	at worker.org.gradle.process.internal.worker.GradleWorkerMain.run(GradleWorkerMain.java:69)
 KT_	at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74)
-KVu11:58:57.585 [Test worker] ERROR fontys.s3.uplifted.business.impl.UserServiceImpl -- Error fetching user with ID: 1
+KVu15:17:20.738 [Test worker] ERROR fontys.s3.uplifted.business.impl.UserServiceImpl -- Error fetching user with ID: 1
 KV&java.lang.RuntimeException: DB error
 KV[	at fontys.s3.uplifted.business.impl.UserServiceImpl.getUserById(UserServiceImpl.java:46)
 KVz	at fontys.s3.uplifted.business.UserServiceImplTest.lambda$testGetUserByIdThrowsException$1(UserServiceImplTest.java:84)
@@ -1113,9 +1113,9 @@
 KV‚	at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:65)
 KV^	at worker.org.gradle.process.internal.worker.GradleWorkerMain.run(GradleWorkerMain.java:69)
 KV_	at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74)
-KWw11:58:57.592 [Test worker] WARN fontys.s3.uplifted.business.impl.UserServiceImpl -- No user found with ID 2 to delete
-YXx11:58:57.896 [Test worker] INFO fontys.s3.uplifted.controller.AuthController -- Attempting login for: test@example.com
-YXj11:58:57.897 [Test worker] ERROR fontys.s3.uplifted.controller.AuthController -- Token generation failed
+KWw15:17:20.744 [Test worker] WARN fontys.s3.uplifted.business.impl.UserServiceImpl -- No user found with ID 2 to delete
+YXx15:17:21.079 [Test worker] INFO fontys.s3.uplifted.controller.AuthController -- Attempting login for: test@example.com
+YXj15:17:21.084 [Test worker] ERROR fontys.s3.uplifted.controller.AuthController -- Token generation failed
 YX)java.lang.RuntimeException: JWT failure
 YXO	at fontys.s3.uplifted.config.security.JwtUtil.generateToken(JwtUtil.java:19)
 YXP	at fontys.s3.uplifted.controller.AuthController.login(AuthController.java:59)
@@ -1204,14 +1204,14 @@
 YX‚	at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:65)
 YX^	at worker.org.gradle.process.internal.worker.GradleWorkerMain.run(GradleWorkerMain.java:69)
 YX_	at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74)
-YZx11:58:58.036 [Test worker] INFO fontys.s3.uplifted.controller.AuthController -- Attempting login for: test@example.com
-Y[x11:58:58.053 [Test worker] INFO fontys.s3.uplifted.controller.AuthController -- Attempting login for: test@example.com
-Y\|11:58:58.060 [Test worker] INFO fontys.s3.uplifted.controller.AuthController -- Attempting login for: notfound@example.com
-Y\v11:58:58.061 [Test worker] WARN fontys.s3.uplifted.controller.AuthController -- User not found: notfound@example.com
-Y^x11:58:58.078 [Test worker] INFO fontys.s3.uplifted.controller.AuthController -- Attempting login for: test@example.com
-Y_v11:58:58.085 [Test worker] WARN fontys.s3.uplifted.controller.AuthController -- Registration failed: duplicate email
-` Ý11:58:58.661 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [fontys.s3.uplifted.persistence.CourseRepositoryTest]: CourseRepositoryTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-` õ11:58:59.301 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration fontys.s3.uplifted.UpliftEdApplication for test class fontys.s3.uplifted.persistence.CourseRepositoryTest
+YZx15:17:21.246 [Test worker] INFO fontys.s3.uplifted.controller.AuthController -- Attempting login for: test@example.com
+Y[x15:17:21.264 [Test worker] INFO fontys.s3.uplifted.controller.AuthController -- Attempting login for: test@example.com
+Y\|15:17:21.271 [Test worker] INFO fontys.s3.uplifted.controller.AuthController -- Attempting login for: notfound@example.com
+Y\v15:17:21.271 [Test worker] WARN fontys.s3.uplifted.controller.AuthController -- User not found: notfound@example.com
+Y^x15:17:21.286 [Test worker] INFO fontys.s3.uplifted.controller.AuthController -- Attempting login for: test@example.com
+Y_v15:17:21.294 [Test worker] WARN fontys.s3.uplifted.controller.AuthController -- Registration failed: duplicate email
+` Ý15:17:21.899 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [fontys.s3.uplifted.persistence.CourseRepositoryTest]: CourseRepositoryTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+` õ15:17:22.565 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration fontys.s3.uplifted.UpliftEdApplication for test class fontys.s3.uplifted.persistence.CourseRepositoryTest
 ` 
 ` )  .   ____          _            __ _ _
 ` * /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
@@ -1221,18 +1221,18 @@
 ` * =========|_|==============|___/=/_/_/_/
 ` , :: Spring Boot ::                (v3.2.5)
 ` 
-` é2025-06-20T11:59:01.224+02:00  INFO 57652 --- [    Test worker] f.s.u.persistence.CourseRepositoryTest   : Starting CourseRepositoryTest using Java 17.0.14 with PID 57652 (started by gugus in C:\Projects\uplifted-learning-platform)
-` °2025-06-20T11:59:01.228+02:00  INFO 57652 --- [    Test worker] f.s.u.persistence.CourseRepositoryTest   : No active profile set, falling back to 1 default profile: "default"
-` ¨2025-06-20T11:59:02.854+02:00  INFO 57652 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-` Ä2025-06-20T11:59:03.234+02:00  INFO 57652 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 336 ms. Found 11 JPA repository interfaces.
-` ©2025-06-20T11:59:03.489+02:00  INFO 57652 --- [    Test worker] beddedDataSourceBeanFactoryPostProcessor : Replacing 'dataSource' DataSource bean with embedded version
-` ÷2025-06-20T11:59:04.250+02:00  INFO 57652 --- [    Test worker] o.s.j.d.e.EmbeddedDatabaseFactory        : Starting embedded database: url='jdbc:h2:mem:70a632f9-b37b-4a1e-a9df-452da018810a;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=false', username='sa'
-` ¦2025-06-20T11:59:05.778+02:00  INFO 57652 --- [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-` ž2025-06-20T11:59:06.083+02:00  INFO 57652 --- [    Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.4.Final
-` “2025-06-20T11:59:06.240+02:00  INFO 57652 --- [    Test worker] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
-` ¤2025-06-20T11:59:06.815+02:00  INFO 57652 --- [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
-` ‡2025-06-20T11:59:07.035+02:00  WARN 57652 --- [    Test worker] org.hibernate.orm.deprecation            : HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-` ß2025-06-20T11:59:10.914+02:00  INFO 57652 --- [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+` é2025-06-20T15:17:24.776+02:00  INFO 31256 --- [    Test worker] f.s.u.persistence.CourseRepositoryTest   : Starting CourseRepositoryTest using Java 17.0.14 with PID 31256 (started by gugus in C:\Projects\uplifted-learning-platform)
+` °2025-06-20T15:17:24.782+02:00  INFO 31256 --- [    Test worker] f.s.u.persistence.CourseRepositoryTest   : No active profile set, falling back to 1 default profile: "default"
+` ¨2025-06-20T15:17:26.468+02:00  INFO 31256 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+` Ä2025-06-20T15:17:26.889+02:00  INFO 31256 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 365 ms. Found 12 JPA repository interfaces.
+` ©2025-06-20T15:17:27.127+02:00  INFO 31256 --- [    Test worker] beddedDataSourceBeanFactoryPostProcessor : Replacing 'dataSource' DataSource bean with embedded version
+` ÷2025-06-20T15:17:27.896+02:00  INFO 31256 --- [    Test worker] o.s.j.d.e.EmbeddedDatabaseFactory        : Starting embedded database: url='jdbc:h2:mem:84287ded-6eef-410f-841d-e20412cc3d55;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=false', username='sa'
+` ¦2025-06-20T15:17:29.281+02:00  INFO 31256 --- [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+` ž2025-06-20T15:17:29.582+02:00  INFO 31256 --- [    Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.4.Final
+` “2025-06-20T15:17:29.747+02:00  INFO 31256 --- [    Test worker] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+` ¤2025-06-20T15:17:30.301+02:00  INFO 31256 --- [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+` ‡2025-06-20T15:17:30.504+02:00  WARN 31256 --- [    Test worker] org.hibernate.orm.deprecation            : HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+` ß2025-06-20T15:17:34.339+02:00  INFO 31256 --- [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
 ` 1Hibernate: drop table if exists answer cascade 
 ` 1Hibernate: drop table if exists course cascade 
 ` =Hibernate: drop table if exists course_enrollments cascade 
@@ -1242,6 +1242,7 @@
 ` 3Hibernate: drop table if exists progress cascade 
 ` 3Hibernate: drop table if exists question cascade 
 ` /Hibernate: drop table if exists quiz cascade 
+` 6Hibernate: drop table if exists quiz_result cascade 
 ` 1Hibernate: drop table if exists review cascade 
 ` 9Hibernate: drop table if exists student_answer cascade 
 ` 1Hibernate: drop table if exists "user" cascade 
@@ -1255,6 +1256,7 @@
 ` ½Hibernate: create table progress (progress_percentage float(53) not null, course_id bigint not null, id bigint generated by default as identity, user_id bigint not null, primary key (id))
 ` ¬Hibernate: create table question (marks integer, requires_review boolean not null, id bigint generated by default as identity, quiz_id bigint not null, correct_answer varchar(255), text varchar(255), type varchar(255) check (type in ('MULTIPLE_CHOICE','TRUE_FALSE','OPEN_ENDED')), primary key (id))
 ` ‰Hibernate: create table quiz (passing_marks integer not null, total_marks integer not null, course_id bigint, creator_id bigint not null, id bigint generated by default as identity, description varchar(255) not null, title varchar(255) not null, primary key (id))
+` ÐHibernate: create table quiz_result (passed boolean not null, score integer not null, id bigint generated by default as identity, quiz_id bigint, submitted_at timestamp(6), user_id bigint, primary key (id))
 ` ÑHibernate: create table review (rating float(53) not null, course_id bigint not null, id bigint generated by default as identity, user_id bigint not null, review_text varchar(255) not null, primary key (id))
 ` Hibernate: create table student_answer (awarded_marks integer, reviewed boolean not null, id bigint generated by default as identity, question_id bigint not null, quiz_id bigint not null, user_id bigint not null, mentor_feedback varchar(255), submitted_answer TEXT, primary key (id))
 `  Hibernate: create table "user" (date_of_birth date, is_active boolean not null, joined_date date, id bigint generated by default as identity, bio TEXT, email varchar(255) not null unique, first_name varchar(255), last_name varchar(255), password varchar(255) not null, role varchar(255) check (role in ('ADMIN','STUDENT','TEACHER')), username varchar(255) not null unique, profile_image LONGBLOB, primary key (id))
@@ -1272,24 +1274,26 @@
 ` |Hibernate: alter table if exists question add constraint FKb0yh0c1qaxfwlcnwo9dms2txf foreign key (quiz_id) references quiz
 ` |Hibernate: alter table if exists quiz add constraint FKce16mrsgeokucc022mpyev7xk foreign key (course_id) references course
 ` }Hibernate: alter table if exists quiz add constraint FKgud1x8wtgdwb3y830s1k6dajl foreign key (creator_id) references "user"
+` Hibernate: alter table if exists quiz_result add constraint FKd49de4d3rwgtndq0n51w1isbx foreign key (quiz_id) references quiz
+` Hibernate: alter table if exists quiz_result add constraint FKbs172b6od5rt9olde0sp4cfqs foreign key (user_id) references "user"
 ` }Hibernate: alter table if exists review add constraint FKprox8elgnr8u5wrq1983degk foreign key (course_id) references course
 ` |Hibernate: alter table if exists review add constraint FKj8m0asijw8lfl4jxhcps8tf4y foreign key (user_id) references "user"
 ` ƒHibernate: alter table if exists user_interest add constraint FKjavxua3565xa4gtonnf9nai51 foreign key (user_id) references "user"
-` °2025-06-20T11:59:11.213+02:00  INFO 57652 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-` ¯2025-06-20T11:59:12.546+02:00  INFO 57652 --- [    Test worker] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
-` ¸2025-06-20T11:59:14.235+02:00  INFO 57652 --- [    Test worker] f.s.u.persistence.CourseRepositoryTest   : Started CourseRepositoryTest in 14.594 seconds (process running for 28.284)
+` °2025-06-20T15:17:34.660+02:00  INFO 31256 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+` ¯2025-06-20T15:17:36.107+02:00  INFO 31256 --- [    Test worker] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+` ¸2025-06-20T15:17:37.916+02:00  INFO 31256 --- [    Test worker] f.s.u.persistence.CourseRepositoryTest   : Started CourseRepositoryTest in 14.996 seconds (process running for 28.396)
 `a³Hibernate: insert into "user" (bio,date_of_birth,email,first_name,is_active,joined_date,last_name,password,profile_image,role,username,id) values (?,?,?,?,?,?,?,?,?,?,?,default)
 `aéHibernate: select ue1_0.id,ue1_0.bio,ue1_0.date_of_birth,ue1_0.email,ue1_0.first_name,ue1_0.is_active,ue1_0.joined_date,ue1_0.last_name,ue1_0.password,ue1_0.profile_image,ue1_0.role,ue1_0.username from "user" ue1_0 where ue1_0.id=?
 `a¯Hibernate: insert into course (category,description,enrollment_limit,image_data,instructor_id,number_of_reviews,published,rating,title,id) values (?,?,?,?,?,?,?,?,?,default)
 `a‘Hibernate: select ce1_0.id,ce1_0.category,ce1_0.description,ce1_0.enrollment_limit,ce1_0.image_data,ce1_0.instructor_id,ce1_0.number_of_reviews,ce1_0.published,ce1_0.rating,ce1_0.title from course ce1_0 left join "user" i1_0 on i1_0.id=ce1_0.instructor_id where i1_0.id=?
-b Õ2025-06-20T11:59:15.186+02:00  INFO 57652 --- [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [fontys.s3.uplifted.persistence.QuizRepositoryTest]: QuizRepositoryTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-b ó2025-06-20T11:59:15.220+02:00  INFO 57652 --- [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration fontys.s3.uplifted.UpliftEdApplication for test class fontys.s3.uplifted.persistence.QuizRepositoryTest
+b Õ2025-06-20T15:17:38.820+02:00  INFO 31256 --- [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [fontys.s3.uplifted.persistence.QuizRepositoryTest]: QuizRepositoryTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+b ó2025-06-20T15:17:38.855+02:00  INFO 31256 --- [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration fontys.s3.uplifted.UpliftEdApplication for test class fontys.s3.uplifted.persistence.QuizRepositoryTest
 bc³Hibernate: insert into "user" (bio,date_of_birth,email,first_name,is_active,joined_date,last_name,password,profile_image,role,username,id) values (?,?,?,?,?,?,?,?,?,?,?,default)
 bc¯Hibernate: insert into course (category,description,enrollment_limit,image_data,instructor_id,number_of_reviews,published,rating,title,id) values (?,?,?,?,?,?,?,?,?,default)
 bc€Hibernate: insert into quiz (course_id,creator_id,description,passing_marks,title,total_marks,id) values (?,?,?,?,?,?,default)
 bcÒHibernate: select qe1_0.id,qe1_0.course_id,qe1_0.creator_id,qe1_0.description,qe1_0.passing_marks,qe1_0.title,qe1_0.total_marks from quiz qe1_0 left join course c1_0 on c1_0.id=qe1_0.course_id where c1_0.id=?
-d Õ2025-06-20T11:59:15.306+02:00  INFO 57652 --- [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [fontys.s3.uplifted.persistence.UserRepositoryTest]: UserRepositoryTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-d ó2025-06-20T11:59:15.345+02:00  INFO 57652 --- [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration fontys.s3.uplifted.UpliftEdApplication for test class fontys.s3.uplifted.persistence.UserRepositoryTest
+d Õ2025-06-20T15:17:38.928+02:00  INFO 31256 --- [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [fontys.s3.uplifted.persistence.UserRepositoryTest]: UserRepositoryTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+d ó2025-06-20T15:17:38.962+02:00  INFO 31256 --- [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration fontys.s3.uplifted.UpliftEdApplication for test class fontys.s3.uplifted.persistence.UserRepositoryTest
 de³Hibernate: insert into "user" (bio,date_of_birth,email,first_name,is_active,joined_date,last_name,password,profile_image,role,username,id) values (?,?,?,?,?,?,?,?,?,?,?,default)
 deïHibernate: select ue1_0.id,ue1_0.bio,ue1_0.date_of_birth,ue1_0.email,ue1_0.first_name,ue1_0.is_active,ue1_0.joined_date,ue1_0.last_name,ue1_0.password,ue1_0.profile_image,ue1_0.role,ue1_0.username from "user" ue1_0 where ue1_0.username=?
 df³Hibernate: insert into "user" (bio,date_of_birth,email,first_name,is_active,joined_date,last_name,password,profile_image,role,username,id) values (?,?,?,?,?,?,?,?,?,?,?,default)

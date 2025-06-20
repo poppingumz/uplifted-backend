@@ -173,4 +173,10 @@ public class QuizServiceImpl implements QuizService {
 
         quizResultRepository.save(result);
     }
+
+    @Override
+    public List<Long> getPassedQuizIds(Long userId) {
+        return quizResultRepository.findPassedQuizIdsByUserId(userId);
+    }
+
 }

@@ -41,7 +41,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">0.286s</div>
+<div class="counter">0.296s</div>
 <p>duration</p>
 </div>
 </td>
@@ -84,32 +84,32 @@
 </tr>
 <tr>
 <td class="success">createQuiz_success()</td>
-<td class="success">0.033s</td>
+<td class="success">0.042s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">deleteQuiz_failure_throwsQuizException()</td>
-<td class="success">0.013s</td>
+<td class="success">0.015s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">deleteQuiz_notFound()</td>
-<td class="success">0.161s</td>
+<td class="success">0.139s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">deleteQuiz_success()</td>
-<td class="success">0.003s</td>
+<td class="success">0.004s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">getQuizById_success()</td>
-<td class="success">0.021s</td>
+<td class="success">0.029s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">getQuizzesByCourseId_failure()</td>
-<td class="success">0.008s</td>
+<td class="success">0.014s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
@@ -119,22 +119,22 @@
 </tr>
 <tr>
 <td class="success">getQuizzesByCreatorId_success()</td>
-<td class="success">0.004s</td>
+<td class="success">0.005s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">updateQuiz_failure_throwsQuizException()</td>
-<td class="success">0.010s</td>
+<td class="success">0.012s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">updateQuiz_success()</td>
-<td class="success">0.006s</td>
+<td class="success">0.007s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">updateQuiz_unauthorized()</td>
-<td class="success">0.012s</td>
+<td class="success">0.014s</td>
 <td class="success">passed</td>
 </tr>
 </table>
@@ -142,9 +142,9 @@
 <div id="tab1" class="tab">
 <h2>Standard output</h2>
 <span class="code">
-<pre>11:58:56.790 [Test worker] ERROR fontys.s3.uplifted.business.impl.QuizServiceImpl -- Failed to delete quiz with ID: 99
+<pre>15:17:19.970 [Test worker] ERROR fontys.s3.uplifted.business.impl.QuizServiceImpl -- Failed to delete quiz with ID: 99
 fontys.s3.uplifted.business.impl.exception.EntityNotFoundException: Quiz with ID 99 not found.
-	at fontys.s3.uplifted.business.impl.QuizServiceImpl.deleteQuiz(QuizServiceImpl.java:133)
+	at fontys.s3.uplifted.business.impl.QuizServiceImpl.deleteQuiz(QuizServiceImpl.java:140)
 	at fontys.s3.uplifted.business.QuizServiceImplTest.lambda$deleteQuiz_notFound$5(QuizServiceImplTest.java:162)
 	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:53)
 	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:35)
@@ -234,9 +234,9 @@ fontys.s3.uplifted.business.impl.exception.EntityNotFoundException: Quiz with ID
 	at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:65)
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.run(GradleWorkerMain.java:69)
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74)
-11:58:56.844 [Test worker] ERROR fontys.s3.uplifted.business.impl.QuizServiceImpl -- Failed to delete quiz with ID: 1
+15:17:20.032 [Test worker] ERROR fontys.s3.uplifted.business.impl.QuizServiceImpl -- Failed to delete quiz with ID: 1
 java.lang.RuntimeException: DB error
-	at fontys.s3.uplifted.business.impl.QuizServiceImpl.deleteQuiz(QuizServiceImpl.java:135)
+	at fontys.s3.uplifted.business.impl.QuizServiceImpl.deleteQuiz(QuizServiceImpl.java:142)
 	at fontys.s3.uplifted.business.QuizServiceImplTest.lambda$deleteQuiz_failure_throwsQuizException$6(QuizServiceImplTest.java:171)
 	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:53)
 	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:35)
@@ -326,10 +326,10 @@ java.lang.RuntimeException: DB error
 	at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:65)
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.run(GradleWorkerMain.java:69)
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74)
-11:58:56.886 [Test worker] INFO fontys.s3.uplifted.business.impl.QuizServiceImpl -- Quiz created successfully with ID: 99
-11:58:56.893 [Test worker] ERROR fontys.s3.uplifted.business.impl.QuizServiceImpl -- Failed to create quiz
+15:17:20.084 [Test worker] INFO fontys.s3.uplifted.business.impl.QuizServiceImpl -- Quiz created successfully with ID: 99
+15:17:20.092 [Test worker] ERROR fontys.s3.uplifted.business.impl.QuizServiceImpl -- Failed to create quiz
 fontys.s3.uplifted.business.impl.exception.EntityNotFoundException: Course not found
-	at fontys.s3.uplifted.business.impl.QuizServiceImpl.createQuiz(QuizServiceImpl.java:44)
+	at fontys.s3.uplifted.business.impl.QuizServiceImpl.createQuiz(QuizServiceImpl.java:51)
 	at fontys.s3.uplifted.business.QuizServiceImplTest.lambda$createQuiz_missingCourse_throwsQuizException$1(QuizServiceImplTest.java:72)
 	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:53)
 	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:35)
@@ -419,9 +419,9 @@ fontys.s3.uplifted.business.impl.exception.EntityNotFoundException: Course not f
 	at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:65)
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.run(GradleWorkerMain.java:69)
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74)
-11:58:56.907 [Test worker] ERROR fontys.s3.uplifted.business.impl.QuizServiceImpl -- Failed to update quiz with ID: 1
+15:17:20.105 [Test worker] ERROR fontys.s3.uplifted.business.impl.QuizServiceImpl -- Failed to update quiz with ID: 1
 java.lang.RuntimeException: DB error
-	at fontys.s3.uplifted.business.impl.QuizServiceImpl.updateQuiz(QuizServiceImpl.java:102)
+	at fontys.s3.uplifted.business.impl.QuizServiceImpl.updateQuiz(QuizServiceImpl.java:109)
 	at fontys.s3.uplifted.business.QuizServiceImplTest.lambda$updateQuiz_failure_throwsQuizException$4(QuizServiceImplTest.java:149)
 	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:53)
 	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:35)
@@ -511,9 +511,9 @@ java.lang.RuntimeException: DB error
 	at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:65)
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.run(GradleWorkerMain.java:69)
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74)
-11:58:56.919 [Test worker] ERROR fontys.s3.uplifted.business.impl.QuizServiceImpl -- Failed to update quiz with ID: 1
+15:17:20.117 [Test worker] ERROR fontys.s3.uplifted.business.impl.QuizServiceImpl -- Failed to update quiz with ID: 1
 fontys.s3.uplifted.business.impl.exception.UnauthorizedAccessException: You are not authorized to update this quiz.
-	at fontys.s3.uplifted.business.impl.QuizServiceImpl.updateQuiz(QuizServiceImpl.java:106)
+	at fontys.s3.uplifted.business.impl.QuizServiceImpl.updateQuiz(QuizServiceImpl.java:113)
 	at fontys.s3.uplifted.business.QuizServiceImplTest.lambda$updateQuiz_unauthorized$3(QuizServiceImplTest.java:140)
 	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:53)
 	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:35)
@@ -603,9 +603,9 @@ fontys.s3.uplifted.business.impl.exception.UnauthorizedAccessException: You are 
 	at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:65)
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.run(GradleWorkerMain.java:69)
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74)
-11:58:56.932 [Test worker] ERROR fontys.s3.uplifted.business.impl.QuizServiceImpl -- Failed to retrieve quizzes for course ID: 1
+15:17:20.132 [Test worker] ERROR fontys.s3.uplifted.business.impl.QuizServiceImpl -- Failed to retrieve quizzes for course ID: 1
 java.lang.RuntimeException: DB down
-	at fontys.s3.uplifted.business.impl.QuizServiceImpl.getQuizzesByCourseId(QuizServiceImpl.java:89)
+	at fontys.s3.uplifted.business.impl.QuizServiceImpl.getQuizzesByCourseId(QuizServiceImpl.java:96)
 	at fontys.s3.uplifted.business.QuizServiceImplTest.lambda$getQuizzesByCourseId_failure$2(QuizServiceImplTest.java:113)
 	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:53)
 	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:35)
@@ -695,7 +695,7 @@ java.lang.RuntimeException: DB down
 	at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:65)
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.run(GradleWorkerMain.java:69)
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74)
-11:58:56.939 [Test worker] INFO fontys.s3.uplifted.business.impl.QuizServiceImpl -- Quiz with ID 1 deleted successfully
+15:17:20.145 [Test worker] INFO fontys.s3.uplifted.business.impl.QuizServiceImpl -- Quiz with ID 1 deleted successfully
 </pre>
 </span>
 </div>
@@ -707,7 +707,7 @@ java.lang.RuntimeException: DB down
 <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
 </label>
 </div>Generated by 
-<a href="http://www.gradle.org">Gradle 8.5</a> at Jun 20, 2025, 11:59:16 AM</p>
+<a href="http://www.gradle.org">Gradle 8.5</a> at Jun 20, 2025, 3:17:40 PM</p>
 </div>
 </div>
 </body>

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="fontys.s3.uplifted.business.ReviewServiceImplTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2025-06-20T09:58:56" hostname="LAPTOP-RHFQ3ARB" time="0.195">
+<testsuite name="fontys.s3.uplifted.business.ReviewServiceImplTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2025-06-20T13:17:20" hostname="LAPTOP-RHFQ3ARB" time="0.167">
   <properties/>
-  <testcase name="testDeleteReview_Success()" classname="fontys.s3.uplifted.business.ReviewServiceImplTest" time="0.141"/>
-  <testcase name="testCreateReview()" classname="fontys.s3.uplifted.business.ReviewServiceImplTest" time="0.018"/>
-  <testcase name="testGetAllReviews()" classname="fontys.s3.uplifted.business.ReviewServiceImplTest" time="0.009"/>
-  <testcase name="testGetReviewById_Found()" classname="fontys.s3.uplifted.business.ReviewServiceImplTest" time="0.007"/>
-  <testcase name="testUpdateReview_Success()" classname="fontys.s3.uplifted.business.ReviewServiceImplTest" time="0.014"/>
-  <system-out><![CDATA[11:58:57.117 [Test worker] INFO fontys.s3.uplifted.business.impl.ReviewServiceImpl -- Review with ID 1 deleted successfully
-11:58:57.131 [Test worker] INFO fontys.s3.uplifted.business.impl.ReviewServiceImpl -- Review created for course ID: 1, user ID: 1
+  <testcase name="testDeleteReview_Success()" classname="fontys.s3.uplifted.business.ReviewServiceImplTest" time="0.129"/>
+  <testcase name="testCreateReview()" classname="fontys.s3.uplifted.business.ReviewServiceImplTest" time="0.013"/>
+  <testcase name="testGetAllReviews()" classname="fontys.s3.uplifted.business.ReviewServiceImplTest" time="0.005"/>
+  <testcase name="testGetReviewById_Found()" classname="fontys.s3.uplifted.business.ReviewServiceImplTest" time="0.005"/>
+  <testcase name="testUpdateReview_Success()" classname="fontys.s3.uplifted.business.ReviewServiceImplTest" time="0.009"/>
+  <system-out><![CDATA[15:17:20.309 [Test worker] INFO fontys.s3.uplifted.business.impl.ReviewServiceImpl -- Review with ID 1 deleted successfully
+15:17:20.321 [Test worker] INFO fontys.s3.uplifted.business.impl.ReviewServiceImpl -- Review created for course ID: 1, user ID: 1
 ]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

@@ -156,7 +156,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public void unenrollFromCourse(Long courseId, String email) {
-<span class="fc" id="L159">        courseRepository.findById(courseId)</span>
+<span class="fc" id="L159">        CourseEntity course = courseRepository.findById(courseId)</span>
 <span class="pc" id="L160">                .orElseThrow(() -&gt; new CourseNotFoundException(</span>
                         &quot;Course not found with ID: &quot; + courseId));
 
@@ -165,121 +165,122 @@ public class CourseServiceImpl implements CourseService {
                         &quot;User not found: &quot; + email));
 
 <span class="fc" id="L167">        enrollmentService.unenrollStudent(courseId, user.getId());</span>
-<span class="fc" id="L168">        log.info(&quot;User {} unenrolled from course {}&quot;, user.getId(), courseId);</span>
+<span class="fc" id="L168">        log.info(&quot;User {} unenrolled from course {}&quot;, user.getId(), course.getId());</span>
 <span class="fc" id="L169">    }</span>
 
 
+
     private void attachFilesToContents(CourseEntity courseEntity, List&lt;MultipartFile&gt; uploadedFiles, UserEntity instructor) {
-<span class="fc bfc" id="L173" title="All 4 branches covered.">        if (courseEntity.getParts() == null || uploadedFiles == null) {</span>
-<span class="fc" id="L174">            log.warn(&quot;Course has no parts or no uploaded files, skipping file attachment.&quot;);</span>
-<span class="fc" id="L175">            return;</span>
+<span class="fc bfc" id="L174" title="All 4 branches covered.">        if (courseEntity.getParts() == null || uploadedFiles == null) {</span>
+<span class="fc" id="L175">            log.warn(&quot;Course has no parts or no uploaded files, skipping file attachment.&quot;);</span>
+<span class="fc" id="L176">            return;</span>
         }
 
-<span class="fc" id="L178">        int idx = 0;</span>
-<span class="fc bfc" id="L179" title="All 2 branches covered.">        for (CoursePartEntity part : courseEntity.getParts()) {</span>
-<span class="pc bpc" id="L180" title="1 of 2 branches missed.">            if (part.getContents() == null) continue;</span>
+<span class="fc" id="L179">        int idx = 0;</span>
+<span class="fc bfc" id="L180" title="All 2 branches covered.">        for (CoursePartEntity part : courseEntity.getParts()) {</span>
+<span class="pc bpc" id="L181" title="1 of 2 branches missed.">            if (part.getContents() == null) continue;</span>
 
-<span class="fc bfc" id="L182" title="All 2 branches covered.">            for (CoursePartContentEntity content : part.getContents()) {</span>
-<span class="pc bpc" id="L183" title="2 of 4 branches missed.">                if (content.getContentType() == ContentType.FILE &amp;&amp; idx &lt; uploadedFiles.size()) {</span>
-<span class="fc" id="L184">                    MultipartFile mf = uploadedFiles.get(idx++);</span>
+<span class="fc bfc" id="L183" title="All 2 branches covered.">            for (CoursePartContentEntity content : part.getContents()) {</span>
+<span class="pc bpc" id="L184" title="2 of 4 branches missed.">                if (content.getContentType() == ContentType.FILE &amp;&amp; idx &lt; uploadedFiles.size()) {</span>
+<span class="fc" id="L185">                    MultipartFile mf = uploadedFiles.get(idx++);</span>
                     try {
-<span class="fc" id="L186">                        FileEntity f = fileRepository.save(FileEntity.builder()</span>
-<span class="fc" id="L187">                                .name(mf.getOriginalFilename())</span>
-<span class="fc" id="L188">                                .type(mf.getContentType())</span>
-<span class="fc" id="L189">                                .course(courseEntity)</span>
-<span class="fc" id="L190">                                .uploader(instructor)</span>
-<span class="fc" id="L191">                                .data(mf.getBytes())</span>
-<span class="fc" id="L192">                                .uploadDate(LocalDate.now())</span>
-<span class="fc" id="L193">                                .build());</span>
-<span class="fc" id="L194">                        content.setContentId(f.getId());</span>
-<span class="nc" id="L195">                    } catch (IOException e) {</span>
-<span class="nc" id="L196">                        log.error(&quot;Could not store part file {}&quot;, content.getTitle(), e);</span>
-<span class="fc" id="L197">                    }</span>
+<span class="fc" id="L187">                        FileEntity f = fileRepository.save(FileEntity.builder()</span>
+<span class="fc" id="L188">                                .name(mf.getOriginalFilename())</span>
+<span class="fc" id="L189">                                .type(mf.getContentType())</span>
+<span class="fc" id="L190">                                .course(courseEntity)</span>
+<span class="fc" id="L191">                                .uploader(instructor)</span>
+<span class="fc" id="L192">                                .data(mf.getBytes())</span>
+<span class="fc" id="L193">                                .uploadDate(LocalDate.now())</span>
+<span class="fc" id="L194">                                .build());</span>
+<span class="fc" id="L195">                        content.setContentId(f.getId());</span>
+<span class="nc" id="L196">                    } catch (IOException e) {</span>
+<span class="nc" id="L197">                        log.error(&quot;Could not store part file {}&quot;, content.getTitle(), e);</span>
+<span class="fc" id="L198">                    }</span>
                 }
-<span class="fc" id="L199">            }</span>
-<span class="fc" id="L200">        }</span>
-<span class="fc" id="L201">    }</span>
+<span class="fc" id="L200">            }</span>
+<span class="fc" id="L201">        }</span>
+<span class="fc" id="L202">    }</span>
 
     private UserEntity findInstructor(Long instructorId) {
-<span class="fc" id="L204">        return userRepository.findById(instructorId)</span>
-<span class="pc" id="L205">                .orElseThrow(() -&gt; new RuntimeException(&quot;Instructor not found&quot;));</span>
+<span class="fc" id="L205">        return userRepository.findById(instructorId)</span>
+<span class="pc" id="L206">                .orElseThrow(() -&gt; new RuntimeException(&quot;Instructor not found&quot;));</span>
     }
 
     private void updateBasicCourseInfo(CourseEntity existing, Course course, UserEntity instructor) {
-<span class="fc" id="L209">        existing.setTitle(course.getTitle());</span>
-<span class="fc" id="L210">        existing.setDescription(course.getDescription());</span>
-<span class="fc" id="L211">        existing.setCategory(course.getCategory());</span>
-<span class="fc" id="L212">        existing.setEnrollmentLimit(course.getEnrollmentLimit());</span>
-<span class="fc" id="L213">        existing.setPublished(course.isPublished());</span>
-<span class="fc" id="L214">        existing.setInstructor(instructor);</span>
-<span class="fc" id="L215">    }</span>
+<span class="fc" id="L210">        existing.setTitle(course.getTitle());</span>
+<span class="fc" id="L211">        existing.setDescription(course.getDescription());</span>
+<span class="fc" id="L212">        existing.setCategory(course.getCategory());</span>
+<span class="fc" id="L213">        existing.setEnrollmentLimit(course.getEnrollmentLimit());</span>
+<span class="fc" id="L214">        existing.setPublished(course.isPublished());</span>
+<span class="fc" id="L215">        existing.setInstructor(instructor);</span>
+<span class="fc" id="L216">    }</span>
 
     private CoursePartEntity buildPartEntity(CoursePart partDto, CourseEntity course) {
-<span class="fc" id="L218">        CoursePartEntity partEntity = new CoursePartEntity();</span>
-<span class="fc" id="L219">        partEntity.setTitle(partDto.getTitle());</span>
-<span class="fc" id="L220">        partEntity.setWeekNumber(partDto.getWeekNumber());</span>
-<span class="fc" id="L221">        partEntity.setSequence(partDto.getSequence());</span>
-<span class="fc" id="L222">        partEntity.setCourse(course);</span>
+<span class="fc" id="L219">        CoursePartEntity partEntity = new CoursePartEntity();</span>
+<span class="fc" id="L220">        partEntity.setTitle(partDto.getTitle());</span>
+<span class="fc" id="L221">        partEntity.setWeekNumber(partDto.getWeekNumber());</span>
+<span class="fc" id="L222">        partEntity.setSequence(partDto.getSequence());</span>
+<span class="fc" id="L223">        partEntity.setCourse(course);</span>
 
-<span class="pc bpc" id="L224" title="1 of 2 branches missed.">        if (partDto.getContents() != null) {</span>
-<span class="fc" id="L225">            List&lt;CoursePartContentEntity&gt; contentEntities = partDto.getContents().stream()</span>
-<span class="fc" id="L226">                    .map(contentDto -&gt; buildContentEntity(contentDto, partEntity))</span>
-<span class="fc" id="L227">                    .toList();</span>
-<span class="fc" id="L228">            partEntity.setContents(contentEntities);</span>
+<span class="pc bpc" id="L225" title="1 of 2 branches missed.">        if (partDto.getContents() != null) {</span>
+<span class="fc" id="L226">            List&lt;CoursePartContentEntity&gt; contentEntities = partDto.getContents().stream()</span>
+<span class="fc" id="L227">                    .map(contentDto -&gt; buildContentEntity(contentDto, partEntity))</span>
+<span class="fc" id="L228">                    .toList();</span>
+<span class="fc" id="L229">            partEntity.setContents(contentEntities);</span>
         }
 
-<span class="fc" id="L231">        return partEntity;</span>
+<span class="fc" id="L232">        return partEntity;</span>
     }
 
     private CoursePartContentEntity buildContentEntity(CoursePartContent contentDto, CoursePartEntity partEntity) {
-<span class="fc" id="L235">        CoursePartContentEntity content = new CoursePartContentEntity();</span>
-<span class="fc" id="L236">        content.setContentType(contentDto.getContentType());</span>
-<span class="pc bpc" id="L237" title="1 of 2 branches missed.">        content.setContentId(contentDto.getContentType() == ContentType.VIDEO ? null : contentDto.getContentId());</span>
-<span class="fc" id="L238">        content.setTitle(contentDto.getTitle());</span>
-<span class="fc" id="L239">        content.setPart(partEntity);</span>
-<span class="fc" id="L240">        return content;</span>
+<span class="fc" id="L236">        CoursePartContentEntity content = new CoursePartContentEntity();</span>
+<span class="fc" id="L237">        content.setContentType(contentDto.getContentType());</span>
+<span class="pc bpc" id="L238" title="1 of 2 branches missed.">        content.setContentId(contentDto.getContentType() == ContentType.VIDEO ? null : contentDto.getContentId());</span>
+<span class="fc" id="L239">        content.setTitle(contentDto.getTitle());</span>
+<span class="fc" id="L240">        content.setPart(partEntity);</span>
+<span class="fc" id="L241">        return content;</span>
     }
 
     private void sendNotifications(NotificationMessage message) {
-<span class="fc" id="L244">        NotificationWebSocketEndpoint.broadcast(message);</span>
-<span class="fc" id="L245">    }</span>
+<span class="fc" id="L245">        NotificationWebSocketEndpoint.broadcast(message);</span>
+<span class="fc" id="L246">    }</span>
 
     @Override
     public Page&lt;CourseResponseDTO&gt; getFilteredCourses(String title, String category, String sort, int page) {
-<span class="fc" id="L249">        PageRequest pageReq = PageRequest.of(page, PAGE_SIZE);</span>
+<span class="fc" id="L250">        PageRequest pageReq = PageRequest.of(page, PAGE_SIZE);</span>
 
-<span class="pc bpc" id="L251" title="1 of 2 branches missed.">        if (&quot;popular&quot;.equalsIgnoreCase(sort)) {</span>
-<span class="nc" id="L252">            return courseRepository.findAll(popularSpec(title, category), pageReq)</span>
-<span class="nc" id="L253">                    .map(CourseMapper::toResponseDTO);</span>
+<span class="pc bpc" id="L252" title="1 of 2 branches missed.">        if (&quot;popular&quot;.equalsIgnoreCase(sort)) {</span>
+<span class="nc" id="L253">            return courseRepository.findAll(popularSpec(title, category), pageReq)</span>
+<span class="nc" id="L254">                    .map(CourseMapper::toResponseDTO);</span>
         }
 
-<span class="fc" id="L256">        Sort sortOrder = Sort.unsorted();</span>
-<span class="pc bpc" id="L257" title="1 of 2 branches missed.">        if (&quot;newest&quot;.equalsIgnoreCase(sort)) {</span>
-<span class="nc" id="L258">            sortOrder = Sort.by(Sort.Direction.DESC, &quot;id&quot;);</span>
-<span class="pc bpc" id="L259" title="1 of 2 branches missed.">        } else if (&quot;oldest&quot;.equalsIgnoreCase(sort)) {</span>
-<span class="nc" id="L260">            sortOrder = Sort.by(Sort.Direction.ASC, &quot;id&quot;);</span>
+<span class="fc" id="L257">        Sort sortOrder = Sort.unsorted();</span>
+<span class="pc bpc" id="L258" title="1 of 2 branches missed.">        if (&quot;newest&quot;.equalsIgnoreCase(sort)) {</span>
+<span class="nc" id="L259">            sortOrder = Sort.by(Sort.Direction.DESC, &quot;id&quot;);</span>
+<span class="pc bpc" id="L260" title="1 of 2 branches missed.">        } else if (&quot;oldest&quot;.equalsIgnoreCase(sort)) {</span>
+<span class="nc" id="L261">            sortOrder = Sort.by(Sort.Direction.ASC, &quot;id&quot;);</span>
         }
 
-<span class="fc" id="L263">        return courseRepository</span>
-<span class="fc" id="L264">                .findAll(baseSpec(title, category), PageRequest.of(page, PAGE_SIZE, sortOrder))</span>
-<span class="fc" id="L265">                .map(CourseMapper::toResponseDTO);</span>
+<span class="fc" id="L264">        return courseRepository</span>
+<span class="fc" id="L265">                .findAll(baseSpec(title, category), PageRequest.of(page, PAGE_SIZE, sortOrder))</span>
+<span class="fc" id="L266">                .map(CourseMapper::toResponseDTO);</span>
     }
 
     private Specification&lt;CourseEntity&gt; baseSpec(String title, String category) {
-<span class="fc" id="L269">        return (root, query, cb) -&gt; {</span>
-<span class="nc" id="L270">            root.fetch(ENROLLED, JoinType.LEFT);</span>
-<span class="nc" id="L271">            query.distinct(true);</span>
-<span class="nc" id="L272">            return buildFilters(root, cb, title, category);</span>
+<span class="fc" id="L270">        return (root, query, cb) -&gt; {</span>
+<span class="nc" id="L271">            root.fetch(ENROLLED, JoinType.LEFT);</span>
+<span class="nc" id="L272">            query.distinct(true);</span>
+<span class="nc" id="L273">            return buildFilters(root, cb, title, category);</span>
         };
     }
 
     private Specification&lt;CourseEntity&gt; popularSpec(String title, String category) {
-<span class="nc" id="L277">        return (root, query, cb) -&gt; {</span>
+<span class="nc" id="L278">        return (root, query, cb) -&gt; {</span>
             // join so we can count
-<span class="nc" id="L279">            var join = root.join(ENROLLED, JoinType.LEFT);</span>
-<span class="nc" id="L280">            query.groupBy(root.get(&quot;id&quot;));</span>
-<span class="nc" id="L281">            query.orderBy(cb.desc(cb.count(join)));</span>
-<span class="nc" id="L282">            return buildFilters(root, cb, title, category);</span>
+<span class="nc" id="L280">            var join = root.join(ENROLLED, JoinType.LEFT);</span>
+<span class="nc" id="L281">            query.groupBy(root.get(&quot;id&quot;));</span>
+<span class="nc" id="L282">            query.orderBy(cb.desc(cb.count(join)));</span>
+<span class="nc" id="L283">            return buildFilters(root, cb, title, category);</span>
         };
     }
 
@@ -287,16 +288,16 @@ public class CourseServiceImpl implements CourseService {
                                    CriteriaBuilder cb,
                                    String title,
                                    String category) {
-<span class="nc" id="L290">        Predicate p = cb.isTrue(root.get(&quot;published&quot;));</span>
-<span class="nc bnc" id="L291" title="All 4 branches missed.">        if (title != null &amp;&amp; !title.isBlank()) {</span>
-<span class="nc" id="L292">            p = cb.and(p,</span>
-<span class="nc" id="L293">                    cb.like(cb.lower(root.get(&quot;title&quot;)), &quot;%&quot; + title.toLowerCase() + &quot;%&quot;));</span>
+<span class="nc" id="L291">        Predicate p = cb.isTrue(root.get(&quot;published&quot;));</span>
+<span class="nc bnc" id="L292" title="All 4 branches missed.">        if (title != null &amp;&amp; !title.isBlank()) {</span>
+<span class="nc" id="L293">            p = cb.and(p,</span>
+<span class="nc" id="L294">                    cb.like(cb.lower(root.get(&quot;title&quot;)), &quot;%&quot; + title.toLowerCase() + &quot;%&quot;));</span>
         }
-<span class="nc bnc" id="L295" title="All 4 branches missed.">        if (category != null &amp;&amp; !category.isBlank()) {</span>
-<span class="nc" id="L296">            p = cb.and(p,</span>
-<span class="nc" id="L297">                    cb.equal(cb.lower(root.get(&quot;category&quot;)), category.toLowerCase()));</span>
+<span class="nc bnc" id="L296" title="All 4 branches missed.">        if (category != null &amp;&amp; !category.isBlank()) {</span>
+<span class="nc" id="L297">            p = cb.and(p,</span>
+<span class="nc" id="L298">                    cb.equal(cb.lower(root.get(&quot;category&quot;)), category.toLowerCase()));</span>
         }
-<span class="nc" id="L299">        return p;</span>
+<span class="nc" id="L300">        return p;</span>
     }
 
 }

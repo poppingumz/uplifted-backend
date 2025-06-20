@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="fontys.s3.uplifted.controller.AuthControllerTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2025-06-20T09:58:57" hostname="LAPTOP-RHFQ3ARB" time="0.483">
+<testsuite name="fontys.s3.uplifted.controller.AuthControllerTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2025-06-20T13:17:20" hostname="LAPTOP-RHFQ3ARB" time="0.538">
   <properties/>
-  <testcase name="shouldLoginTokenFailsInternally()" classname="fontys.s3.uplifted.controller.AuthControllerTest" time="0.41"/>
-  <testcase name="shouldLoginSuccess()" classname="fontys.s3.uplifted.controller.AuthControllerTest" time="0.019"/>
-  <testcase name="shouldLoginWhenPasswordMissing()" classname="fontys.s3.uplifted.controller.AuthControllerTest" time="0.006"/>
-  <testcase name="shouldLoginUserNotFound()" classname="fontys.s3.uplifted.controller.AuthControllerTest" time="0.006"/>
-  <testcase name="shouldRegisterSuccess()" classname="fontys.s3.uplifted.controller.AuthControllerTest" time="0.008"/>
+  <testcase name="shouldLoginTokenFailsInternally()" classname="fontys.s3.uplifted.controller.AuthControllerTest" time="0.467"/>
+  <testcase name="shouldLoginSuccess()" classname="fontys.s3.uplifted.controller.AuthControllerTest" time="0.023"/>
+  <testcase name="shouldLoginWhenPasswordMissing()" classname="fontys.s3.uplifted.controller.AuthControllerTest" time="0.005"/>
+  <testcase name="shouldLoginUserNotFound()" classname="fontys.s3.uplifted.controller.AuthControllerTest" time="0.005"/>
+  <testcase name="shouldRegisterSuccess()" classname="fontys.s3.uplifted.controller.AuthControllerTest" time="0.007"/>
   <testcase name="shouldLoginWithInvalidPassword()" classname="fontys.s3.uplifted.controller.AuthControllerTest" time="0.006"/>
-  <testcase name="shouldRegisterFailure()" classname="fontys.s3.uplifted.controller.AuthControllerTest" time="0.005"/>
-  <system-out><![CDATA[11:58:57.896 [Test worker] INFO fontys.s3.uplifted.controller.AuthController -- Attempting login for: test@example.com
-11:58:57.897 [Test worker] ERROR fontys.s3.uplifted.controller.AuthController -- Token generation failed
+  <testcase name="shouldRegisterFailure()" classname="fontys.s3.uplifted.controller.AuthControllerTest" time="0.006"/>
+  <system-out><![CDATA[15:17:21.079 [Test worker] INFO fontys.s3.uplifted.controller.AuthController -- Attempting login for: test@example.com
+15:17:21.084 [Test worker] ERROR fontys.s3.uplifted.controller.AuthController -- Token generation failed
 java.lang.RuntimeException: JWT failure
 	at fontys.s3.uplifted.config.security.JwtUtil.generateToken(JwtUtil.java:19)
 	at fontys.s3.uplifted.controller.AuthController.login(AuthController.java:59)
@@ -98,12 +98,12 @@ java.lang.RuntimeException: JWT failure
 	at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:65)
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.run(GradleWorkerMain.java:69)
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74)
-11:58:58.036 [Test worker] INFO fontys.s3.uplifted.controller.AuthController -- Attempting login for: test@example.com
-11:58:58.053 [Test worker] INFO fontys.s3.uplifted.controller.AuthController -- Attempting login for: test@example.com
-11:58:58.060 [Test worker] INFO fontys.s3.uplifted.controller.AuthController -- Attempting login for: notfound@example.com
-11:58:58.061 [Test worker] WARN fontys.s3.uplifted.controller.AuthController -- User not found: notfound@example.com
-11:58:58.078 [Test worker] INFO fontys.s3.uplifted.controller.AuthController -- Attempting login for: test@example.com
-11:58:58.085 [Test worker] WARN fontys.s3.uplifted.controller.AuthController -- Registration failed: duplicate email
+15:17:21.246 [Test worker] INFO fontys.s3.uplifted.controller.AuthController -- Attempting login for: test@example.com
+15:17:21.264 [Test worker] INFO fontys.s3.uplifted.controller.AuthController -- Attempting login for: test@example.com
+15:17:21.271 [Test worker] INFO fontys.s3.uplifted.controller.AuthController -- Attempting login for: notfound@example.com
+15:17:21.271 [Test worker] WARN fontys.s3.uplifted.controller.AuthController -- User not found: notfound@example.com
+15:17:21.286 [Test worker] INFO fontys.s3.uplifted.controller.AuthController -- Attempting login for: test@example.com
+15:17:21.294 [Test worker] WARN fontys.s3.uplifted.controller.AuthController -- Registration failed: duplicate email
 ]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>
