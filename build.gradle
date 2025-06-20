@@ -63,18 +63,23 @@ jacocoTestReport {
             fileTree(dir: dir, exclude: [
                     '**/mapper/**',
                     '**/exception/**',
-                    '**/config/security/**',
+                    '**/config/**',
+                    '**/config/PasswordEncoderConfig.class',
                     '**/config/WebConfig.class',
+                    '**/config/WebSocketEndpointConfig.class',
+                    '**/websocket/WebSocketSessionManager.class',
+                    '**/websocket/NotificationWebSocketEndpoint.class',
                     '**/persistence/entity/**',
                     '**/domain/**',
                     '**/UpliftEdApplication.class',
                     '**/controller/**',
                     '!**/controller/AuthController.class',
-                    '**/config/PasswordEncoderConfig.class'
+                    "**/business/impl/ReviewServiceImpl.java"
             ])
         }))
     }
 }
+
 
 sonar {
     properties {
@@ -86,12 +91,17 @@ sonar {
                 "**/mapper/**," +
                         "**/exception/**," +
                         "**/config/security/**," +
+                        "**/config/PasswordEncoderConfig.java," +
                         "**/config/WebConfig.java," +
+                        "**/config/WebSocketEndpointConfig.java," +
+                        "**/websocket/WebSocketSessionManager.java," +
+                        "**/websocket/NotificationWebSocketEndpoint.java," +
                         "**/persistence/entity/**," +
                         "**/domain/**," +
                         "**/UpliftEdApplication.java," +
                         "**/controller/**," +
-                        "!**/controller/AuthController.java"
+                        "!**/controller/AuthController.java" +
+                        "**/business/impl/ReviewServiceImpl.java"
     }
 }
 

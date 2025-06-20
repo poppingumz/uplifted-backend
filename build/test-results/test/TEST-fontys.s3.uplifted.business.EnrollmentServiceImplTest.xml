@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="fontys.s3.uplifted.business.EnrollmentServiceImplTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2025-06-20T09:58:56" hostname="LAPTOP-RHFQ3ARB" time="0.017">
+  <properties/>
+  <testcase name="enrollAndRetrieve()" classname="fontys.s3.uplifted.business.EnrollmentServiceImplTest" time="0.008"/>
+  <testcase name="unenrollNotPresent()" classname="fontys.s3.uplifted.business.EnrollmentServiceImplTest" time="0.004"/>
+  <testcase name="unenrollExisting()" classname="fontys.s3.uplifted.business.EnrollmentServiceImplTest" time="0.002"/>
+  <system-out><![CDATA[11:58:56.251 [Test worker] INFO fontys.s3.uplifted.business.impl.EnrollmentServiceImpl -- Persisted enrollment: course=1, user=100
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

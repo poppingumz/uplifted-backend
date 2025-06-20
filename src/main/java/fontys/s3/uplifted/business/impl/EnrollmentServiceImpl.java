@@ -1,49 +1,57 @@
 package fontys.s3.uplifted.business.impl;
 
 import fontys.s3.uplifted.business.EnrollmentService;
+import fontys.s3.uplifted.business.impl.exception.EnrollmentException;
+import fontys.s3.uplifted.persistence.EnrollmentRepository;
+import fontys.s3.uplifted.persistence.entity.EnrollmentEntity;
+import fontys.s3.uplifted.persistence.entity.EnrollmentId;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class EnrollmentServiceImpl implements EnrollmentService {
 
-    private final Map<Long, Set<Long>> enrollments = new HashMap<>();
+    private final EnrollmentRepository enrollmentRepository;
 
+    @Override
     public void enrollStudent(Long courseId, Long studentId) {
         try {
-            enrollments.computeIfAbsent(courseId, k -> new HashSet<>()).add(studentId);
-            log.info("Enrolled student {} to course {}", studentId, courseId);
+            EnrollmentEntity entity = new EnrollmentEntity(courseId, studentId);
+            enrollmentRepository.save(entity);
+            log.info("Persisted enrollment: course={}, user={}", courseId, studentId);
         } catch (Exception e) {
-            log.error("Failed to enroll student {} to course {}", studentId, courseId, e);
-            throw new RuntimeException("Unable to enroll student.");
+            log.error("Failed to persist enrollment", e);
+            throw new EnrollmentException("Unable to enroll student.");
         }
     }
 
+    @Override
     public void unenrollStudent(Long courseId, Long studentId) {
         try {
-            Set<Long> students = enrollments.get(courseId);
-            if (students != null && students.remove(studentId)) {
-                log.info("Unenrolled student {} from course {}", studentId, courseId);
-            } else {
-                log.warn("Student {} was not enrolled in course {}", studentId, courseId);
-            }
+            enrollmentRepository.deleteById(new EnrollmentId(courseId, studentId));
         } catch (Exception e) {
-            log.error("Failed to unenroll student {} from course {}", studentId, courseId, e);
-            throw new RuntimeException("Unable to unenroll student.");
+            throw new EnrollmentException("Unable to unenroll student.");
         }
     }
 
+    @Override
     public Set<Long> getEnrolledStudents(Long courseId) {
-        try {
-            return new HashSet<>(enrollments.getOrDefault(courseId, Collections.emptySet()));
-        } catch (Exception e) {
-            log.error("Failed to retrieve enrolled students for course {}", courseId, e);
-            throw new RuntimeException("Unable to get enrolled students.");
-        }
+        return enrollmentRepository.findByCourseId(courseId)
+                .stream()
+                .map(EnrollmentEntity::getUserId)
+                .collect(Collectors.toSet());
+    }
+
+    public Set<Long> getCoursesOfUser(Long userId) {
+        return enrollmentRepository.findByUserId(userId)
+                .stream()
+                .map(EnrollmentEntity::getCourseId)
+                .collect(Collectors.toSet());
     }
 }

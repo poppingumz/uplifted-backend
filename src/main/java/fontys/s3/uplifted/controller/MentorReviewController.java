@@ -5,12 +5,14 @@ import fontys.s3.uplifted.domain.StudentAnswer;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/mentor_review")
 @RequiredArgsConstructor
@@ -24,17 +26,18 @@ public class MentorReviewController {
     }
 
     @PatchMapping("/{answerId}")
-    public ResponseEntity<?> reviewAnswer(
+    public ResponseEntity<String> reviewAnswer(
             @PathVariable Long answerId,
             @RequestBody ReviewRequest request
     ) {
         try {
             answerService.reviewAnswer(answerId, request.getMarks(), request.getFeedback());
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok("Review submitted successfully");
         } catch (Exception e) {
+            log.error("Review processing failed for answerId {}: {}", answerId, e.getMessage());
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Registration failed: " + e.getMessage());
+                    .body("Review failed: " + e.getMessage());
         }
     }
 

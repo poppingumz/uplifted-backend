@@ -1,4 +1,3 @@
-// ProgressServiceImplTest.java
 package fontys.s3.uplifted.business;
 
 import fontys.s3.uplifted.business.impl.ProgressServiceImpl;
@@ -14,18 +13,20 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
 import java.util.List;
 import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class ProgressServiceImplTest {
 
-    @Mock ProgressRepository progressRepository;
-    @Mock CourseRepository courseRepository;
-    @Mock UserRepository userRepository;
-    @InjectMocks
-    ProgressServiceImpl service;
+    @Mock private ProgressRepository progressRepository;
+    @Mock private CourseRepository courseRepository;
+    @Mock private UserRepository userRepository;
+
+    @InjectMocks private ProgressServiceImpl service;
 
     private ProgressEntity entity;
     private CourseEntity courseEntity;
@@ -34,8 +35,13 @@ class ProgressServiceImplTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        courseEntity = new CourseEntity(); courseEntity.setId(2L);
-        userEntity = new UserEntity(); userEntity.setId(3L);
+
+        courseEntity = new CourseEntity();
+        courseEntity.setId(2L);
+
+        userEntity = new UserEntity();
+        userEntity.setId(3L);
+
         entity = new ProgressEntity();
         entity.setId(10L);
         entity.setCourse(courseEntity);
@@ -70,15 +76,21 @@ class ProgressServiceImplTest {
         when(courseRepository.findById(2L)).thenReturn(Optional.of(courseEntity));
         when(userRepository.findById(3L)).thenReturn(Optional.of(userEntity));
         when(progressRepository.save(any())).thenReturn(entity);
-        Progress created = service.createProgress(new Progress(null, 2L, 3L, 75.0));
+
+        var progress = new Progress(null, 2L, 3L, 75.0);
+        var created = service.createProgress(progress);
+
         assertEquals(10L, created.getId());
+        assertEquals(75.0, created.getProgressPercentage());
     }
 
     @Test
     void createProgressMissingCourse() {
         when(courseRepository.findById(any())).thenReturn(Optional.empty());
-        var ex = assertThrows(RuntimeException.class,
-                () -> service.createProgress(new Progress(null, 2L, 3L, 75.0)));
+
+        var progress = new Progress(null, 2L, 3L, 75.0);
+        RuntimeException ex = assertThrows(RuntimeException.class, () -> service.createProgress(progress));
+
         assertEquals("Course not found", ex.getMessage());
     }
 
@@ -88,7 +100,9 @@ class ProgressServiceImplTest {
         when(userRepository.findById(3L)).thenReturn(Optional.of(userEntity));
         when(progressRepository.findById(10L)).thenReturn(Optional.of(entity));
         when(progressRepository.save(any())).thenReturn(entity);
+
         var updated = service.updateProgress(10L, new Progress(null, 2L, 3L, 75.0));
+
         assertTrue(updated.isPresent());
         assertEquals(75.0, updated.get().getProgressPercentage());
     }
@@ -98,12 +112,16 @@ class ProgressServiceImplTest {
         when(courseRepository.findById(2L)).thenReturn(Optional.of(courseEntity));
         when(userRepository.findById(3L)).thenReturn(Optional.of(userEntity));
         when(progressRepository.findById(99L)).thenReturn(Optional.empty());
-        assertTrue(service.updateProgress(99L, new Progress(null, 2L, 3L, 75.0)).isEmpty());
+
+        var result = service.updateProgress(99L, new Progress(null, 2L, 3L, 75.0));
+
+        assertTrue(result.isEmpty());
     }
 
     @Test
     void deleteProgress() {
         when(progressRepository.existsById(10L)).thenReturn(true);
+
         assertTrue(service.deleteProgress(10L));
         verify(progressRepository).deleteById(10L);
     }
@@ -111,6 +129,7 @@ class ProgressServiceImplTest {
     @Test
     void deleteProgressNotFound() {
         when(progressRepository.existsById(99L)).thenReturn(false);
+
         assertFalse(service.deleteProgress(99L));
     }
 }

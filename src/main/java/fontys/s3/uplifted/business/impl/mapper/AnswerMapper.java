@@ -1,10 +1,13 @@
 package fontys.s3.uplifted.business.impl.mapper;
-
 import fontys.s3.uplifted.domain.Answer;
 import fontys.s3.uplifted.persistence.entity.AnswerEntity;
 import fontys.s3.uplifted.persistence.entity.QuestionEntity;
 
 public final class AnswerMapper {
+
+    private AnswerMapper() {
+        throw new UnsupportedOperationException("Utility class should not be instantiated");
+    }
 
     public static Answer toDomain(AnswerEntity entity) {
         return Answer.builder()

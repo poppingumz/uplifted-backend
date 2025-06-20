@@ -1,20 +1,21 @@
 package fontys.s3.uplifted.business.impl;
 
 import fontys.s3.uplifted.business.ReviewService;
+import fontys.s3.uplifted.business.impl.exception.EntityNotFoundException;
+import fontys.s3.uplifted.business.impl.exception.ReviewException;
 import fontys.s3.uplifted.business.impl.mapper.ReviewMapper;
 import fontys.s3.uplifted.domain.Review;
+import fontys.s3.uplifted.persistence.CourseRepository;
 import fontys.s3.uplifted.persistence.ReviewRepository;
+import fontys.s3.uplifted.persistence.UserRepository;
 import fontys.s3.uplifted.persistence.entity.CourseEntity;
 import fontys.s3.uplifted.persistence.entity.ReviewEntity;
 import fontys.s3.uplifted.persistence.entity.UserEntity;
-import fontys.s3.uplifted.persistence.CourseRepository;
-import fontys.s3.uplifted.persistence.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -38,10 +39,10 @@ public class ReviewServiceImpl implements ReviewService {
             return reviewRepository.findAll()
                     .stream()
                     .map(ReviewMapper::toDomain)
-                    .collect(Collectors.toList());
+                    .toList();
         } catch (Exception e) {
             log.error("Failed to retrieve all reviews", e);
-            throw new RuntimeException("Could not retrieve reviews.");
+            throw new ReviewException("Could not retrieve reviews.");
         }
     }
 
@@ -51,7 +52,7 @@ public class ReviewServiceImpl implements ReviewService {
             return reviewRepository.findById(id).map(ReviewMapper::toDomain);
         } catch (Exception e) {
             log.error("Failed to retrieve review with ID: {}", id, e);
-            throw new RuntimeException("Could not find review with ID: " + id);
+            throw new ReviewException("Could not find review with ID: " + id);
         }
     }
 
@@ -59,18 +60,20 @@ public class ReviewServiceImpl implements ReviewService {
     public Review createReview(Review review) {
         try {
             CourseEntity course = courseRepository.findById(review.getCourseId())
-                    .orElseThrow(() -> new RuntimeException("Course not found with ID: " + review.getCourseId()));
+                    .orElseThrow(() -> new EntityNotFoundException("Course not found with ID: " + review.getCourseId()));
 
             UserEntity user = userRepository.findById(review.getUserId())
-                    .orElseThrow(() -> new RuntimeException("User not found with ID: " + review.getUserId()));
+                    .orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + review.getUserId()));
 
             ReviewEntity entity = ReviewMapper.toEntity(review, course, user);
             ReviewEntity saved = reviewRepository.save(entity);
+
             log.info("Review created for course ID: {}, user ID: {}", review.getCourseId(), review.getUserId());
+
             return ReviewMapper.toDomain(saved);
         } catch (Exception e) {
             log.error("Failed to create review", e);
-            throw new RuntimeException("Could not create review. Please try again.");
+            throw new ReviewException("Could not create review. Please try again.");
         }
     }
 
@@ -79,10 +82,10 @@ public class ReviewServiceImpl implements ReviewService {
         try {
             return reviewRepository.findById(id).map(existing -> {
                 CourseEntity course = courseRepository.findById(review.getCourseId())
-                        .orElseThrow(() -> new RuntimeException("Course not found with ID: " + review.getCourseId()));
+                        .orElseThrow(() -> new EntityNotFoundException("Course not found with ID: " + review.getCourseId()));
 
                 UserEntity user = userRepository.findById(review.getUserId())
-                        .orElseThrow(() -> new RuntimeException("User not found with ID: " + review.getUserId()));
+                        .orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + review.getUserId()));
 
                 ReviewEntity updated = ReviewMapper.toEntity(review, course, user);
                 updated.setId(id);
@@ -91,7 +94,7 @@ public class ReviewServiceImpl implements ReviewService {
             });
         } catch (Exception e) {
             log.error("Failed to update review with ID: {}", id, e);
-            throw new RuntimeException("Could not update review. Please try again.");
+            throw new ReviewException("Could not update review. Please try again.");
         }
     }
 
@@ -102,13 +105,12 @@ public class ReviewServiceImpl implements ReviewService {
                 log.warn("No review found with ID {} to delete", id);
                 return false;
             }
-
             reviewRepository.deleteById(id);
             log.info("Review with ID {} deleted successfully", id);
             return true;
         } catch (Exception e) {
             log.error("Failed to delete review with ID: {}", id, e);
-            throw new RuntimeException("Could not delete review.");
+            throw new ReviewException("Could not delete review.");
         }
     }
 }

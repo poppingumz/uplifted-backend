@@ -1,7 +1,13 @@
 package fontys.s3.uplifted.business;
 
 import fontys.s3.uplifted.business.impl.QuizServiceImpl;
+import fontys.s3.uplifted.business.impl.exception.EntityNotFoundException;
+import fontys.s3.uplifted.business.impl.exception.QuizException;
+import fontys.s3.uplifted.business.impl.exception.UnauthorizedAccessException;
 import fontys.s3.uplifted.domain.Quiz;
+import fontys.s3.uplifted.domain.Question;
+import fontys.s3.uplifted.domain.Answer;
+import fontys.s3.uplifted.domain.enums.QuestionType;
 import fontys.s3.uplifted.persistence.CourseRepository;
 import fontys.s3.uplifted.persistence.QuizRepository;
 import fontys.s3.uplifted.persistence.UserRepository;
@@ -10,153 +16,170 @@ import fontys.s3.uplifted.persistence.entity.QuizEntity;
 import fontys.s3.uplifted.persistence.entity.UserEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.*;
-import java.util.List;
-import java.util.Optional;
+
+import java.util.*;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class QuizServiceImplTest {
 
-    @Mock QuizRepository quizRepo;
-    @Mock CourseRepository courseRepo;
-    @Mock UserRepository userRepo;
-    @InjectMocks
-    QuizServiceImpl service;
-
-    private Quiz quiz;
-    private CourseEntity courseEntity;
-    private UserEntity userEntity;
-    private QuizEntity quizEntity;
+    private QuizRepository quizRepository;
+    private CourseRepository courseRepository;
+    private UserRepository userRepository;
+    private QuizServiceImpl quizService;
 
     @BeforeEach
-    void init() {
-        MockitoAnnotations.openMocks(this);
-        quiz = Quiz.builder()
-                .id(null)
-                .title("T")
-                .description("D")
-                .courseId(5L)
-                .createdById(7L)
+    void setUp() {
+        quizRepository = mock(QuizRepository.class);
+        courseRepository = mock(CourseRepository.class);
+        userRepository = mock(UserRepository.class);
+        quizService = new QuizServiceImpl(quizRepository, courseRepository, userRepository);
+    }
+
+    @Test
+    void createQuiz_success() {
+        Quiz quiz = Quiz.builder()
+                .title("Test Quiz")
+                .createdById(1L)
+                .courseId(2L)
+                .questions(List.of(Question.builder()
+                        .text("Q1")
+                        .type(QuestionType.MULTIPLE_CHOICE)
+                        .answers(List.of(Answer.builder().text("A").correct(true).build()))
+                        .build()))
                 .build();
-        courseEntity = new CourseEntity(); courseEntity.setId(5L);
-        userEntity   = new UserEntity();   userEntity.setId(7L);
-        quizEntity   = new QuizEntity();
-        quizEntity.setId(99L);
-        quizEntity.setTitle("T");
-        quizEntity.setDescription("D");
-        quizEntity.setCourse(courseEntity);
-        quizEntity.setCreatedBy(userEntity);
+
+        CourseEntity course = CourseEntity.builder().id(2L).build();
+        UserEntity creator = UserEntity.builder().id(1L).build();
+
+        when(courseRepository.findById(2L)).thenReturn(Optional.of(course));
+        when(userRepository.findById(1L)).thenReturn(Optional.of(creator));
+        when(quizRepository.save(any())).thenAnswer(invocation -> {
+            QuizEntity saved = invocation.getArgument(0);
+            saved.setId(99L);
+            return saved;
+        });
+
+        Quiz result = quizService.createQuiz(quiz);
+        assertNotNull(result);
     }
 
     @Test
-    void createQuizSuccess() {
-        when(courseRepo.findById(5L)).thenReturn(Optional.of(courseEntity));
-        when(userRepo.findById(7L))  .thenReturn(Optional.of(userEntity));
-        when(quizRepo.save(any())).thenReturn(quizEntity);
-
-        Quiz created = service.createQuiz(quiz);
-
-        assertEquals(99L, created.getId());
-        assertEquals("T", created.getTitle());
-        verify(quizRepo).save(ArgumentMatchers.any(QuizEntity.class));
+    void createQuiz_missingCourse_throwsQuizException() {
+        Quiz quiz = Quiz.builder().title("No Course").createdById(1L).courseId(5L).build();
+        when(courseRepository.findById(5L)).thenThrow(new EntityNotFoundException("Course not found"));
+        assertThrows(QuizException.class, () -> quizService.createQuiz(quiz));
     }
 
     @Test
-    void createQuizCourseNotFound() {
-        when(courseRepo.findById(any())).thenReturn(Optional.empty());
-        RuntimeException ex = assertThrows(RuntimeException.class,
-                () -> service.createQuiz(quiz));
-        assertTrue(ex.getMessage().contains("Could not create quiz"));
-    }
-
-    @Test
-    void createQuizUserNotFound() {
-        when(courseRepo.findById(5L)).thenReturn(Optional.of(courseEntity));
-        when(userRepo.findById(any())).thenReturn(Optional.empty());
-        RuntimeException ex = assertThrows(RuntimeException.class,
-                () -> service.createQuiz(quiz));
-        assertTrue(ex.getMessage().contains("Could not create quiz"));
-    }
-
-    @Test
-    void getQuizByIdFound() {
-        when(quizRepo.findById(99L)).thenReturn(Optional.of(quizEntity));
-        Optional<Quiz> opt = service.getQuizById(99L);
-        assertTrue(opt.isPresent());
-        assertEquals(99L, opt.get().getId());
-    }
-
-    @Test
-    void getQuizByIdEmpty() {
-        when(quizRepo.findById(123L)).thenReturn(Optional.empty());
-        assertTrue(service.getQuizById(123L).isEmpty());
-    }
-
-    @Test
-    void getQuizzesByCourseIdSuccess() {
-        when(quizRepo.findByCourseId(5L)).thenReturn(List.of(quizEntity));
-        List<Quiz> list = service.getQuizzesByCourseId(5L);
-        assertEquals(1, list.size());
-        assertEquals("T", list.get(0).getTitle());
-    }
-
-    @Test
-    void getQuizzesByCourseIdError() {
-        when(quizRepo.findByCourseId(any()))
-                .thenThrow(new RuntimeException("DB"));
-        RuntimeException ex = assertThrows(RuntimeException.class,
-                () -> service.getQuizzesByCourseId(5L));
-        assertTrue(ex.getMessage().contains("Could not load quizzes"));
-    }
-
-    @Test
-    void updateQuizSuccess() {
-        Quiz updated = Quiz.builder()
-                .id(null)
-                .title("X")
-                .description("Y")
-                .courseId(5L)
-                .createdById(7L)
+    void getQuizById_success() {
+        UserEntity creator = UserEntity.builder().id(1L).build();
+        QuizEntity entity = QuizEntity.builder()
+                .id(10L)
+                .title("Test")
+                .createdBy(creator)
                 .build();
-        QuizEntity updatedEntity = new QuizEntity();
-        updatedEntity.setId(99L);
-        updatedEntity.setTitle("X");
-        updatedEntity.setDescription("Y");
-        updatedEntity.setCourse(courseEntity);
-        updatedEntity.setCreatedBy(userEntity);
 
-        when(quizRepo.findById(99L)).thenReturn(Optional.of(quizEntity));
-        when(courseRepo.findById(5L)).thenReturn(Optional.of(courseEntity));
-        when(userRepo.findById(7L)).thenReturn(Optional.of(userEntity));
-        when(quizRepo.save(any())).thenReturn(updatedEntity);
+        when(quizRepository.findById(10L)).thenReturn(Optional.of(entity));
 
-        Quiz out = service.updateQuiz(99L, updated);
-
-        assertEquals("X", out.getTitle());
-        verify(quizRepo).save(any());
+        Optional<Quiz> result = quizService.getQuizById(10L);
+        assertTrue(result.isPresent());
+        assertEquals("Test", result.get().getTitle());
+        assertEquals(1L, result.get().getCreatedById());
     }
 
     @Test
-    void updateQuizNotFound() {
-        when(quizRepo.findById(1L)).thenReturn(Optional.empty());
-        RuntimeException ex = assertThrows(RuntimeException.class,
-                () -> service.updateQuiz(1L, quiz));
-        assertTrue(ex.getMessage().contains("Could not update quiz"));
+    void getQuizzesByCourseId_success() {
+        UserEntity creator = UserEntity.builder().id(1L).build();
+        QuizEntity quizEntity = QuizEntity.builder()
+                .id(1L)
+                .title("A")
+                .createdBy(creator)
+                .build();
+
+        when(quizRepository.findByCourseId(1L)).thenReturn(List.of(quizEntity));
+
+        List<Quiz> quizzes = quizService.getQuizzesByCourseId(1L);
+
+        assertEquals(1, quizzes.size());
+        assertEquals("A", quizzes.get(0).getTitle());
+        assertEquals(1L, quizzes.get(0).getCreatedById());
     }
 
     @Test
-    void deleteQuizSuccess() {
-        when(quizRepo.existsById(99L)).thenReturn(true);
-        assertDoesNotThrow(() -> service.deleteQuiz(99L));
-        verify(quizRepo).deleteById(99L);
+    void getQuizzesByCourseId_failure() {
+        when(quizRepository.findByCourseId(anyLong())).thenThrow(new RuntimeException("DB down"));
+        assertThrows(QuizException.class, () -> quizService.getQuizzesByCourseId(1L));
     }
 
     @Test
-    void deleteQuizNotFound() {
-        when(quizRepo.existsById(1L)).thenReturn(false);
-        RuntimeException ex = assertThrows(RuntimeException.class,
-                () -> service.deleteQuiz(1L));
-        assertEquals("Could not delete quiz.", ex.getMessage());
+    void updateQuiz_success() {
+        Quiz quiz = Quiz.builder().createdById(1L).courseId(2L).title("Updated").build();
+        QuizEntity existing = QuizEntity.builder().id(1L).createdBy(UserEntity.builder().id(1L).build()).build();
+
+        when(quizRepository.findById(1L)).thenReturn(Optional.of(existing));
+        when(userRepository.findById(1L)).thenReturn(Optional.of(UserEntity.builder().id(1L).build()));
+        when(courseRepository.findById(2L)).thenReturn(Optional.of(CourseEntity.builder().id(2L).build()));
+        when(quizRepository.save(any())).thenReturn(existing);
+
+        Quiz result = quizService.updateQuiz(1L, quiz);
+        assertNotNull(result);
+    }
+
+    @Test
+    void updateQuiz_unauthorized() {
+        Quiz quiz = Quiz.builder().createdById(99L).build();
+        QuizEntity existing = QuizEntity.builder()
+                .id(1L)
+                .createdBy(UserEntity.builder().id(1L).build())
+                .build();
+
+        when(quizRepository.findById(1L)).thenReturn(Optional.of(existing));
+
+        QuizException ex = assertThrows(QuizException.class, () -> quizService.updateQuiz(1L, quiz));
+        assertEquals("Could not update quiz.", ex.getMessage());
+    }
+
+
+    @Test
+    void updateQuiz_failure_throwsQuizException() {
+        Quiz quiz = Quiz.builder().createdById(1L).build();
+        when(quizRepository.findById(1L)).thenThrow(new RuntimeException("DB error"));
+        assertThrows(QuizException.class, () -> quizService.updateQuiz(1L, quiz));
+    }
+
+    @Test
+    void deleteQuiz_success() {
+        when(quizRepository.existsById(1L)).thenReturn(true);
+        quizService.deleteQuiz(1L);
+        verify(quizRepository).deleteById(1L);
+    }
+
+    @Test
+    void deleteQuiz_notFound() {
+        when(quizRepository.existsById(99L)).thenReturn(false);
+        QuizException exception = assertThrows(QuizException.class, () -> quizService.deleteQuiz(99L));
+        assertTrue(exception.getMessage().contains("Could not delete quiz."));
+    }
+
+
+    @Test
+    void deleteQuiz_failure_throwsQuizException() {
+        when(quizRepository.existsById(1L)).thenReturn(true);
+        doThrow(new RuntimeException("DB error")).when(quizRepository).deleteById(1L);
+        assertThrows(QuizException.class, () -> quizService.deleteQuiz(1L));
+    }
+
+    @Test
+    void getQuizzesByCreatorId_success() {
+        UserEntity user = UserEntity.builder().id(1L).build();
+        QuizEntity quizEntity = QuizEntity.builder().id(10L).createdBy(user).build();
+        when(quizRepository.findByCreatedById(1L)).thenReturn(List.of(quizEntity));
+
+        List<Quiz> result = quizService.getQuizzesByCreatorId(1L);
+
+        assertEquals(1, result.size());
+        assertEquals(10L, result.get(0).getId());
     }
 }

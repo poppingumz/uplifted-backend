@@ -1,7 +1,7 @@
-
 package fontys.s3.uplifted.business;
 
 import fontys.s3.uplifted.business.impl.UserServiceImpl;
+import fontys.s3.uplifted.business.impl.exception.UserServiceException;
 import fontys.s3.uplifted.domain.User;
 import fontys.s3.uplifted.domain.enums.Role;
 import fontys.s3.uplifted.persistence.UserRepository;
@@ -20,7 +20,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-public class UserServiceImplTest {
+class UserServiceImplTest {
 
     @Mock
     private UserRepository userRepository;
@@ -55,7 +55,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void testGetAllUsers() {
+    void testGetAllUsers() {
         when(userRepository.findAll()).thenReturn(Arrays.asList(sampleEntity));
 
         List<User> users = userService.getAllUsers();
@@ -64,7 +64,13 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void testGetUserById() {
+    void testGetAllUsersThrowsException() {
+        when(userRepository.findAll()).thenThrow(new RuntimeException("DB error"));
+        assertThrows(UserServiceException.class, () -> userService.getAllUsers());
+    }
+
+    @Test
+    void testGetUserById() {
         when(userRepository.findById(1L)).thenReturn(Optional.of(sampleEntity));
 
         Optional<User> result = userService.getUserById(1L);
@@ -73,7 +79,28 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void testCreateUser() {
+    void testGetUserByIdThrowsException() {
+        when(userRepository.findById(1L)).thenThrow(new RuntimeException("DB error"));
+        assertThrows(UserServiceException.class, () -> userService.getUserById(1L));
+    }
+
+    @Test
+    void testGetUserByEmail() {
+        when(userRepository.findByEmail("john@example.com")).thenReturn(Optional.of(sampleEntity));
+
+        Optional<User> user = userService.getUserByEmail("john@example.com");
+        assertTrue(user.isPresent());
+        assertEquals("johndoe", user.get().getUsername());
+    }
+
+    @Test
+    void testGetUserByEmailThrowsException() {
+        when(userRepository.findByEmail("john@example.com")).thenThrow(new RuntimeException("DB error"));
+        assertThrows(UserServiceException.class, () -> userService.getUserByEmail("john@example.com"));
+    }
+
+    @Test
+    void testCreateUser() {
         when(passwordEncoder.encode(sampleUser.getPassword())).thenReturn("hashedpassword");
         when(userRepository.save(any(UserEntity.class))).thenReturn(sampleEntity);
 
@@ -86,7 +113,14 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void testUpdateUser() {
+    void testCreateUserThrowsException() {
+        when(passwordEncoder.encode(sampleUser.getPassword())).thenReturn("hashedpassword");
+        when(userRepository.save(any(UserEntity.class))).thenThrow(new RuntimeException("DB error"));
+        assertThrows(UserServiceException.class, () -> userService.createUser(sampleUser));
+    }
+
+    @Test
+    void testUpdateUser() {
         when(userRepository.findById(1L)).thenReturn(Optional.of(sampleEntity));
         when(passwordEncoder.encode(sampleUser.getPassword())).thenReturn("hashedpassword");
         when(userRepository.save(any(UserEntity.class))).thenReturn(sampleEntity);
@@ -99,9 +133,14 @@ public class UserServiceImplTest {
         verify(userRepository).save(any(UserEntity.class));
     }
 
+    @Test
+    void testUpdateUserThrowsException() {
+        when(userRepository.findById(1L)).thenThrow(new RuntimeException("DB error"));
+        assertThrows(UserServiceException.class, () -> userService.updateUser(1L, sampleUser));
+    }
 
     @Test
-    public void testDeleteUserSuccess() {
+    void testDeleteUserSuccess() {
         when(userRepository.existsById(1L)).thenReturn(true);
         doNothing().when(userRepository).deleteById(1L);
 
@@ -110,7 +149,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void testDeleteUserNotFound() {
+    void testDeleteUserNotFound() {
         when(userRepository.existsById(2L)).thenReturn(false);
 
         boolean result = userService.deleteUser(2L);
@@ -118,11 +157,10 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void testGetUserByEmail() {
-        when(userRepository.findByEmail("john@example.com")).thenReturn(Optional.of(sampleEntity));
+    void testDeleteUserThrowsException() {
+        when(userRepository.existsById(1L)).thenReturn(true);
+        doThrow(new RuntimeException("DB error")).when(userRepository).deleteById(1L);
 
-        Optional<User> user = userService.getUserByEmail("john@example.com");
-        assertTrue(user.isPresent());
-        assertEquals("johndoe", user.get().getUsername());
+        assertThrows(UserServiceException.class, () -> userService.deleteUser(1L));
     }
 }

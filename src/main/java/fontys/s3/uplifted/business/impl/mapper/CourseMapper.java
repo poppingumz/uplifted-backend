@@ -37,6 +37,11 @@ public final class CourseMapper {
                 .build();
     }
 
+    public static CourseResponseDTO toResponseDTO(CourseEntity entity) {
+        return toResponseDTO(toDomain(entity));
+    }
+
+
     private static List<CoursePart> toPartDomainFromEntity(List<CoursePartEntity> partEntities) {
         if (partEntities == null) return new ArrayList<>();
         return partEntities.stream()

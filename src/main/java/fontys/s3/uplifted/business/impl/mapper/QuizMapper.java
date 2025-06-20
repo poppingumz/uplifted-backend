@@ -4,7 +4,6 @@ import fontys.s3.uplifted.domain.Quiz;
 import fontys.s3.uplifted.persistence.entity.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public final class QuizMapper {
 
@@ -47,13 +46,13 @@ public final class QuizMapper {
                         if (q.getAnswers() != null && !q.getAnswers().isEmpty()) {
                             var answerEntities = q.getAnswers().stream()
                                     .map(a -> AnswerMapper.toEntity(a, questionEntity))
-                                    .collect(Collectors.toList());
+                                    .toList();
                             questionEntity.setAnswers(answerEntities);
                         }
 
                         return questionEntity;
                     })
-                    .collect(Collectors.toList());
+                    .toList();
 
             quizEntity.setQuestions(questionEntities);
         }

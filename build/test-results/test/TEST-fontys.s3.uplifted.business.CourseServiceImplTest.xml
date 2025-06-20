@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="fontys.s3.uplifted.business.CourseServiceImplTest" tests="13" skipped="0" failures="0" errors="0" timestamp="2025-06-20T09:58:56" hostname="LAPTOP-RHFQ3ARB" time="0.154">
+  <properties/>
+  <testcase name="createCourse_withFiles_success()" classname="fontys.s3.uplifted.business.CourseServiceImplTest" time="0.014"/>
+  <testcase name="enrollInCourse_limitReached_throwsException()" classname="fontys.s3.uplifted.business.CourseServiceImplTest" time="0.013"/>
+  <testcase name="getAllCourses_success()" classname="fontys.s3.uplifted.business.CourseServiceImplTest" time="0.007"/>
+  <testcase name="deleteCourse_notFound()" classname="fontys.s3.uplifted.business.CourseServiceImplTest" time="0.008"/>
+  <testcase name="deleteCourse_success()" classname="fontys.s3.uplifted.business.CourseServiceImplTest" time="0.008"/>
+  <testcase name="enrollInCourse_alreadyEnrolled_throwsException()" classname="fontys.s3.uplifted.business.CourseServiceImplTest" time="0.02"/>
+  <testcase name="getCourseById_success()" classname="fontys.s3.uplifted.business.CourseServiceImplTest" time="0.005"/>
+  <testcase name="buildPartEntity_and_buildContentEntity_viaReflection()" classname="fontys.s3.uplifted.business.CourseServiceImplTest" time="0.01"/>
+  <testcase name="getCoursesByInstructor_success()" classname="fontys.s3.uplifted.business.CourseServiceImplTest" time="0.005"/>
+  <testcase name="getCoursesByEnrolledUser_success()" classname="fontys.s3.uplifted.business.CourseServiceImplTest" time="0.009"/>
+  <testcase name="unenrollFromCourse_success()" classname="fontys.s3.uplifted.business.CourseServiceImplTest" time="0.015"/>
+  <testcase name="updateCourse_withFiles_success()" classname="fontys.s3.uplifted.business.CourseServiceImplTest" time="0.006"/>
+  <testcase name="enrollInCourse_success()" classname="fontys.s3.uplifted.business.CourseServiceImplTest" time="0.009"/>
+  <system-out><![CDATA[11:58:56.204 [Test worker] INFO fontys.s3.uplifted.business.impl.CourseServiceImpl -- User 10 unenrolled from course 1
+11:58:56.231 [Test worker] INFO fontys.s3.uplifted.business.impl.CourseServiceImpl -- User 10 enrolled in course 1
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

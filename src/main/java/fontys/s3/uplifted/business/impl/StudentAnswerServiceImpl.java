@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -20,7 +19,7 @@ public class StudentAnswerServiceImpl implements StudentAnswerService {
     @Override
     public void submitAnswer(StudentAnswer answer) {
         StudentAnswerEntity entity = StudentAnswerMapper.toEntity(answer);
-        entity.setReviewed(false); // force default
+        entity.setReviewed(false); // default state
         studentAnswerRepository.save(entity);
     }
 
@@ -40,13 +39,13 @@ public class StudentAnswerServiceImpl implements StudentAnswerService {
     public List<StudentAnswer> getPendingReviews() {
         return studentAnswerRepository.findByReviewedFalse().stream()
                 .map(StudentAnswerMapper::toDomain)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
     public List<StudentAnswer> getAnswersByUser(Long userId) {
         return studentAnswerRepository.findByUserId(userId).stream()
                 .map(StudentAnswerMapper::toDomain)
-                .collect(Collectors.toList());
+                .toList();
     }
 }

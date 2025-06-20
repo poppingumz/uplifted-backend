@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ReviewServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">uplifted-learning-platform</a> &gt; <a href="index.source.html" class="el_package">fontys.s3.uplifted.business.impl</a> &gt; <span class="el_source">ReviewServiceImpl.java</span></div><h1>ReviewServiceImpl.java</h1><pre class="source lang-java linenums">package fontys.s3.uplifted.business.impl;
 
 import fontys.s3.uplifted.business.ReviewService;
+import fontys.s3.uplifted.business.impl.exception.EntityNotFoundException;
+import fontys.s3.uplifted.business.impl.exception.ReviewException;
 import fontys.s3.uplifted.business.impl.mapper.ReviewMapper;
 import fontys.s3.uplifted.domain.Review;
+import fontys.s3.uplifted.persistence.CourseRepository;
 import fontys.s3.uplifted.persistence.ReviewRepository;
+import fontys.s3.uplifted.persistence.UserRepository;
 import fontys.s3.uplifted.persistence.entity.CourseEntity;
 import fontys.s3.uplifted.persistence.entity.ReviewEntity;
 import fontys.s3.uplifted.persistence.entity.UserEntity;
-import fontys.s3.uplifted.persistence.CourseRepository;
-import fontys.s3.uplifted.persistence.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
-<span class="fc" id="L19">@Slf4j</span>
+<span class="fc" id="L20">@Slf4j</span>
 @Service
 public class ReviewServiceImpl implements ReviewService {
 
@@ -26,89 +27,90 @@ public class ReviewServiceImpl implements ReviewService {
 
     public ReviewServiceImpl(ReviewRepository reviewRepository,
                              CourseRepository courseRepository,
-<span class="fc" id="L29">                             UserRepository userRepository) {</span>
-<span class="fc" id="L30">        this.reviewRepository = reviewRepository;</span>
-<span class="fc" id="L31">        this.courseRepository = courseRepository;</span>
-<span class="fc" id="L32">        this.userRepository = userRepository;</span>
-<span class="fc" id="L33">    }</span>
+<span class="fc" id="L30">                             UserRepository userRepository) {</span>
+<span class="fc" id="L31">        this.reviewRepository = reviewRepository;</span>
+<span class="fc" id="L32">        this.courseRepository = courseRepository;</span>
+<span class="fc" id="L33">        this.userRepository = userRepository;</span>
+<span class="fc" id="L34">    }</span>
 
     @Override
     public List&lt;Review&gt; getAllReviews() {
         try {
-<span class="fc" id="L38">            return reviewRepository.findAll()</span>
-<span class="fc" id="L39">                    .stream()</span>
-<span class="fc" id="L40">                    .map(ReviewMapper::toDomain)</span>
-<span class="fc" id="L41">                    .collect(Collectors.toList());</span>
-<span class="nc" id="L42">        } catch (Exception e) {</span>
-<span class="nc" id="L43">            log.error(&quot;Failed to retrieve all reviews&quot;, e);</span>
-<span class="nc" id="L44">            throw new RuntimeException(&quot;Could not retrieve reviews.&quot;);</span>
+<span class="fc" id="L39">            return reviewRepository.findAll()</span>
+<span class="fc" id="L40">                    .stream()</span>
+<span class="fc" id="L41">                    .map(ReviewMapper::toDomain)</span>
+<span class="fc" id="L42">                    .toList();</span>
+<span class="nc" id="L43">        } catch (Exception e) {</span>
+<span class="nc" id="L44">            log.error(&quot;Failed to retrieve all reviews&quot;, e);</span>
+<span class="nc" id="L45">            throw new ReviewException(&quot;Could not retrieve reviews.&quot;);</span>
         }
     }
 
     @Override
     public Optional&lt;Review&gt; getReviewById(Long id) {
         try {
-<span class="fc" id="L51">            return reviewRepository.findById(id).map(ReviewMapper::toDomain);</span>
-<span class="nc" id="L52">        } catch (Exception e) {</span>
-<span class="nc" id="L53">            log.error(&quot;Failed to retrieve review with ID: {}&quot;, id, e);</span>
-<span class="nc" id="L54">            throw new RuntimeException(&quot;Could not find review with ID: &quot; + id);</span>
+<span class="fc" id="L52">            return reviewRepository.findById(id).map(ReviewMapper::toDomain);</span>
+<span class="nc" id="L53">        } catch (Exception e) {</span>
+<span class="nc" id="L54">            log.error(&quot;Failed to retrieve review with ID: {}&quot;, id, e);</span>
+<span class="nc" id="L55">            throw new ReviewException(&quot;Could not find review with ID: &quot; + id);</span>
         }
     }
 
     @Override
     public Review createReview(Review review) {
         try {
-<span class="fc" id="L61">            CourseEntity course = courseRepository.findById(review.getCourseId())</span>
-<span class="pc" id="L62">                    .orElseThrow(() -&gt; new RuntimeException(&quot;Course not found with ID: &quot; + review.getCourseId()));</span>
+<span class="fc" id="L62">            CourseEntity course = courseRepository.findById(review.getCourseId())</span>
+<span class="pc" id="L63">                    .orElseThrow(() -&gt; new EntityNotFoundException(&quot;Course not found with ID: &quot; + review.getCourseId()));</span>
 
-<span class="fc" id="L64">            UserEntity user = userRepository.findById(review.getUserId())</span>
-<span class="pc" id="L65">                    .orElseThrow(() -&gt; new RuntimeException(&quot;User not found with ID: &quot; + review.getUserId()));</span>
+<span class="fc" id="L65">            UserEntity user = userRepository.findById(review.getUserId())</span>
+<span class="pc" id="L66">                    .orElseThrow(() -&gt; new EntityNotFoundException(&quot;User not found with ID: &quot; + review.getUserId()));</span>
 
-<span class="fc" id="L67">            ReviewEntity entity = ReviewMapper.toEntity(review, course, user);</span>
-<span class="fc" id="L68">            ReviewEntity saved = reviewRepository.save(entity);</span>
-<span class="fc" id="L69">            log.info(&quot;Review created for course ID: {}, user ID: {}&quot;, review.getCourseId(), review.getUserId());</span>
-<span class="fc" id="L70">            return ReviewMapper.toDomain(saved);</span>
-<span class="nc" id="L71">        } catch (Exception e) {</span>
-<span class="nc" id="L72">            log.error(&quot;Failed to create review&quot;, e);</span>
-<span class="nc" id="L73">            throw new RuntimeException(&quot;Could not create review. Please try again.&quot;);</span>
+<span class="fc" id="L68">            ReviewEntity entity = ReviewMapper.toEntity(review, course, user);</span>
+<span class="fc" id="L69">            ReviewEntity saved = reviewRepository.save(entity);</span>
+
+<span class="fc" id="L71">            log.info(&quot;Review created for course ID: {}, user ID: {}&quot;, review.getCourseId(), review.getUserId());</span>
+
+<span class="fc" id="L73">            return ReviewMapper.toDomain(saved);</span>
+<span class="nc" id="L74">        } catch (Exception e) {</span>
+<span class="nc" id="L75">            log.error(&quot;Failed to create review&quot;, e);</span>
+<span class="nc" id="L76">            throw new ReviewException(&quot;Could not create review. Please try again.&quot;);</span>
         }
     }
 
     @Override
     public Optional&lt;Review&gt; updateReview(Long id, Review review) {
         try {
-<span class="fc" id="L80">            return reviewRepository.findById(id).map(existing -&gt; {</span>
-<span class="fc" id="L81">                CourseEntity course = courseRepository.findById(review.getCourseId())</span>
-<span class="pc" id="L82">                        .orElseThrow(() -&gt; new RuntimeException(&quot;Course not found with ID: &quot; + review.getCourseId()));</span>
+<span class="fc" id="L83">            return reviewRepository.findById(id).map(existing -&gt; {</span>
+<span class="fc" id="L84">                CourseEntity course = courseRepository.findById(review.getCourseId())</span>
+<span class="pc" id="L85">                        .orElseThrow(() -&gt; new EntityNotFoundException(&quot;Course not found with ID: &quot; + review.getCourseId()));</span>
 
-<span class="fc" id="L84">                UserEntity user = userRepository.findById(review.getUserId())</span>
-<span class="pc" id="L85">                        .orElseThrow(() -&gt; new RuntimeException(&quot;User not found with ID: &quot; + review.getUserId()));</span>
+<span class="fc" id="L87">                UserEntity user = userRepository.findById(review.getUserId())</span>
+<span class="pc" id="L88">                        .orElseThrow(() -&gt; new EntityNotFoundException(&quot;User not found with ID: &quot; + review.getUserId()));</span>
 
-<span class="fc" id="L87">                ReviewEntity updated = ReviewMapper.toEntity(review, course, user);</span>
-<span class="fc" id="L88">                updated.setId(id);</span>
+<span class="fc" id="L90">                ReviewEntity updated = ReviewMapper.toEntity(review, course, user);</span>
+<span class="fc" id="L91">                updated.setId(id);</span>
 
-<span class="fc" id="L90">                return ReviewMapper.toDomain(reviewRepository.save(updated));</span>
+<span class="fc" id="L93">                return ReviewMapper.toDomain(reviewRepository.save(updated));</span>
             });
-<span class="nc" id="L92">        } catch (Exception e) {</span>
-<span class="nc" id="L93">            log.error(&quot;Failed to update review with ID: {}&quot;, id, e);</span>
-<span class="nc" id="L94">            throw new RuntimeException(&quot;Could not update review. Please try again.&quot;);</span>
+<span class="nc" id="L95">        } catch (Exception e) {</span>
+<span class="nc" id="L96">            log.error(&quot;Failed to update review with ID: {}&quot;, id, e);</span>
+<span class="nc" id="L97">            throw new ReviewException(&quot;Could not update review. Please try again.&quot;);</span>
         }
     }
 
     @Override
     public boolean deleteReview(Long id) {
         try {
-<span class="pc bpc" id="L101" title="1 of 2 branches missed.">            if (!reviewRepository.existsById(id)) {</span>
-<span class="nc" id="L102">                log.warn(&quot;No review found with ID {} to delete&quot;, id);</span>
-<span class="nc" id="L103">                return false;</span>
+<span class="pc bpc" id="L104" title="1 of 2 branches missed.">            if (!reviewRepository.existsById(id)) {</span>
+<span class="nc" id="L105">                log.warn(&quot;No review found with ID {} to delete&quot;, id);</span>
+<span class="nc" id="L106">                return false;</span>
             }
-
-<span class="fc" id="L106">            reviewRepository.deleteById(id);</span>
-<span class="fc" id="L107">            log.info(&quot;Review with ID {} deleted successfully&quot;, id);</span>
-<span class="fc" id="L108">            return true;</span>
-<span class="nc" id="L109">        } catch (Exception e) {</span>
-<span class="nc" id="L110">            log.error(&quot;Failed to delete review with ID: {}&quot;, id, e);</span>
-<span class="nc" id="L111">            throw new RuntimeException(&quot;Could not delete review.&quot;);</span>
+<span class="fc" id="L108">            reviewRepository.deleteById(id);</span>
+<span class="fc" id="L109">            log.info(&quot;Review with ID {} deleted successfully&quot;, id);</span>
+<span class="fc" id="L110">            return true;</span>
+<span class="nc" id="L111">        } catch (Exception e) {</span>
+<span class="nc" id="L112">            log.error(&quot;Failed to delete review with ID: {}&quot;, id, e);</span>
+<span class="nc" id="L113">            throw new ReviewException(&quot;Could not delete review.&quot;);</span>
         }
     }
 }

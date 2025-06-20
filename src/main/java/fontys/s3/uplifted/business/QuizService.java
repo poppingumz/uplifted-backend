@@ -12,4 +12,5 @@ public interface QuizService {
     Quiz updateQuiz(Long id, Quiz updatedQuiz);
     void deleteQuiz(Long id);
     List<Quiz> getQuizzesByCreatorId(Long userId);
+    void saveQuizResult(Long quizId, Long userId, int score, boolean passed);
 }

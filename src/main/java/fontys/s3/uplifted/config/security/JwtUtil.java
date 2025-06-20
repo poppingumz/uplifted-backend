@@ -7,14 +7,13 @@ import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Date;
-import java.util.Map;
 
 @Component
 public class JwtUtil {
-    private final String SECRET_KEY = "VerySecretKeyThatShouldBeLongEnough123!";
-    private final long EXPIRATION_TIME = 1000L * 60 * 60 * 24;
 
-    private final Key key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
+    private static final String SecretKey = "VerySecretKeyThatShouldBeLongEnough123!";
+    private static final long ExpirationTime = 1000L * 60 * 60 * 24; // 24 hours
+    private static final Key key = Keys.hmacShaKeyFor(SecretKey.getBytes());
 
     public String generateToken(User user) {
         if (user.getRole() == null) {
@@ -26,11 +25,10 @@ public class JwtUtil {
                 .claim("userId", user.getId())
                 .claim("role", user.getRole().name())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                .setExpiration(new Date(System.currentTimeMillis() + ExpirationTime))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
-
 
     public String extractEmail(String token) {
         return Jwts.parserBuilder()

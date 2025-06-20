@@ -1,22 +1,18 @@
 package fontys.s3.uplifted.controller;
 
 import fontys.s3.uplifted.domain.dto.NotificationMessage;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
+import fontys.s3.uplifted.websocket.NotificationWebSocketEndpoint;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/notifications")
-@RequiredArgsConstructor
 public class NotificationController {
-
-    private final SimpMessagingTemplate messagingTemplate;
 
     @PostMapping("/send")
     public void sendNotification(@RequestBody NotificationMessage message) {
-        System.out.println("🔔 Sending notification: " + message);
-        messagingTemplate.convertAndSend("/topic/category/" + message.getCategory(), message);
+        log.info("🔔 Sending native WebSocket notification: {}", message);
+        NotificationWebSocketEndpoint.broadcast(message);
     }
 }

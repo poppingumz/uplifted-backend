@@ -5,6 +5,10 @@ import fontys.s3.uplifted.persistence.entity.StudentAnswerEntity;
 
 public final class StudentAnswerMapper {
 
+    private StudentAnswerMapper() {
+        throw new UnsupportedOperationException("Utility class should not be instantiated");
+    }
+
     public static StudentAnswer toDomain(StudentAnswerEntity entity) {
         return StudentAnswer.builder()
                 .id(entity.getId())
@@ -31,4 +35,3 @@ public final class StudentAnswerMapper {
                 .build();
     }
 }
-

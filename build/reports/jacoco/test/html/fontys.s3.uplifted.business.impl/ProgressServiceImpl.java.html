@@ -14,10 +14,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
-<span class="fc" id="L20">@Slf4j</span>
+<span class="fc" id="L19">@Slf4j</span>
 public class ProgressServiceImpl implements ProgressService {
 
     private final ProgressRepository progressRepository;
@@ -26,55 +25,55 @@ public class ProgressServiceImpl implements ProgressService {
 
     public ProgressServiceImpl(ProgressRepository progressRepository,
                                CourseRepository courseRepository,
-<span class="fc" id="L29">                               UserRepository userRepository) {</span>
-<span class="fc" id="L30">        this.progressRepository = progressRepository;</span>
-<span class="fc" id="L31">        this.courseRepository = courseRepository;</span>
-<span class="fc" id="L32">        this.userRepository = userRepository;</span>
-<span class="fc" id="L33">    }</span>
+<span class="fc" id="L28">                               UserRepository userRepository) {</span>
+<span class="fc" id="L29">        this.progressRepository = progressRepository;</span>
+<span class="fc" id="L30">        this.courseRepository = courseRepository;</span>
+<span class="fc" id="L31">        this.userRepository = userRepository;</span>
+<span class="fc" id="L32">    }</span>
 
     public List&lt;Progress&gt; getAllProgress() {
-<span class="fc" id="L36">        return progressRepository.findAll()</span>
-<span class="fc" id="L37">                .stream()</span>
-<span class="fc" id="L38">                .map(ProgressMapper::toDomain)</span>
-<span class="fc" id="L39">                .collect(Collectors.toList());</span>
+<span class="fc" id="L35">        return progressRepository.findAll()</span>
+<span class="fc" id="L36">                .stream()</span>
+<span class="fc" id="L37">                .map(ProgressMapper::toDomain)</span>
+<span class="fc" id="L38">                .toList();</span>
     }
 
     public Optional&lt;Progress&gt; getProgressById(Long id) {
-<span class="fc" id="L43">        return progressRepository.findById(id)</span>
-<span class="fc" id="L44">                .map(ProgressMapper::toDomain);</span>
+<span class="fc" id="L42">        return progressRepository.findById(id)</span>
+<span class="fc" id="L43">                .map(ProgressMapper::toDomain);</span>
     }
 
     public Progress createProgress(Progress progress) {
-<span class="fc" id="L48">        CourseEntity course = courseRepository.findById(progress.getCourseId())</span>
-<span class="fc" id="L49">                .orElseThrow(() -&gt; new RuntimeException(&quot;Course not found&quot;));</span>
+<span class="fc" id="L47">        CourseEntity course = courseRepository.findById(progress.getCourseId())</span>
+<span class="fc" id="L48">                .orElseThrow(() -&gt; new RuntimeException(&quot;Course not found&quot;));</span>
 
-<span class="fc" id="L51">        UserEntity user = userRepository.findById(progress.getUserId())</span>
-<span class="pc" id="L52">                .orElseThrow(() -&gt; new RuntimeException(&quot;User not found&quot;));</span>
+<span class="fc" id="L50">        UserEntity user = userRepository.findById(progress.getUserId())</span>
+<span class="pc" id="L51">                .orElseThrow(() -&gt; new RuntimeException(&quot;User not found&quot;));</span>
 
-<span class="fc" id="L54">        ProgressEntity entity = ProgressMapper.toEntity(progress, course, user);</span>
-<span class="fc" id="L55">        return ProgressMapper.toDomain(progressRepository.save(entity));</span>
+<span class="fc" id="L53">        ProgressEntity entity = ProgressMapper.toEntity(progress, course, user);</span>
+<span class="fc" id="L54">        return ProgressMapper.toDomain(progressRepository.save(entity));</span>
     }
 
     public Optional&lt;Progress&gt; updateProgress(Long id, Progress progress) {
-<span class="fc" id="L59">        CourseEntity course = courseRepository.findById(progress.getCourseId())</span>
-<span class="pc" id="L60">                .orElseThrow(() -&gt; new RuntimeException(&quot;Course not found&quot;));</span>
+<span class="fc" id="L58">        CourseEntity course = courseRepository.findById(progress.getCourseId())</span>
+<span class="pc" id="L59">                .orElseThrow(() -&gt; new RuntimeException(&quot;Course not found&quot;));</span>
 
-<span class="fc" id="L62">        UserEntity user = userRepository.findById(progress.getUserId())</span>
-<span class="pc" id="L63">                .orElseThrow(() -&gt; new RuntimeException(&quot;User not found&quot;));</span>
+<span class="fc" id="L61">        UserEntity user = userRepository.findById(progress.getUserId())</span>
+<span class="pc" id="L62">                .orElseThrow(() -&gt; new RuntimeException(&quot;User not found&quot;));</span>
 
-<span class="fc" id="L65">        return progressRepository.findById(id).map(existing -&gt; {</span>
-<span class="fc" id="L66">            ProgressEntity entity = ProgressMapper.toEntity(progress, course, user);</span>
-<span class="fc" id="L67">            entity.setId(id);</span>
-<span class="fc" id="L68">            return ProgressMapper.toDomain(progressRepository.save(entity));</span>
+<span class="fc" id="L64">        return progressRepository.findById(id).map(existing -&gt; {</span>
+<span class="fc" id="L65">            ProgressEntity entity = ProgressMapper.toEntity(progress, course, user);</span>
+<span class="fc" id="L66">            entity.setId(id);</span>
+<span class="fc" id="L67">            return ProgressMapper.toDomain(progressRepository.save(entity));</span>
         });
     }
 
     public boolean deleteProgress(Long id) {
-<span class="fc bfc" id="L73" title="All 2 branches covered.">        if (!progressRepository.existsById(id)) {</span>
-<span class="fc" id="L74">            return false;</span>
+<span class="fc bfc" id="L72" title="All 2 branches covered.">        if (!progressRepository.existsById(id)) {</span>
+<span class="fc" id="L73">            return false;</span>
         }
-<span class="fc" id="L76">        progressRepository.deleteById(id);</span>
-<span class="fc" id="L77">        return true;</span>
+<span class="fc" id="L75">        progressRepository.deleteById(id);</span>
+<span class="fc" id="L76">        return true;</span>
     }
 }
 

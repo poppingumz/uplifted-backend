@@ -1,6 +1,7 @@
 package fontys.s3.uplifted.business;
 
 import fontys.s3.uplifted.business.impl.FileServiceImpl;
+import fontys.s3.uplifted.business.impl.exception.FileNotFoundException;
 import fontys.s3.uplifted.domain.File;
 import fontys.s3.uplifted.persistence.CourseRepository;
 import fontys.s3.uplifted.persistence.FileRepository;
@@ -12,7 +13,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockMultipartFile;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -122,7 +122,8 @@ class FileServiceImplTest {
     void deleteFile_notFound() {
         when(fileRepository.existsById(99L)).thenReturn(false);
 
-        RuntimeException ex = assertThrows(RuntimeException.class, () -> fileService.deleteFile(99L));
+        FileNotFoundException ex = assertThrows(FileNotFoundException.class, () ->
+                fileService.deleteFile(99L));
         assertEquals("File not found with ID: 99", ex.getMessage());
     }
 

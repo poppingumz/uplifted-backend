@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="fontys.s3.uplifted.business.ProgressServiceImplTest" tests="9" skipped="0" failures="0" errors="0" timestamp="2025-06-20T09:58:56" hostname="LAPTOP-RHFQ3ARB" time="0.268">
+  <properties/>
+  <testcase name="updateProgressSuccess()" classname="fontys.s3.uplifted.business.ProgressServiceImplTest" time="0.207"/>
+  <testcase name="deleteProgressNotFound()" classname="fontys.s3.uplifted.business.ProgressServiceImplTest" time="0.005"/>
+  <testcase name="getByIdFound()" classname="fontys.s3.uplifted.business.ProgressServiceImplTest" time="0.005"/>
+  <testcase name="getByIdNotFound()" classname="fontys.s3.uplifted.business.ProgressServiceImplTest" time="0.004"/>
+  <testcase name="getAllProgress()" classname="fontys.s3.uplifted.business.ProgressServiceImplTest" time="0.008"/>
+  <testcase name="createProgressMissingCourse()" classname="fontys.s3.uplifted.business.ProgressServiceImplTest" time="0.01"/>
+  <testcase name="createProgressSuccess()" classname="fontys.s3.uplifted.business.ProgressServiceImplTest" time="0.008"/>
+  <testcase name="deleteProgress()" classname="fontys.s3.uplifted.business.ProgressServiceImplTest" time="0.005"/>
+  <testcase name="updateProgressNotFoundId()" classname="fontys.s3.uplifted.business.ProgressServiceImplTest" time="0.005"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

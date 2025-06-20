@@ -4,6 +4,7 @@ import fontys.s3.uplifted.business.impl.UserServiceImpl;
 import fontys.s3.uplifted.config.security.JwtUtil;
 import fontys.s3.uplifted.domain.User;
 import fontys.s3.uplifted.domain.dto.LoginRequestDTO;
+import fontys.s3.uplifted.domain.dto.LoginResponseDTO;
 import fontys.s3.uplifted.domain.enums.Role;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
-import java.util.Map;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -22,17 +22,10 @@ import static org.mockito.Mockito.*;
 
 class AuthControllerTest {
 
-    @Mock
-    private UserServiceImpl userService;
-
-    @Mock
-    private JwtUtil jwtUtil;
-
-    @Mock
-    private PasswordEncoder passwordEncoder;
-
-    @InjectMocks
-    private AuthController authController;
+    @Mock private UserServiceImpl userService;
+    @Mock private JwtUtil jwtUtil;
+    @Mock private PasswordEncoder passwordEncoder;
+    @InjectMocks private AuthController authController;
 
     private User validUser;
 
@@ -61,16 +54,20 @@ class AuthControllerTest {
         login.setEmail("test@example.com");
         login.setPassword("raw-password");
 
-        when(userService.getUserByEmail("test@example.com")).thenReturn(Optional.of(validUser));
-        when(passwordEncoder.matches("raw-password", "encodedpass123")).thenReturn(true);
+        when(userService.getUserByEmail("test@example.com"))
+                .thenReturn(Optional.of(validUser));
+        when(passwordEncoder.matches("raw-password", "encodedpass123"))
+                .thenReturn(true);
         when(jwtUtil.generateToken(validUser)).thenReturn("jwt-token");
 
-        ResponseEntity<?> response = authController.login(login);
+        ResponseEntity<Object> response = authController.login(login);
 
         assertEquals(200, response.getStatusCodeValue());
-        Map<String, Object> result = (Map<String, Object>) response.getBody();
-        assertEquals("jwt-token", result.get("token"));
-        assertTrue(result.containsKey("user"));
+        // Cast to DTO
+        LoginResponseDTO body = (LoginResponseDTO) response.getBody();
+        assertNotNull(body);
+        assertEquals("jwt-token", body.getToken());
+        assertEquals("test@example.com", body.getEmail());
     }
 
     @Test
@@ -79,13 +76,16 @@ class AuthControllerTest {
         login.setEmail("test@example.com");
         login.setPassword("wrongpass");
 
-        when(userService.getUserByEmail("test@example.com")).thenReturn(Optional.of(validUser));
-        when(passwordEncoder.matches("wrongpass", "encodedpass123")).thenReturn(false);
+        when(userService.getUserByEmail("test@example.com"))
+                .thenReturn(Optional.of(validUser));
+        when(passwordEncoder.matches("wrongpass", "encodedpass123"))
+                .thenReturn(false);
 
-        ResponseEntity<?> response = authController.login(login);
+        ResponseEntity<Object> response = authController.login(login);
 
         assertEquals(401, response.getStatusCodeValue());
-        assertEquals("Invalid credentials", ((Map<?, ?>) response.getBody()).get("error"));
+        String err = (String) response.getBody();
+        assertEquals("Invalid credentials", err);
     }
 
     @Test
@@ -95,12 +95,14 @@ class AuthControllerTest {
         login.setPassword(null);
 
         validUser.setPassword(null);
-        when(userService.getUserByEmail("test@example.com")).thenReturn(Optional.of(validUser));
+        when(userService.getUserByEmail("test@example.com"))
+                .thenReturn(Optional.of(validUser));
 
-        ResponseEntity<?> response = authController.login(login);
+        ResponseEntity<Object> response = authController.login(login);
 
         assertEquals(401, response.getStatusCodeValue());
-        assertEquals("Missing password", ((Map<?, ?>) response.getBody()).get("error"));
+        String err = (String) response.getBody();
+        assertEquals("Missing password", err);
     }
 
     @Test
@@ -109,12 +111,14 @@ class AuthControllerTest {
         login.setEmail("notfound@example.com");
         login.setPassword("irrelevant");
 
-        when(userService.getUserByEmail("notfound@example.com")).thenReturn(Optional.empty());
+        when(userService.getUserByEmail("notfound@example.com"))
+                .thenReturn(Optional.empty());
 
-        ResponseEntity<?> response = authController.login(login);
+        ResponseEntity<Object> response = authController.login(login);
 
         assertEquals(401, response.getStatusCodeValue());
-        assertEquals("Invalid credentials", ((Map<?, ?>) response.getBody()).get("error"));
+        String err = (String) response.getBody();
+        assertEquals("Invalid credentials", err);
     }
 
     @Test
@@ -123,14 +127,18 @@ class AuthControllerTest {
         login.setEmail("test@example.com");
         login.setPassword("raw-password");
 
-        when(userService.getUserByEmail("test@example.com")).thenReturn(Optional.of(validUser));
-        when(passwordEncoder.matches("raw-password", "encodedpass123")).thenReturn(true);
-        when(jwtUtil.generateToken(validUser)).thenThrow(new RuntimeException("JWT failure"));
+        when(userService.getUserByEmail("test@example.com"))
+                .thenReturn(Optional.of(validUser));
+        when(passwordEncoder.matches("raw-password", "encodedpass123"))
+                .thenReturn(true);
+        when(jwtUtil.generateToken(validUser))
+                .thenThrow(new RuntimeException("JWT failure"));
 
-        ResponseEntity<?> response = authController.login(login);
+        ResponseEntity<Object> response = authController.login(login);
 
         assertEquals(500, response.getStatusCodeValue());
-        assertTrue(((Map<?, ?>) response.getBody()).get("error").toString().contains("Internal server error"));
+        String err = (String) response.getBody();
+        assertTrue(err.contains("Internal server error"));
     }
 
     @Test
@@ -144,7 +152,7 @@ class AuthControllerTest {
 
         when(userService.createUser(input)).thenReturn(created);
 
-        ResponseEntity<?> response = authController.register(input);
+        ResponseEntity<Object> response = authController.register(input);
 
         assertEquals(200, response.getStatusCodeValue());
         assertSame(created, response.getBody());
@@ -153,9 +161,10 @@ class AuthControllerTest {
 
     @Test
     void shouldRegisterFailure() {
-        when(userService.createUser(validUser)).thenThrow(new RuntimeException("duplicate email"));
+        when(userService.createUser(validUser))
+                .thenThrow(new RuntimeException("duplicate email"));
 
-        ResponseEntity<?> response = authController.register(validUser);
+        ResponseEntity<Object> response = authController.register(validUser);
 
         assertEquals(400, response.getStatusCodeValue());
         assertEquals("Registration failed: duplicate email", response.getBody());

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="fontys.s3.uplifted.business.FileServiceImplTest" tests="11" skipped="0" failures="0" errors="0" timestamp="2025-06-20T09:58:56" hostname="LAPTOP-RHFQ3ARB" time="0.072">
+  <properties/>
+  <testcase name="deleteFile_success()" classname="fontys.s3.uplifted.business.FileServiceImplTest" time="0.01"/>
+  <testcase name="getAllFiles_success()" classname="fontys.s3.uplifted.business.FileServiceImplTest" time="0.013"/>
+  <testcase name="deleteFile_notFound()" classname="fontys.s3.uplifted.business.FileServiceImplTest" time="0.006"/>
+  <testcase name="getFileById_found()" classname="fontys.s3.uplifted.business.FileServiceImplTest" time="0.004"/>
+  <testcase name="uploadFile_success()" classname="fontys.s3.uplifted.business.FileServiceImplTest" time="0.006"/>
+  <testcase name="getFilesByCourse_success()" classname="fontys.s3.uplifted.business.FileServiceImplTest" time="0.003"/>
+  <testcase name="uploadFile_courseNotFound()" classname="fontys.s3.uplifted.business.FileServiceImplTest" time="0.006"/>
+  <testcase name="getRawFileEntityById_success()" classname="fontys.s3.uplifted.business.FileServiceImplTest" time="0.002"/>
+  <testcase name="uploadFile_uploaderNotFound()" classname="fontys.s3.uplifted.business.FileServiceImplTest" time="0.005"/>
+  <testcase name="getFileById_notFound()" classname="fontys.s3.uplifted.business.FileServiceImplTest" time="0.003"/>
+  <testcase name="getRawFileEntityById_notFound()" classname="fontys.s3.uplifted.business.FileServiceImplTest" time="0.002"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

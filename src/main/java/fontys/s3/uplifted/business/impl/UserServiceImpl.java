@@ -1,9 +1,9 @@
-// UserServiceImpl.java
 package fontys.s3.uplifted.business.impl;
 
 import fontys.s3.uplifted.business.UserService;
 import fontys.s3.uplifted.business.impl.mapper.UserMapper;
 import fontys.s3.uplifted.domain.User;
+import fontys.s3.uplifted.business.impl.exception.UserServiceException;
 import fontys.s3.uplifted.persistence.UserRepository;
 import fontys.s3.uplifted.persistence.entity.UserEntity;
 import lombok.extern.slf4j.Slf4j;
@@ -13,17 +13,15 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+
     @Autowired
-    private PasswordEncoder passwordEncoder;
-
-
     public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
@@ -35,26 +33,39 @@ public class UserServiceImpl implements UserService {
             return userRepository.findAll()
                     .stream()
                     .map(UserMapper::convert)
-                    .collect(Collectors.toList());
+                    .toList(); // cleaner, modern Java
         } catch (Exception e) {
             log.error("Error fetching all users", e);
-            throw new RuntimeException("Unable to retrieve users.");
+            throw new UserServiceException("Unable to retrieve users.");
         }
     }
 
     @Override
     public Optional<User> getUserById(Long id) {
         try {
-            return userRepository.findById(id).map(UserMapper::convert);
+            return userRepository.findById(id)
+                    .map(UserMapper::convert);
         } catch (Exception e) {
             log.error("Error fetching user with ID: {}", id, e);
-            throw new RuntimeException("Unable to retrieve user.");
+            throw new UserServiceException("Unable to retrieve user.");
         }
     }
 
+    @Override
+    public Optional<User> getUserByEmail(String email) {
+        try {
+            return userRepository.findByEmail(email)
+                    .map(UserMapper::convert);
+        } catch (Exception e) {
+            log.error("Error fetching user with email: {}", email, e);
+            throw new UserServiceException("Unable to retrieve user by email.");
+        }
+    }
+
+    @Override
     public User createUser(User user) {
         try {
-            if (!user.getPassword().startsWith("$2a$")) {
+            if (user.getPassword() != null && !user.getPassword().startsWith("$2a$")) {
                 user.setPassword(passwordEncoder.encode(user.getPassword()));
             }
             UserEntity entity = UserMapper.convertToEntity(user);
@@ -63,7 +74,7 @@ public class UserServiceImpl implements UserService {
             return UserMapper.convert(savedEntity);
         } catch (Exception e) {
             log.error("Error creating user", e);
-            throw new RuntimeException("Unable to create user.");
+            throw new UserServiceException("Unable to create user.");
         }
     }
 
@@ -81,7 +92,7 @@ public class UserServiceImpl implements UserService {
             });
         } catch (Exception e) {
             log.error("Error updating user with ID: {}", id, e);
-            throw new RuntimeException("Unable to update user.");
+            throw new UserServiceException("Unable to update user.");
         }
     }
 
@@ -96,14 +107,7 @@ public class UserServiceImpl implements UserService {
             return true;
         } catch (Exception e) {
             log.error("Error deleting user with ID: {}", id, e);
-            throw new RuntimeException("Unable to delete user.");
+            throw new UserServiceException("Unable to delete user.");
         }
     }
-
-    public Optional<User> getUserByEmail(String email) {
-        return userRepository.findByEmail(email)
-                .map(UserMapper::convert);
-    }
-
-
 }

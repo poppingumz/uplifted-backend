@@ -17,7 +17,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
-public class QuizRepositoryTest {
+class QuizRepositoryTest {
 
     @Autowired
     private TestEntityManager entityManager;

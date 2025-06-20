@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>WebSocketSessionManager.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">uplifted-learning-platform</a> &gt; <a href="index.source.html" class="el_package">fontys.s3.uplifted.websocket</a> &gt; <span class="el_source">WebSocketSessionManager.java</span></div><h1>WebSocketSessionManager.java</h1><pre class="source lang-java linenums">package fontys.s3.uplifted.websocket;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import fontys.s3.uplifted.domain.dto.NotificationMessage;
+import jakarta.annotation.PreDestroy;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+import org.springframework.web.socket.TextMessage;
+import org.springframework.web.socket.WebSocketSession;
+import org.springframework.web.socket.handler.TextWebSocketHandler;
+
+import java.io.IOException;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+
+<span class="nc" id="L16">@Slf4j</span>
+@Component
+<span class="nc" id="L18">public class WebSocketSessionManager extends TextWebSocketHandler {</span>
+
+<span class="nc" id="L20">    private final Map&lt;WebSocketSession, List&lt;String&gt;&gt; sessionSubscriptions = new ConcurrentHashMap&lt;&gt;();</span>
+<span class="nc" id="L21">    private final ObjectMapper objectMapper = new ObjectMapper();</span>
+
+    @Override
+    public void afterConnectionEstablished(WebSocketSession session) {
+<span class="nc" id="L25">        sessionSubscriptions.put(session, new ArrayList&lt;&gt;());</span>
+<span class="nc" id="L26">        log.info(&quot;ðŸŸ¢ WebSocket connected: {}&quot;, session.getId());</span>
+<span class="nc" id="L27">    }</span>
+
+    @Override
+    public void afterConnectionClosed(WebSocketSession session, org.springframework.web.socket.CloseStatus status) {
+<span class="nc" id="L31">        sessionSubscriptions.remove(session);</span>
+<span class="nc" id="L32">        log.info(&quot;ðŸ”´ WebSocket disconnected: {}&quot;, session.getId());</span>
+<span class="nc" id="L33">    }</span>
+
+    @Override
+    public void handleTextMessage(WebSocketSession session, TextMessage message) throws IOException {
+<span class="nc" id="L37">        Map&lt;String, Object&gt; json = objectMapper.readValue(message.getPayload(), Map.class);</span>
+<span class="nc" id="L38">        String type = (String) json.get(&quot;type&quot;);</span>
+
+<span class="nc bnc" id="L40" title="All 2 branches missed.">        if (&quot;SUBSCRIBE&quot;.equalsIgnoreCase(type)) {</span>
+<span class="nc" id="L41">            String category = (String) json.get(&quot;category&quot;);</span>
+<span class="nc" id="L42">            sessionSubscriptions.getOrDefault(session, new ArrayList&lt;&gt;()).add(category);</span>
+<span class="nc" id="L43">            log.info(&quot;ðŸ“© Subscribed {} to category: {}&quot;, session.getId(), category);</span>
+        }
+<span class="nc" id="L45">    }</span>
+
+    public void broadcastToCategory(String category, NotificationMessage msg) {
+        TextMessage textMessage;
+        try {
+<span class="nc" id="L50">            textMessage = new TextMessage(objectMapper.writeValueAsString(msg));</span>
+<span class="nc" id="L51">        } catch (IOException e) {</span>
+<span class="nc" id="L52">            log.error(&quot;Failed to serialize message&quot;, e);</span>
+<span class="nc" id="L53">            return;</span>
+<span class="nc" id="L54">        }</span>
+
+<span class="nc bnc" id="L56" title="All 2 branches missed.">        for (Map.Entry&lt;WebSocketSession, List&lt;String&gt;&gt; entry : sessionSubscriptions.entrySet()) {</span>
+<span class="nc" id="L57">            WebSocketSession session = entry.getKey();</span>
+<span class="nc" id="L58">            List&lt;String&gt; categories = entry.getValue();</span>
+
+<span class="nc bnc" id="L60" title="All 4 branches missed.">            if (categories.contains(category) &amp;&amp; session.isOpen()) {</span>
+                try {
+<span class="nc" id="L62">                    session.sendMessage(textMessage);</span>
+<span class="nc" id="L63">                } catch (IOException e) {</span>
+<span class="nc" id="L64">                    log.warn(&quot;Failed to send message to session {}&quot;, session.getId(), e);</span>
+<span class="nc" id="L65">                }</span>
+            }
+<span class="nc" id="L67">        }</span>
+<span class="nc" id="L68">    }</span>
+
+    @PreDestroy
+    public void cleanup() {
+<span class="nc" id="L72">        sessionSubscriptions.keySet().forEach(session -&gt; {</span>
+            try {
+<span class="nc" id="L74">                session.close();</span>
+<span class="nc" id="L75">            } catch (IOException e) {</span>
+<span class="nc" id="L76">                log.warn(&quot;Error closing session {}&quot;, session.getId(), e);</span>
+<span class="nc" id="L77">            }</span>
+<span class="nc" id="L78">        });</span>
+<span class="nc" id="L79">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -36,7 +35,7 @@ public class ProgressServiceImpl implements ProgressService {
         return progressRepository.findAll()
                 .stream()
                 .map(ProgressMapper::toDomain)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public Optional<Progress> getProgressById(Long id) {

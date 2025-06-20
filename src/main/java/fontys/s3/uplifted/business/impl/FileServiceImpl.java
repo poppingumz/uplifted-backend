@@ -1,6 +1,7 @@
 package fontys.s3.uplifted.business.impl;
 
 import fontys.s3.uplifted.business.FileService;
+import fontys.s3.uplifted.business.impl.exception.FileNotFoundException;
 import fontys.s3.uplifted.business.impl.mapper.FileMapper;
 import fontys.s3.uplifted.domain.File;
 import fontys.s3.uplifted.persistence.CourseRepository;
@@ -18,7 +19,6 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -33,7 +33,6 @@ public class FileServiceImpl implements FileService {
     public Long uploadFile(MultipartFile file, Long uploaderId, Long courseId) throws IOException {
         UserEntity uploader = userRepository.findById(uploaderId)
                 .orElseThrow(() -> new RuntimeException("Uploader not found"));
-
         CourseEntity course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new RuntimeException("Course not found"));
 
@@ -54,7 +53,7 @@ public class FileServiceImpl implements FileService {
         return fileRepository.findAll()
                 .stream()
                 .map(FileMapper::toDomain)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
@@ -71,7 +70,7 @@ public class FileServiceImpl implements FileService {
     @Override
     public void deleteFile(Long id) {
         if (!fileRepository.existsById(id)) {
-            throw new RuntimeException("File not found with ID: " + id);
+            throw new FileNotFoundException("File not found with ID: " + id);
         }
         fileRepository.deleteById(id);
     }
@@ -81,6 +80,6 @@ public class FileServiceImpl implements FileService {
         return fileRepository.findByCourseId(courseId)
                 .stream()
                 .map(FileMapper::toDomain)
-                .collect(Collectors.toList());
+                .toList();
     }
 }

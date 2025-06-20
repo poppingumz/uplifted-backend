@@ -1,62 +1,86 @@
 package fontys.s3.uplifted.config.security;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.core.Ordered;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 import java.util.List;
 
 @Configuration
-@RequiredArgsConstructor
 @Profile("!test")
+@RequiredArgsConstructor
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthFilter;
 
+    private static final String ROLE_TEACHER = "TEACHER";
+    private static final String ROLE_STUDENT = "STUDENT";
+
+    @Bean
+    public FilterRegistrationBean<CorsFilter> corsFilterRegistration() {
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowedOriginPatterns(List.of("http://localhost:*"));
+        config.setAllowCredentials(true);
+        config.setAllowedHeaders(List.of("*"));
+        config.setAllowedMethods(List.of("*"));
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+
+        FilterRegistrationBean<CorsFilter> bean = new FilterRegistrationBean<>(new CorsFilter(source));
+        bean.setOrder(Ordered.HIGHEST_PRECEDENCE);
+        return bean;
+    }
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .cors(Customizer.withDefaults())
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        // Public endpoints
-                        .requestMatchers(
-                                "/api/users/register",
-                                "/api/auth/**",
-                                "/swagger-ui/**",
-                                "/v3/api-docs/**"
-                        ).permitAll()
+                        // WebSocket and SockJS (connect/info/fallbacks)
+                        .requestMatchers("/ws/**", "/websocket/**", "/topic/**", "/app/**", "/info", "/error").permitAll()
 
-                        // Allow WEB SOCKET handshake endpoints
-                        .requestMatchers("/ws/**", "/websocket/**", "/topic/**").permitAll()
+                        // Test WebSocket endpoint
+                        .requestMatchers(HttpMethod.POST, "/api/notifications/test").permitAll()
 
-                        // Allow browsing courses
-                        .requestMatchers("/api/courses", "/api/courses/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/quizzes/submit")
+                        .hasAnyRole(ROLE_STUDENT, ROLE_TEACHER)
 
-                        // Allow sending notifications via REST
+                        // Public API
+                        .requestMatchers("/api/auth/**", "/api/users/register").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/courses", "/api/courses/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/notifications/send").permitAll()
 
-                        // Teacher-only course modifications
-                        .requestMatchers(
-                                "/api/courses/create",
-                                "/api/courses/update/**",
-                                "/api/courses/delete/**"
-                        ).hasRole("TEACHER")
+                        // CORS Preflight
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
-                        // Student-only enrollment
-                        .requestMatchers("/api/enrollments/**").hasRole("STUDENT")
+                        // File downloads (authenticated)
+                        .requestMatchers(HttpMethod.GET, "/api/files/*/download").authenticated()
 
-                        // Everything else requires authentication
+                        // Role-specific access
+                        .requestMatchers(HttpMethod.POST, "/api/courses/create").hasRole(ROLE_TEACHER)
+                        .requestMatchers(HttpMethod.PUT, "/api/courses/update/**").hasRole(ROLE_TEACHER)
+                        .requestMatchers(HttpMethod.DELETE, "/api/courses/delete/**").hasRole(ROLE_TEACHER)
+                        .requestMatchers("/api/stats/**").hasRole(ROLE_TEACHER)
+
+                        .requestMatchers(HttpMethod.GET, "/api/users/**").hasAnyRole(ROLE_TEACHER, ROLE_STUDENT)
+                        .requestMatchers("/api/enrollments/**").hasRole(ROLE_STUDENT)
+
+                        // Default catch-all
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
@@ -65,22 +89,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(
-            AuthenticationConfiguration config
-    ) throws Exception {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
-    }
-
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration config = new CorsConfiguration();
-        config.setAllowCredentials(true);
-        config.addAllowedOrigin("http://localhost:5174");
-        config.addAllowedHeader("*");
-        config.addAllowedMethod("*");
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config);
-        return source;
     }
 }
