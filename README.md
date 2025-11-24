@@ -41,7 +41,7 @@
 
 ---
 
-## 🛠 Technology Stack
+## Technology Stack
 
 | Area | Technology |
 | :--- | :--- |
@@ -53,7 +53,7 @@
 
 ---
 
-## 🏗 System Architecture
+## System Architecture
 
 The application follows a strictly layered **Monolithic Architecture** designed for maintainability and separation of concerns:
 
